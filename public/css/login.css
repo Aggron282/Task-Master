@@ -1,12 +1,12 @@
 .login_container{
   background:linear-gradient(to right, rgba(236, 0, 140, 1),rgba(252, 103, 103, 1));
-  height:100vh;
   padding-bottom:5%;
-  overflow-x: hidden;
+  overflow: hidden;
   width:100%;
+}
 
-
-
+.login_mod{
+  animation: slide_up_and_bounce 1s ease-in 1;
 }
 
 .title_logo{
@@ -23,7 +23,6 @@
   font-family: "Montserrat"
 }
 
-
 .login_container img{
   width:20%;
 }
@@ -37,7 +36,7 @@
   background:white;
   padding:5%;
   padding-bottom:15%;
-  margin-top:5%;
+  margin-top:2.5%;
   position: relative;
 }
 
@@ -56,28 +55,20 @@
 
 .authentication_container{
   background:white;
-  margin:5%;
   box-shadow:0px 0px 10px rgba(0,0,0,.5);
-  animation: appear 1 ease-in .75s;
-
+  animation: slide_from_left 1 ease-in .75s;
   border-radius:10px;
   padding:5%;
   overflow: hidden;
+  margin-top:10% !important;
+  margin-left:5%;
+  margin-right:5%;
   box-sizing: border-box;
 }
 
 .error_{
   box-shadow: 0px 0px 10px red !important;
   border-color:red !important;
-}
-
-@keyframes appear {
-  0%{
-    transform:translateX(-1200px);
-  }
-  100%{
-    transform:translateX(0px);
-  }
 }
 
 form p{
@@ -101,7 +92,6 @@ form p{
 .login_title{
   text-align: left;
   font-weight:250;
-
   font-size:30px;
   font-family: "Amazon Ember";
 }
@@ -176,4 +166,32 @@ form p{
 .login_row{
   width:100%;
   margin-top:2.5%;
+}
+
+body{
+  overflow:hidden  !important;
+}
+
+.inner_banner{
+ animation: banner_appear .5s 1 ease-in;
+ width:100%;
+ padding:20px;
+ position: absolute;
+ top:0%;
+ left:0%;
+ opacity:1;
+ transform: translateY(0px);
+}
+
+.delete_banner{
+  animation: banner_disappear .5s 1 ease-in !important;
+  transform:translateY(-100px) !important;
+  opacity:0 !important;
+}
+
+.inner_banner p{
+  color:white;
+  font-size:22px;
+  text-align: center;
+  font-family: "amazon ember";
 }

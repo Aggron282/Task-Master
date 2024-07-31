@@ -7,11 +7,11 @@ header {
   position: relative;
   overflow: auto;
 }
+
 header .logo_container{
   width:30%;
   float:left;
 }
-
 
 .showcase_img{
   float:right;
@@ -66,7 +66,6 @@ main {
   padding-bottom:20%;
 }
 
-
 header .account_container{
   float:right;
   width:40%;
@@ -75,7 +74,6 @@ header .account_container{
 .account_container button{
   float:right;
   margin-right:10%;
-
 }
 
 header .title {
@@ -132,7 +130,6 @@ header .title {
   top: 0;
   z-index: -1;
 }
-
 
 .create_account:active {
   border-width: 4px 0 0;
