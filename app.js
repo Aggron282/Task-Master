@@ -7,11 +7,15 @@ var path = require("path");
 var port = 3001;
 
 var main_router = require("./routes/main_routes.js");
+var board_router = require("./routes/board_routes.js");
+
 
 app.use(body_parser.json());
 app.use(express.static(__dirname + '/public'));
 app.use(body_parser.urlencoded({extended:false}));
 app.use(main_router);
+app.use(board_router);
+
 
 mongoose.connect(mongodb_connection).then((s)=>{
 

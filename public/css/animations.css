@@ -1,3 +1,6 @@
+*{
+  box-sizing: border-box;
+}
 @keyframes slide_up_and_bounce {
   0%{
     transform: translateY(900px) scaleY(1);
