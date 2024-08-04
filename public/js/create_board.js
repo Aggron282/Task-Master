@@ -13,18 +13,27 @@ function RenderModal(){
   var html = `
   <div class="modal_board">
     <div class="error_banner"></div>
-    <p id="exit_modal"> X </p>  
+
+    <p id="exit_modal"> X </p>
+
     <p class="title"> Choose Background </p>
+
     ${ReturnColorElements()}
+
     <br />
     <br />
+
     <p class="title"> Choose Uploaded Background </p>
+
     <button class="upload_button">Upload Image</button>
+
     <br />
+
     <p class="title"> Choose Name of Board </p>
+
     <input class="board_input" id = "board_name" placeholder = "Name of Board">
 
-    <button class="add_board_button showcase_button">Add Board</button>
+    <button class="add_board_button showcase_button"> Add Board </button>
   </div>`
 
   board_modal_wrapper.classList.add("wrapper_active");
@@ -49,6 +58,30 @@ function RemoveModal(){
   active_color = null;
   board_modal_container.innerHTML = "";
   board_modal_wrapper.classList.remove("wrapper_active");
+
+}
+
+function RenderBoardElements(board){
+
+  var html = ``;
+  var board_container = document.querySelector(".board_populate_container");
+  console.log(board);
+    for(var i = 0 ; i < board.length;i++){
+      var no_space_name = board[i].name.replace(/\s/g, '');
+      html += `
+        <a href = "/my_board/id=:${board[i]._id}/name=:${no_space_name}">
+          <div class="taskboard" style = "background:${board[i].background}" _id = "${board[i]._id} name = "${board[i].name}">
+            <div class = "inner_board">
+              <p class="task_heading">${board[i].name}</p>
+              <div class="see_more">...</div>
+            </div>
+          </div>
+        </a>
+      `
+    }
+
+    board_container.innerHTML = html;
+
 
 }
 
@@ -140,11 +173,13 @@ function CreateBoard(name,background){
     }
 
     axios.post("/board/create",board_heading).then((result)=>{
-      console.log(result);
-    }).catch((err)=>{
-      alert("Error Occurred");
-      console.log(err);
-    })
+
+      var boards = result.data.boards;
+      console.log(boards);
+      RenderBoardElements(boards);
+      RemoveModal();
+
+    });
 
   }
 
@@ -152,11 +187,23 @@ function CreateBoard(name,background){
 
 function Init(){
 
+  GetUser();
+
   if(add_board_buttons.length > 0){
     AddBoardButtonEvents();
   }
 
 }
 
+
+function GetUser(){
+
+  axios.get("/user/data").then((result)=>{
+    var boards = result.data.boards;
+    console.log(boards);
+    RenderBoardElements(boards);
+  });
+
+}
 
 Init();

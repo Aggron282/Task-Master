@@ -17,17 +17,28 @@ const GetCreateAccountPage = (req,res,next) => {
   res.sendFile(path.join(__dirname,"..","public","create_account.html"));
 }
 
+const Logout = (req,res,next)=>{
+    req.user = null;
+    req.session.isAuthenticated = null;
+    res.redirect("/");
+}
+
 const Login = (req,res,next)=>{
 
   var account = req.body;
 
   User.findOne({username:account.username}).then((result)=>{
-    console.log(result);
+
     if(!result){
       res.json({error:"Wrong username/password"});
     }
     else if(result.password == account.password){
+
+      req.session.user = result;
+      req.session.isAuthenticated = true;
+
       res.json({error:null});
+
     }
     else{
       res.json({error:"Wrong username/password"});
@@ -36,6 +47,8 @@ const Login = (req,res,next)=>{
   })
 
 }
+
+
 
 const CreateAccount = (req,res,next) => {
 
@@ -54,7 +67,7 @@ const CreateAccount = (req,res,next) => {
           name:"",
           profilePicture:"",
           password:password,
-          tasks:[]
+          boards:[]
       }
 
       var account_saved = new User(new_account);
@@ -69,6 +82,18 @@ const CreateAccount = (req,res,next) => {
 
 }
 
+const GetUserData = (req,res,next) => {
+
+  if(req.user){
+    res.json(req.user);
+  }else{
+    res.json(null);
+  }
+
+}
+
+module.exports.GetUserData = GetUserData;
+module.exports.Logout = Logout;
 module.exports.GetLoginPage = GetLoginPage;
 module.exports.GetCreateAccountPage = GetCreateAccountPage;
 module.exports.CreateAccount = CreateAccount;

@@ -7,6 +7,6 @@ router.get("/auth/create_account",main_controller.GetCreateAccountPage);
 router.post("/auth/create_account",main_controller.CreateAccount);
 router.post("/auth/login",main_controller.Login);
 router.get("/auth/login",main_controller.GetLoginPage);
-
+router.get("/auth/logout",main_controller.Logout);
 
 module.exports = router;

@@ -8,6 +8,31 @@
 .login_mod{
   animation: slide_up_and_bounce 1s ease-in 1;
 }
+ .underline{
+  position: absolute;
+  top:40%;
+  left:0%;
+  height:4px;
+  background:white;
+  width:30%;
+}
+
+.relative{
+  position: relative;
+}
+.go_back:hover{
+  transform:rotate(-3deg);
+}
+.go_back{
+  transition: all .3s;
+  transform:rotate(0deg);
+  color:white;
+  position: relative;
+  float:left;
+  font-size:28px;
+  font-weight:300;
+  margin-left:2.5%;
+}
 
 .title_logo{
   text-align: left;
@@ -32,12 +57,20 @@
   background:#f0f4f9;
 }
 
+
+
+
 .login_mod{
   background:white;
   padding:5%;
   padding-bottom:15%;
   margin-top:2.5%;
   position: relative;
+}
+
+.create_account_mod{
+  margin-top:-20%;
+
 }
 
 .google_login{
@@ -175,7 +208,8 @@ body{
 .inner_banner{
  animation: banner_appear .5s 1 ease-in;
  width:100%;
- padding:20px;
+ z-index:999;
+ padding:15px;
  position: absolute;
  top:0%;
  left:0%;

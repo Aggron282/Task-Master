@@ -1,0 +1,60 @@
+.dropdown_container{
+  float:left;
+  width:20%;
+
+}
+
+.my_logo{
+  width:20%;
+  float:left;
+}
+
+.my_title_logo{
+  float:left;
+  font-size:22px;
+  font-family: "Noto Sans";
+}
+
+.choices_container{
+  margin-left:35%;
+  width:100%;
+}
+.my_profile_img{
+  filter:brightness(0);
+  width:50px;
+  margin-top:-5%;
+}
+.profile_container{
+  float:left;
+}
+
+.my_logo_container{
+  float: left;
+  width:20%;
+
+}
+.dropdown_container{
+  padding-top:10px;
+
+}
+.dropdown_container p{
+  float:left;
+  padding-top:0px;
+
+  margin-left:5%;
+}
+.task_heading{
+  padding-top:10px;
+  padding-bottom:60px;
+
+}
+
+.list_heading{
+  background:white;
+  opacity:.3;
+  font-size:20px;
+  text-align: center;
+  padding:10px;
+  border-radius:20px;
+  float:left;
+}

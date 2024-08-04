@@ -20,9 +20,10 @@ const User = new Schema(
       type:String,
       required:true
     },
-    tasks:[]
+    boards:[]
 
-     }
+  }
+
 );
 
 

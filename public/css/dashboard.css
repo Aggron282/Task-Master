@@ -8,14 +8,13 @@
 }
 
 .board_container .inner_container{
-  padding:5%;
+  padding:10px;
   overflow: auto;
 }
 
 .board_task{
   float:left;
-  margin-left:5%;
-  width:25%;
+  margin-left:2.5%;
 }
 
 .add_task img {
@@ -41,11 +40,13 @@
 }
 
 .add_task{
-  border:#e6e6e6 dashed 2px;
-  font-size:25px;
-  transition:  all .2s;
-  color:#e6e6e6;
-  font-weight:200;
+  width: 199px;
+  height: 200px;
+  border: #e6e6e6 dashed 2px;
+  font-size: 25px;
+  transition: all .2s;
+  color: #e6e6e6;
+  font-weight: 200;
 }
 
 .container-fluid{

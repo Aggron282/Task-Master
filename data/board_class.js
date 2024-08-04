@@ -1,3 +1,5 @@
+const generateUniqueId = require('generate-unique-id');
+
 class Board {
 
   constructor(config){
@@ -5,6 +7,8 @@ class Board {
     this.subtitle = config.subtitle;
     this.background = config.background;
     this.list = [];
+    this._id =  generateUniqueId();
+
   }
 
 }
