@@ -7,7 +7,7 @@ class Board {
     this.subtitle = config.subtitle;
     this.background = config.background;
     this.list = [];
-    this._id =  generateUniqueId();
+    this.id =  generateUniqueId();
 
   }
 

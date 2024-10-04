@@ -1,4 +1,5 @@
-var path = require("path");
+const path = require("path");
+
 const User = require("./../models/users.js");
 
 const GetHomePage = (req,res,next) => {
@@ -47,8 +48,6 @@ const Login = (req,res,next)=>{
   })
 
 }
-
-
 
 const CreateAccount = (req,res,next) => {
 

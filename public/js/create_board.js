@@ -5,6 +5,7 @@ var new_board = document.querySelector("#new_board");
 var colors = ["black","#bbbbbb","#a827cb","#e8a1c9","#1bd37e","#412d20","#bbbfde","#b871e9","#716c7f","#66f02d","#fb56aa","#c30230"]
 var isModalRendered = false;
 var active_color;
+var boards;
 
 function RenderModal(){
 
@@ -12,6 +13,7 @@ function RenderModal(){
 
   var html = `
   <div class="modal_board">
+
     <div class="error_banner"></div>
 
     <p id="exit_modal"> X </p>
@@ -25,7 +27,7 @@ function RenderModal(){
 
     <p class="title"> Choose Uploaded Background </p>
 
-    <button class="upload_button">Upload Image</button>
+    <input type='file' class=" upload_button" name="thumbnail"  placeholder="Image URL">
 
     <br />
 
@@ -34,9 +36,11 @@ function RenderModal(){
     <input class="board_input" id = "board_name" placeholder = "Name of Board">
 
     <button class="add_board_button showcase_button"> Add Board </button>
-  </div>`
+  <
+  /div>`
 
   board_modal_wrapper.classList.add("wrapper_active");
+
   board_modal_container.innerHTML = html;
 
   AddColorBoxEvents();
@@ -65,12 +69,14 @@ function RenderBoardElements(board){
 
   var html = ``;
   var board_container = document.querySelector(".board_populate_container");
-  console.log(board);
+
     for(var i = 0 ; i < board.length;i++){
+
       var no_space_name = board[i].name.replace(/\s/g, '');
+
       html += `
-        <a href = "/my_board/id=:${board[i]._id}/name=:${no_space_name}">
-          <div class="taskboard" style = "background:${board[i].background}" _id = "${board[i]._id} name = "${board[i].name}">
+        <a href = "/my_board/id=:${board[i].id}/name=:${no_space_name}">
+          <div class="taskboard" style = "background:${board[i].background}" id = "${board[i].id} name = "${board[i].name}">
             <div class = "inner_board">
               <p class="task_heading">${board[i].name}</p>
               <div class="see_more">...</div>
@@ -199,7 +205,7 @@ function Init(){
 function GetUser(){
 
   axios.get("/user/data").then((result)=>{
-    var boards = result.data.boards;
+    boards = result.data.boards;
     console.log(boards);
     RenderBoardElements(boards);
   });

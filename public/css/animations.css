@@ -15,6 +15,7 @@
 }
 
 
+
 @keyframes slide_from_left {
   0%{
     transform:translateX(-1200px);
