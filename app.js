@@ -9,6 +9,19 @@ var mongodb_connection = "mongodb+srv://marcokhodr116:aggron828@cluster0.81dhu2y
 var path = require("path");
 var port = 3001;
 
+var multer = require("multer");
+
+const fileStorage = multer.diskStorage({
+
+  destination: (req,file,cb) =>{
+    cb(null,"images")
+  },
+  filename: (req,file,cb) =>{
+    cb(null,new Date().toISOString().replace(/:/g, '-') + file.originalname);
+  }
+
+});
+
 
 var main_router = require("./routes/main_routes.js");
 var board_router = require("./routes/board_routes.js");
@@ -16,6 +29,7 @@ var board_router = require("./routes/board_routes.js");
 app.use(body_parser.json());
 app.use(express.static(__dirname + '/public'));
 app.use(body_parser.urlencoded({extended:false}));
+app.use(multer({storage:fileStorage}).single("thumbnail"));
 
 var StoreSession =  new MongoDBStore({
   uri:mongodb_connection,

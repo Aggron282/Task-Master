@@ -127,6 +127,12 @@ const AddBoard = (req,res,next)=>{
 
   var board_heading = req.body;
 
+  var color = Object.keys(req.body)[0];
+  req.body.color = color;
+  req.body.thumbnail = req.file;
+
+  console.log(req.body);
+  return;
   var config = {
     subtitle:"",
     name:board_heading.name,

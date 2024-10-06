@@ -6,12 +6,14 @@ var colors = ["black","#bbbbbb","#a827cb","#e8a1c9","#1bd37e","#412d20","#bbbfde
 var isModalRendered = false;
 var active_color;
 var boards;
-
+var chosen_color_input;
+var chosen_image;
 function RenderModal(){
 
   isModalRendered = true;
 
   var html = `
+
   <div class="modal_board">
 
     <div class="error_banner"></div>
@@ -22,25 +24,31 @@ function RenderModal(){
 
     ${ReturnColorElements()}
 
-    <br />
-    <br />
-
-    <p class="title"> Choose Uploaded Background </p>
-
-    <input type='file' class=" upload_button" name="thumbnail"  placeholder="Image URL">
 
     <br />
+    <br />
 
-    <p class="title"> Choose Name of Board </p>
+    <form method = "POST" action = "/board/create" id="createboard">
+    <input class="chosen_color_input" name='${colors[0]}' type="hidden"/>
 
-    <input class="board_input" id = "board_name" placeholder = "Name of Board">
+      <p class="title"> Choose Uploaded Background </p>
 
-    <button class="add_board_button showcase_button"> Add Board </button>
-  <
-  /div>`
+      <input type='file' class=" upload_button" name="thumbnail"  placeholder="Image URL">
+
+      <br />
+
+      <p class="title"> Choose Name of Board </p>
+
+      <input class="board_input" id = "board_name" name="name" placeholder = "Name of Board">
+
+      <button class="add_board_button showcase_button" type = "submit"> Add Board </button>
+
+    </form>
+
+  `;
 
   board_modal_wrapper.classList.add("wrapper_active");
-
+  chosen_color_input = document.querySelector(".chosen_color_input");
   board_modal_container.innerHTML = html;
 
   AddColorBoxEvents();
@@ -51,6 +59,9 @@ function RenderModal(){
 
   document.querySelector(".add_board_button").addEventListener("click",(e)=>{
     var name = document.querySelector("#board_name").value;
+    var form = document.querySelector("#createboard");
+    form.preventDefault();
+    e.preventDefault();
     CreateBoard(name,active_color);
   });
 
@@ -98,7 +109,9 @@ function ReturnColorElements(){
   for(var i = 0; i < colors.length; i++){
 
     if(i < 1){
-      html += `<div class="color_box color_active" style="background:${colors[i]}"></div>`
+      html += `<div class="color_box color_active" style="background:${colors[i]}">
+
+      </div>`
       active_color = colors[i];
     }
     else{
@@ -122,6 +135,13 @@ function ChangeBoardColor(color){
   }
 
   active_color = color;
+
+
+  if(document.querySelector(".chosen_color_input")){
+    var chosen_color_input = document.querySelector(".chosen_color_input");
+    chosen_color_input.setAttribute("name",color)
+  }
+
   board_modal_wrapper.style.background = active_color;
 
 }
@@ -139,6 +159,9 @@ function AddColorBoxEvents(){
       ChangeBoardColor(chosen_color);
 
       e.target.classList.add("color_active");
+      if(chosen_color_input){
+        chosen_color_input.setAttribute("name",chosen_color);
+      }
 
     });
 
@@ -167,26 +190,14 @@ function AddBoardButtonEvents(){
 }
 
 function CreateBoard(name,background){
-  console.log(name);
+
   if(name.length <= 0){
     RenderErrorBanner("Must Choose Name","orangered");
   }
-  else{
 
-    var board_heading = {
-      name:name,
-      background:background
-    }
-
-    axios.post("/board/create",board_heading).then((result)=>{
-
-      var boards = result.data.boards;
-      console.log(boards);
-      RenderBoardElements(boards);
-      RemoveModal();
-
-    });
-
+  else if(document.querySelector("#createboard")){
+    var form = document.querySelector("#createboard");
+    form.submit();
   }
 
 }
