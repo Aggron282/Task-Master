@@ -298,9 +298,11 @@ async function Init (){
    isEditing = false;
 
    await SetCurrentBoard();
+   var background = chosen_board.background.filename ? `url("/images/${chosen_board.background.filename}")` : chosen_board.background;
+   board_container.style.background = background;
+   document.body.style.background = background;
 
-   board_container.style.background = chosen_board.background;
-   document.body.style.background = chosen_board.background;
+
    ExitOutOfListModals();
    ExitOutOfTaskModals();
    RenderList();

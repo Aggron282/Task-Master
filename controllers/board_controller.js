@@ -125,18 +125,19 @@ const AddTaskToList = async (req,res,next) => {
 
 const AddBoard = (req,res,next)=>{
 
-  var board_heading = req.body;
-
   var color = Object.keys(req.body)[0];
-  req.body.color = color;
+
   req.body.thumbnail = req.file;
 
-  console.log(req.body);
-  return;
+  var board_config = req.body;
+  var pic = board_config.thumbnail ? board_config.thumbnail : color;
+
   var config = {
     subtitle:"",
-    name:board_heading.name,
-    background:board_heading.background
+    name:board_config.name,
+    description:"",
+    status:false,
+    background:pic
   }
 
   var new_board = new Board(config);

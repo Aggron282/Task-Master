@@ -8,6 +8,7 @@ var active_color;
 var boards;
 var chosen_color_input;
 var chosen_image;
+
 function RenderModal(){
 
   isModalRendered = true;
@@ -23,12 +24,11 @@ function RenderModal(){
     <p class="title"> Choose Background </p>
 
     ${ReturnColorElements()}
-
-
+    
     <br />
     <br />
 
-    <form method = "POST" action = "/board/create" id="createboard">
+    <form method = "POST" action = "/board/create" id="createboard"  enctype = "multipart/form-data">
     <input class="chosen_color_input" name='${colors[0]}' type="hidden"/>
 
       <p class="title"> Choose Uploaded Background </p>
@@ -85,9 +85,10 @@ function RenderBoardElements(board){
 
       var no_space_name = board[i].name.replace(/\s/g, '');
 
+      var background = board[i].background.filename ? `url('/images/${board[i].background.filename}')` : board[i].background;
       html += `
         <a href = "/my_board/id=:${board[i].id}/name=:${no_space_name}">
-          <div class="taskboard" style = "background:${board[i].background}" id = "${board[i].id} name = "${board[i].name}">
+          <div class="taskboard" style = "background:${background}" id = "${board[i].id} name = "${board[i].name}">
             <div class = "inner_board">
               <p class="task_heading">${board[i].name}</p>
               <div class="see_more">...</div>

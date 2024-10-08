@@ -1,13 +1,28 @@
-.login_container{
-  background:linear-gradient(to right, rgba(236, 0, 140, 1),rgba(252, 103, 103, 1));
+body{
+  background:linear-gradient(to right,#ff5757 ,#8c52ff),url("./../imgs/auth.png"); */
   padding-bottom:5%;
-  overflow: hidden;
+  animation: 15s infinite ease-in transient;
   width:100%;
+
+}
+
+.authentication_container{
+  background: none !important2;
+}
+.login_container{
+  background:none !important;
+  position: relative;
+  z-index: 0;
+}
+
+.watermark--auth{
+  filter: invert(4%) sepia(56%) saturate(5546%) hue-rotate(164deg) brightness(99%) contrast(103%);
 }
 
 .login_mod{
   animation: slide_up_and_bounce 1s ease-in 1;
 }
+
  .underline{
   position: absolute;
   top:40%;
@@ -15,6 +30,27 @@
   height:4px;
   background:white;
   width:30%;
+}
+
+.title_logo{
+  z-index: 99;
+  position: relative;
+}
+
+.go_back{
+  position: relative;
+
+  z-index: 99;
+
+}
+
+.watermark--auth{
+  position: absolute;
+  opacity: .05;
+  width:100% !important;
+  height:100%;
+  left:0%;
+  bottom:0%;
 }
 
 .relative{
@@ -31,6 +67,18 @@
   float:left;
   font-size:28px;
   font-weight:300;
+  margin-left:2.5%;
+}
+
+.go_back--login{
+  transition: all .3s;
+  transform:rotate(0deg);
+  color:white;
+  position: relative;
+  float:left;
+  font-size:28px;
+  font-weight:300;
+  margin-top:-5%;
   margin-left:2.5%;
 }
 
@@ -56,9 +104,6 @@
   padding:0%;
   background:#f0f4f9;
 }
-
-
-
 
 .login_mod{
   background:white;
@@ -93,7 +138,10 @@
   border-radius:10px;
   padding:5%;
   overflow: hidden;
-  margin-top:10% !important;
+  margin-top:7.5% !important;
+  position: relative;
+  z-index: 9909;
+
   margin-left:5%;
   margin-right:5%;
   box-sizing: border-box;
@@ -118,7 +166,7 @@ form p{
 }
 
 .logo_login{
-  width:30%;
+  width:40% !important;
   margin-left: 5%;
 }
 
