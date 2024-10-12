@@ -1,6 +1,7 @@
 var board_container = document.querySelector(".my_taskboard_container");
 var inner_container = document.querySelector(".inner_container_task");
 var task_heading_container = document.querySelector(".task_heading_container");
+var overlay = document.querySelector(".overlay--board");
 
 var url = window.location.href;
 var name = url.split("name=:")[1];
@@ -202,7 +203,7 @@ function AddListToBoard(e,cb){
   }
 
   axios.post(`/my_board/create/id=${id}/name=${name}`,config).then((result)=>{
-    Init();
+    InitMyBoard();
     cb(result);
   }).catch(err => console.log(err));
 
@@ -227,7 +228,7 @@ function AddTaskToBoard(e,cb){
 
   if(isEditing){
     axios.post(`/my_board/add/task`,config).then((result)=>{
-      Init();
+      InitMyBoard();
     }).catch(err => console.log(err));
   }
 
@@ -285,32 +286,66 @@ async function SetCurrentBoard(){
 
     var no_space_name = user.boards[i].name.replace(/\s/g, '');
 
-    if(no_space_name == name && id == user.boards[i].id){
+    if(no_space_name == name && id == user.boards[i]._id){
+
       chosen_board = user.boards[i];
+        console.log(chosen_board);
     }
 
   }
 
 }
 
-async function Init (){
+async function InitMyBoard (){
 
    isEditing = false;
 
    await SetCurrentBoard();
-   var background = chosen_board.background.filename ? `url("/images/${chosen_board.background.filename}")` : chosen_board.background;
-   board_container.style.background = background;
-   document.body.style.background = background;
+   console.log(chosen_board);
+   var background = chosen_board.background;
+   var rgb = chosen_board.background;
+   var color_data = chosen_board.background;
 
+   if(chosen_board.background_img){
+    background = chosen_board.background_img ? `url("/images/${chosen_board.background_img.filename}")` : chosen_board.background;
+    rgb = chosen_board.background_img ?  chosen_board.background_img.filename : chosen_board.background;
+    color_data = await axios.post("/api/color/all",{src:rgb});
+   }
+
+   var task_heading = document.querySelector(".task_heading");
+   var side_nav = document.querySelector("#sidebackground");
+
+   var linear_grad = `linear-gradient(to bottom`;
+
+   task_heading.style.background = background;
+   side_nav.style.background = background;
+
+   if(color_data.data){
+     for (var i =0; i < color_data.data.length - 3; i++){
+       var chosen_color = color_data.data[i];
+       linear_grad += `,rgba(${chosen_color.r},${chosen_color.g},${chosen_color.b},${1})`;
+     }
+
+     linear_grad+= ")";
+
+     task_heading.style.background = linear_grad;
+     side_nav.style.background = linear_grad;
+
+   }
+
+
+   overlay.style.background = background;
 
    ExitOutOfListModals();
    ExitOutOfTaskModals();
+
    RenderList();
+
    AddEventsToAddTask();
+
    AddEventToAddList();
+
 }
-
-
 
 // board_container.addEventListener("click",(e)=>{
 //
@@ -323,4 +358,4 @@ async function Init (){
 
 
 
-Init();
+InitMyBoard();

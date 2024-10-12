@@ -20,7 +20,10 @@ const User = new Schema(
       type:String,
       required:true
     },
-    boards:[]
+    boards:{
+      type:Array,
+      required:true
+    }
 
   }
 

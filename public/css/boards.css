@@ -4,27 +4,40 @@
     float: left;
     width: 20%;
     position: relative;
-    border-radius: 10px;
+    border-radius: 5px;
     padding:10px;
-    padding-bottom:20px;
+    height:120px;
     transform: translateY(0px);
     transition:  all .3s;
 }
+
+
 .inner_board{
   padding:5px;
-  background:white;
-  border-radius: 10px;
   width:100%;
   height:100%;
   transition: all .3s;
+}
+
+.inner_board p {
+  text-align: center;
+  padding:0px;
+  color:white !important;
+  font-size:25px;
+  letter-spacing: 2px;
+  font-weight:500 !important;
+  font-family: "Roboto" !important
+}
+
+.inner_board:hover p{
+  color:black !important;
 }
 
 .see_more{
   text-align: center;
   color:white;
   font-size:40px;
-  margin-top:10%;
-
+  margin-top:-10%;
 }
 .taskboard:hover{
   transform: translateY(-10px);
@@ -46,8 +59,24 @@
 
 .taskboard:hover .inner_board{
   background:transparent;
-
 }
+
+.options_list{
+  position: relative;
+  z-index:999;
+}
+.task_sidenav .background  {
+  background: white;
+  opacity:.9;
+
+  height:100%;
+  width:100%;
+  position: absolute;
+  top:0;
+  z-index: 0;
+  left:0;
+}
+
 .taskboard:hover .inner_board p {
   background:white;
 }

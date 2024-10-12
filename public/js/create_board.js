@@ -8,6 +8,11 @@ var active_color;
 var boards;
 var chosen_color_input;
 var chosen_image;
+var delete_boards = document.querySelector(".delete_boards");
+var canDelete = false;
+
+var boards_found = document.getElementsByClassName("taskboard");
+
 
 function RenderModal(){
 
@@ -24,7 +29,7 @@ function RenderModal(){
     <p class="title"> Choose Background </p>
 
     ${ReturnColorElements()}
-    
+
     <br />
     <br />
 
@@ -76,6 +81,23 @@ function RemoveModal(){
 
 }
 
+function AddDeleteEvents(){
+
+  var delete_buttons_found = document.getElementsByClassName(".delete_button_");
+
+  for(var t =0; t < boards_found.length;i++){
+
+    delete_buttons_found[i].addEventListener("click",(e)=>{
+
+      var id = e.target.getAttribute("id");
+      var owner_id = e.target.getAttribute("ownerID");
+      console.log(id,owner_id);
+    });
+
+  }
+
+}
+
 function RenderBoardElements(board){
 
   var html = ``;
@@ -85,21 +107,41 @@ function RenderBoardElements(board){
 
       var no_space_name = board[i].name.replace(/\s/g, '');
 
-      var background = board[i].background.filename ? `url('/images/${board[i].background.filename}')` : board[i].background;
+      var background = board[i].background_img ? `url('/images/${board[i].background_img.filename}')` : board[i].background;
       html += `
-        <a href = "/my_board/id=:${board[i].id}/name=:${no_space_name}">
-          <div class="taskboard" style = "background:${background}" id = "${board[i].id} name = "${board[i].name}">
+          <div class="taskboard" style = "background:${background}" id = "${board[i]._id} name = "${board[i].name}">
+            <a href = "/my_board/id=:${board[i]._id}/name=:${no_space_name}">
             <div class = "inner_board">
               <p class="task_heading">${board[i].name}</p>
-              <div class="see_more">...</div>
+
             </div>
+            </a>
+            <div class="delete_button_" ownerID = "${board[i].ownerID}" id = "${board[i]._id}">X </div>
           </div>
-        </a>
+
       `
     }
 
     board_container.innerHTML = html;
 
+    var delete_button_ = document.getElementsByClassName("delete_button_");
+
+    for(var i =0; i < delete_button_.length; i++){
+        delete_button_[i].addEventListener("click",(e)=>{
+          var _id = e.target.getAttribute("id");
+          var ownerID = e.target.getAttribute("ownerID");
+          var config = {
+            _id:_id,
+            ownerID:ownerID
+          }
+          axios.post("/my_board/delete/one",config).then((response)=>{
+            console.log(response);
+            Init();
+
+          });
+
+        })
+    }
 
 }
 
@@ -186,6 +228,22 @@ function AddBoardButtonEvents(){
 
     })
 
+    delete_boards.addEventListener("click",(e)=>{
+
+        canDelete = !canDelete;
+        for(var i =0; i < boards_found.length; i++){
+
+            if(canDelete){
+              boards_found[i].classList.add("taskboard--delete")
+            }
+            else{
+              boards_found[i].classList.remove("taskboard--delete")
+            }
+
+        }
+
+    });
+
   }
 
 }
@@ -203,18 +261,12 @@ function CreateBoard(name,background){
 
 }
 
-function Init(){
 
-  GetUser();
-
-  if(add_board_buttons.length > 0){
-    AddBoardButtonEvents();
-  }
-
+if(add_board_buttons.length > 0){
+  AddBoardButtonEvents();
 }
 
-
-function GetUser(){
+function Init(){
 
   axios.get("/user/data").then((result)=>{
     boards = result.data.boards;

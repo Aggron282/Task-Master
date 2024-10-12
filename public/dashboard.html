@@ -37,7 +37,7 @@
           <div class="row navbar_board_row">
             <div class="col-2 logo_col">
               <div class="logo_container--dashboard">
-                  <img class="logo" src = "/images/logo.png"/>
+                  <img class="logo" src = "/imgs/logo.png"/>
                   <p class="title title--logo"> Task-Master </p>
               </div>
             </div>
@@ -85,14 +85,19 @@
     </div>
       <div class="row dashboard_row">
 
-        <div class="col-3">
+        <div class="col-2">
 
           <div class="account_header">
 
               <div class="options_container">
 
                   <ul class="options_list">
-
+                    <li class="delete_boards">
+                      <span class="profile_container">
+                          <img class="icon_sidenav" src = "./../../imgs/settings.png">
+                          <p> Delete Boards </p>
+                      </span>
+                     </li>
                       <li>
                         <span class="profile_container">
                             <img class="icon_sidenav" src = "./../../imgs/task.png">
@@ -139,7 +144,7 @@
 
         </div>
 
-        <div class="col-9 board_col">
+        <div class="col-10 board_col">
 
           <div class="board_container">
 
@@ -167,6 +172,7 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src = "./../js/auth.js"></script>
     <script src = "./../js/create_board.js"></script>
+    <script src = "./../js/util.js"></script>
 
   </body>
 

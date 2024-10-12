@@ -3,39 +3,37 @@ const Schema = mongoose.Schema;
 
 const schema = new Schema(
   {
-    title:{
+    name:{
       type:String,
       required:true
     },
     subtitle:{
       type:String,
-      required:true
+      required:false
     },
-    background_img:{
+    background:{
       type:String,
       required:true
     },
-    list:{
-      type:[
-        {
-          listID:String,
-          required:true
-        },
-        {
-          item_title:String,
-          required:true
-        },
-        {
-          item_subtitle:String,
-          required:true
-        },
-        {
-          complete:Boolean,
-          required:true
-        }
-    ],
+    background_img:{
+      type:Object,
+      required:false
+    },
+    ownerID:{
+      type:Schema.Types.ObjectId,
       required:true
-
+    },
+    description:{
+      type:String,
+      required:false
+    },
+    status:{
+      type:Boolean,
+      required:true
+    },
+    list:{
+      type:Array,
+      required:true
     }
 
   }

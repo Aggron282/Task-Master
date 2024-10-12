@@ -1,13 +1,27 @@
 body{
-  background:linear-gradient(to right,#ff5757 ,#8c52ff),url("./../imgs/auth.png"); */
+  background:linear-gradient(to right,rgba(255, 87, 87, .8),rgba(255, 87, 87, .8)),url("./../imgs/auth.png"); */
   padding-bottom:5%;
   animation: 15s infinite ease-in transient;
   width:100%;
 
 }
 
+.login_title--create{
+  text-align: center !important;
+  font-size:20px;
+  font-weight:500 !important;
+}
+.login_row input{
+  height:30px;
+}
+
 .authentication_container{
   background: none !important2;
+}
+.logo_login--create{
+  width:30% !important;
+  margin-left:35% !important;
+  margin-top:5%;
 }
 .login_container{
   background:none !important;
@@ -15,6 +29,10 @@ body{
   z-index: 0;
 }
 
+.link_to_auth{
+  margin-top:10px;
+  font-size:14px;
+}
 .watermark--auth{
   filter: invert(4%) sepia(56%) saturate(5546%) hue-rotate(164deg) brightness(99%) contrast(103%);
 }
@@ -84,7 +102,7 @@ body{
 
 .title_logo{
   text-align: left;
-  font-weight:100 !important;
+  font-weight:700 !important;
   padding-top:10px;
   color:white;
   padding: 10px;
@@ -108,13 +126,15 @@ body{
 .login_mod{
   background:white;
   padding:5%;
-  padding-bottom:15%;
+  padding-bottom:10%;
   margin-top:2.5%;
   position: relative;
 }
-
 .create_account_mod{
-  margin-top:-20%;
+  padding-bottom:5% !important
+}
+.create_account_mod{
+  margin-top:-15%;
 
 }
 
@@ -172,7 +192,7 @@ form p{
 
 .login_title{
   text-align: left;
-  font-weight:250;
+  font-weight:400;
   font-size:30px;
   font-family: "Amazon Ember";
 }
@@ -194,7 +214,7 @@ form p{
 .login_button{
   background:linear-gradient(to right, rgba(236, 0, 140, 1),rgba(252, 103, 103, 1));
   padding:2%;
-  margin-top:15%;
+  margin-top:5%;
   opacity:.6;
   color:white;
   font-size:17px;
