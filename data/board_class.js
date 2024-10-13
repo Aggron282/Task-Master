@@ -8,7 +8,6 @@ class Board {
     this.background = config.background;
     this.list = [];
     this.id =  generateUniqueId();
-
   }
 
 }

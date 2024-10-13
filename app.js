@@ -1,15 +1,19 @@
-var body_parser = require("body-parser");
-var express = require("express");
-var app = express();
-var User = require("./models/users.js");
-var mongoose = require("mongoose");
-var session = require("express-session");
-var MongoDBStore = require('connect-mongodb-session')(session);
-var mongodb_connection = "mongodb+srv://marcokhodr116:aggron828@cluster0.81dhu2y.mongodb.net/task_master?retryWrites=true&w=majority&appName=Cluster0"
-var path = require("path");
-var port = 3001;
+const port = 3001;
 
-var multer = require("multer");
+const body_parser = require("body-parser");
+const express = require("express");
+const mongoose = require("mongoose");
+const session = require("express-session");
+const MongoDBStore = require('connect-mongodb-session')(session);
+const path = require("path");
+const multer = require("multer");
+
+const mongodb_connection = require("./util/db.js").mongodb_connection;
+
+const User = require("./models/users.js");
+
+const app = express();
+
 
 const fileStorage = multer.diskStorage({
 
@@ -22,9 +26,10 @@ const fileStorage = multer.diskStorage({
 
 });
 
-
-var main_router = require("./routes/main_routes.js");
-var board_router = require("./routes/board_routes.js");
+const auth_router = require("./routes/auth_routes.js");
+const main_router = require("./routes/main_routes.js");
+const board_router = require("./routes/board_routes.js");
+const dashboard_router = require("./routes/dashboard_routes.js");
 
 app.use(body_parser.json());
 app.use(express.static(__dirname + '/public'));
@@ -41,10 +46,12 @@ app.use(session({secret:"3489834948394893sjkdev__43898935",saveUninitialized:fal
 app.use((req,res,next)=>{
 
   if(req.session.user){
+
     User.findById(req.session.user._id).then((user)=>{
       req.user = user;
       next();
     });
+
   }
   else{
     next();
@@ -54,6 +61,8 @@ app.use((req,res,next)=>{
 
 app.use(main_router);
 app.use(board_router);
+app.use(dashboard_router);
+app.use(auth_router);
 
 mongoose.connect(mongodb_connection).then((s)=>{
 

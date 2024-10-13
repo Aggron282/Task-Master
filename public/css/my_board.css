@@ -3,11 +3,16 @@
   width:20%;
 
 }
+body{
+  overflow-y: hidden !important;
+}
 .my_taskboard_container{
   margin-top:5%;
   padding-top: 5%;
 }
-
+#sidebackground{
+  box-shadow: 0px 0px 20px rgba(255,255,255,.1);
+}
 .task_item_container{
   background:white;
   padding:2px;

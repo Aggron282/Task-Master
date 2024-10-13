@@ -1,78 +1,15 @@
-var board_container = document.querySelector(".my_taskboard_container");
-var inner_container = document.querySelector(".inner_container_task");
-var task_heading_container = document.querySelector(".task_heading_container");
-var overlay = document.querySelector(".overlay--board");
+const board_container = document.querySelector(".my_taskboard_container");
+const inner_container = document.querySelector(".inner_container_task");
+const task_heading_container = document.querySelector(".task_heading_container");
+const overlay = document.querySelector(".overlay--board");
 
-var url = window.location.href;
-var name = url.split("name=:")[1];
-var id = url.split("id=:")[1];
+const url = window.location.href;
+const name = url.split("name=:")[1];
+let id = url.split("id=:")[1];
 
 var chosen_board;
 
 var isEditing = false;
-
-const RenderListItem = (task_list) => {
-
-  var list_of_tasks = RenderTaskItems(task_list.list);
-
-  return(`
-    <div class=" task_list relative" _id = "${task_list._id}" isClicked = "0">
-    <div class="list_heading inactive_list"  >
-      ${task_list.name}
-    </div>
-    <div class="all_tasks_in_list">
-      ${list_of_tasks}
-    </div>
-    <div class="add_additional_list_modal"> +  Add Task </div>
-  </div>`);
-
-}
-
-const RenderAddList = (task) => {
-   var id = task ? task._id : ""
-  return (`
-    <div class="relative"  _id = "${id}" isClicked = "0">
-
-      <div class="list_heading inactive_list task_list create_list create_new "  >
-        + Add List
-      </div>
-
-      <div class="add_list_modal"></div>
-
-    </div>`);
-
-}
-
-const RenderAddTaskModal = (id) => {
-
-  return (
-    `<div class="create_list_inner_modal create_list_inner_modal--task" _id = "${id}">
-
-      <input class="list_create_input" id = "taskInput" placeholder = "Enter Name" >
-      <button class="list_create_button" id="addTask">
-        + Add Task
-      </button>
-    </div>
-    `
-  )
-
-}
-
-const RenderAddListModal = () => {
-
-  return (
-    `<div class="create_list_inner_modal create_list--list">
-     <p> Add New List </p>
-      <input class="list_create_input" id = "listInput" placeholder = "Enter Name" >
-      <button class="list_create_button" id = "addList">
-        + Add List
-      </button>
-    </div>
-    `
-  )
-
-}
-
 
 function ExitOutOfListModals(){
 
@@ -94,32 +31,6 @@ function ExitOutOfTaskModals(){
 
 }
 
-function RenderList(){
-
-  var html = ``;
-
-  if(!chosen_board){
-    return;
-  }
-
-  task_heading_container.innerHTML = `<p class="task_title">${chosen_board.name}</p>`
-
-  html += RenderAddList(chosen_board);
-
-  if(chosen_board.list.length <= 0){
-    inner_container.innerHTML =  html;
-    return;
-  }
-
-  for(var k = 0; k < chosen_board.list.length; k++){
-    html += RenderListItem(chosen_board.list[k]);
-  }
-
-  inner_container.innerHTML =  html;
-
-
-}
-
 const AddEventToAddList = () => {
 
   var create_list = document.querySelector(".create_list");
@@ -134,19 +45,21 @@ const AddEventToAddList = () => {
 
     add_list_modal.innerHTML = RenderAddListModal();
 
-    var create_button =  add_list_modal.querySelector("#addList");
+    var create_button = document.querySelector("#addList");
 
     create_button.addEventListener("click",(e)=>{
       AddListToBoard(e,(result)=>{console.log(result)});
-    })
+    });
 
-  })
+  });
 
 }
 
 const AddEventsToAddTask = (element) => {
 
   var task_list = document.getElementsByClassName("task_list");
+  var add_list_modal = element.querySelector(".add_additional_list_modal");
+  var create_button =  add_list_modal.querySelector("#addTask");
 
   for(var i =0; i < task_list.length; i++){
 
@@ -163,13 +76,12 @@ const AddEventsToAddTask = (element) => {
         return;
       }
 
-      var add_list_modal = element.querySelector(".add_additional_list_modal");
 
       if(add_list_modal){
 
-        add_list_modal.innerHTML = RenderAddTaskModal(element.getAttribute("_id"));
+        var list_id = element.getAttribute("_id");
 
-        var create_button =  add_list_modal.querySelector("#addTask");
+        add_list_modal.innerHTML = RenderAddTaskModal(list_id);
 
         create_button.addEventListener("click",(e)=>{
 
@@ -234,36 +146,6 @@ function AddTaskToBoard(e,cb){
 
 }
 
-function RenderTaskItems(tasks){
-
-  var html = ``;
-
-  tasks.map((task)=>{
-
-    var extra = "";
-
-    if(task.description.length > 0){
-      extra = `<div class="extra">...</div>`
-    }
-
-    html += `
-
-    <div class="task_item_container" _id = ${task._id} status = ${task.status}>
-
-      <p class="task_item_name">
-        ${task.name}
-      </p>
-
-      ${extra}
-
-    </div>`
-
-  });
-
-  return html;
-
-}
-
 async function SetCurrentBoard(){
 
   id = id.split("/name=:")[0]
@@ -287,9 +169,7 @@ async function SetCurrentBoard(){
     var no_space_name = user.boards[i].name.replace(/\s/g, '');
 
     if(no_space_name == name && id == user.boards[i]._id){
-
       chosen_board = user.boards[i];
-        console.log(chosen_board);
     }
 
   }
@@ -301,29 +181,85 @@ async function InitMyBoard (){
    isEditing = false;
 
    await SetCurrentBoard();
-   console.log(chosen_board);
+
    var background = chosen_board.background;
    var rgb = chosen_board.background;
    var color_data = chosen_board.background;
+   var task_heading = document.querySelector(".task_heading");
+   var side_nav = document.querySelector("#sidebackground");
+   var linear_grad = `linear-gradient(to bottom`;
+
+   task_heading.style.background = background;
 
    if(chosen_board.background_img){
     background = chosen_board.background_img ? `url("/images/${chosen_board.background_img.filename}")` : chosen_board.background;
     rgb = chosen_board.background_img ?  chosen_board.background_img.filename : chosen_board.background;
     color_data = await axios.post("/api/color/all",{src:rgb});
+  }else{
+
+   var side_nav_background = null;
+   var current_background = background;
+
+   current_background = background.split(",");
+   current_background[0] = current_background[0].substr(4);
+   current_background[2] = current_background[2].replace(")","")
+
+   var dom_color = {
+     color:parseInt(current_background[0]),
+     index:0
    }
 
-   var task_heading = document.querySelector(".task_heading");
-   var side_nav = document.querySelector("#sidebackground");
+   var sub_color = {
+     color:parseInt(current_background[2]),
+     index:2
+   }
 
-   var linear_grad = `linear-gradient(to bottom`;
+   for(var r = 0; r < current_background.length; r++){
 
-   task_heading.style.background = background;
-   side_nav.style.background = background;
+      if(parseInt(current_background[r]) > dom_color.color){
+        dom_color.color = current_background[r];
+        dom_color.index = r;
+      }
+      if(parseInt(current_background[r]) < sub_color.color){
+        sub_color.color = current_background[r];
+        sub_color.index = r;
+      }
 
+   }
+
+   console.log(dom_color);
+   console.log(sub_color);
+   var side_color = [...current_background];
+   if(parseInt(sub_color.color) > 30){
+     current_background[sub_color.index] = Math.floor(sub_color.color / 2.5);
+   }else{
+     current_background[dom_color.index] = Math.floor(dom_color.color / 1.2);
+   }
+
+   diff_color_style = `rgb(${current_background[0]},${current_background[1]},${current_background[2]})`;
+
+   if(parseInt(sub_color.color) > 30){
+     side_color[sub_color.index] =sub_color.color - 5;
+   }else{
+     side_color[dom_color.index] =dom_color.color - 15;
+   }
+
+
+   console.log(current_background);
+   side_color_style = `rgb(${side_color[0]},${side_color[1]},${side_color[2]})`;
+
+   side_nav.style.background = side_color_style;
+   side_nav.style.borderRight = `1px solid ${diff_color_style}`;
+   task_heading.style.background = diff_color_style;
+ }
    if(color_data.data){
+
      for (var i =0; i < color_data.data.length - 3; i++){
+
        var chosen_color = color_data.data[i];
+
        linear_grad += `,rgba(${chosen_color.r},${chosen_color.g},${chosen_color.b},${1})`;
+
      }
 
      linear_grad+= ")";
@@ -333,29 +269,20 @@ async function InitMyBoard (){
 
    }
 
-
    overlay.style.background = background;
 
    ExitOutOfListModals();
    ExitOutOfTaskModals();
 
-   RenderList();
-
-   AddEventsToAddTask();
+   BuildListHTML(chosen_board);
 
    AddEventToAddList();
 
 }
 
-// board_container.addEventListener("click",(e)=>{
-//
-//   if(isEditing){
-//     ExitOutOfListModals();
-//     ExitOutOfTaskModals();
-//   }
-//
-// })
-
-
+async function BuildListHTML(board){
+  var html = RenderList(board);
+  inner_container.innerHTML =  html;
+}
 
 InitMyBoard();

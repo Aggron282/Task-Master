@@ -1,8 +1,8 @@
-var login_button = document.querySelector(".login_button");
-var login_form = document.querySelector(".login_form");
-var password = document.querySelector("#password");
-var username = document.querySelector("#username");
-var name = document.querySelector("#name");
+const login_button = document.querySelector(".login_button");
+const login_form = document.querySelector(".login_form");
+const password = document.querySelector("#password");
+const username = document.querySelector("#username");
+const name = document.querySelector("#name");
 
 login_form.addEventListener("submit",(e)=>{
   e.preventDefault();
@@ -33,8 +33,6 @@ function CreateAccount(){
       if(result.data){
 
         var data = result.data;
-
-        console.log(data);
 
         if(data.error){
           RenderErrorBanner(data.error,"limegreen");

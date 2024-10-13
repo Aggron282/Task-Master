@@ -1,16 +1,21 @@
 .taskboard{
-    margin-bottom: 2.5%;
-    margin-left: 2.5%;
-    float: left;
-    width: 20%;
-    position: relative;
-    border-radius: 5px;
-    padding:10px;
-    height:120px;
-    transform: translateY(0px);
-    transition:  all .3s;
+  margin-bottom: 2.5%;
+  margin-left: 2.5%;
+  float: left;
+  width: 20%;
+  position: relative;
+  border-radius: 5px;
+  padding:10px;
+  height:120px;
+  transform: translateY(0px);
+  transition:  all .3s;
 }
 
+.task_parent{
+  width:80%;
+  float:left;
+  margin-top:-7.5%;
+}
 
 .inner_board{
   padding:5px;
@@ -20,10 +25,10 @@
 }
 
 .inner_board p {
-  text-align: center;
+  text-align: left;
   padding:0px;
   color:white !important;
-  font-size:25px;
+  font-size:15px !important;
   letter-spacing: 2px;
   font-weight:500 !important;
   font-family: "Roboto" !important
@@ -39,10 +44,11 @@
   font-size:40px;
   margin-top:-10%;
 }
+
 .taskboard:hover{
   transform: translateY(-10px);
-
 }
+
 .taskboard:hover .inner_board .see_more{
   opacity:1;
 }
@@ -65,10 +71,10 @@
   position: relative;
   z-index:999;
 }
+
 .task_sidenav .background  {
   background: white;
   opacity:.9;
-
   height:100%;
   width:100%;
   position: absolute;
@@ -80,8 +86,6 @@
 .taskboard:hover .inner_board p {
   background:white;
 }
-
-
 
 body{
   overflow-y: scroll !important;

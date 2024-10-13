@@ -2,8 +2,7 @@ const generateUniqueId = require('generate-unique-id');
 
 class Task {
 
-  constructor(data,query)
-  {
+  constructor(data,query){
 
     this.name = data.name;
     this.list = [];
@@ -13,7 +12,6 @@ class Task {
     }
 
     this._id = generateUniqueId();
-
   }
 
 }

@@ -1,9 +1,7 @@
 body{
-
   padding-bottom:5%;
   animation: 15s infinite ease-in transient;
   width:100%;
-
 }
 
 .login_title--create{
@@ -11,6 +9,7 @@ body{
   font-size:20px;
   font-weight:500 !important;
 }
+
 .login_row input{
   height:30px;
 }
@@ -18,11 +17,13 @@ body{
 .authentication_container{
   background: none !important2;
 }
+
 .logo_login--create{
   width:20% !important;
   margin-left:40% !important;
   margin-top:5%;
 }
+
 .login_container{
   background:none !important;
   position: relative;
@@ -33,15 +34,12 @@ body{
   margin-top:10px;
   font-size:14px;
 }
-.watermark--auth{
-
-}
 
 .login_mod{
   animation: slide_up_and_bounce 1s ease-in 1;
 }
 
- .underline{
+.underline{
   position: absolute;
   top:40%;
   left:0%;
@@ -57,9 +55,7 @@ body{
 
 .go_back{
   position: relative;
-
   z-index: 99;
-
 }
 
 .watermark--auth{
@@ -74,9 +70,11 @@ body{
 .relative{
   position: relative;
 }
+
 .go_back:hover{
   transform:rotate(-3deg);
 }
+
 .go_back{
   transition: all .3s;
   transform:rotate(0deg);
@@ -131,18 +129,21 @@ body{
   box-shadow: 0px 0px 5px rgba(0,0,0,.5);
   position: relative;
 }
+
 .create_account_mod{
   padding-bottom:5% !important
 }
+
 .create_account_mod{
   margin-top:5%;
-
 }
+
 .directions{
   text-align: center;
   font-size: 14px;
   font-weight: 500;
 }
+
 .google_login{
   margin-top:5%;
   background:white;
@@ -166,7 +167,6 @@ body{
   margin-top:7.5% !important;
   position: relative;
   z-index: 9909;
-
   margin-left:5%;
   margin-right:5%;
   box-sizing: border-box;
@@ -179,7 +179,6 @@ body{
 
 form p{
   font-family: "Amazon Ember";
-
 }
 
 .login_subtitle{
@@ -228,7 +227,6 @@ form p{
   border-width:0px;
   border-radius:15px;
   width:100%;
-
 }
 
 .forgot_pass{
@@ -279,15 +277,15 @@ body{
 }
 
 .inner_banner{
- animation: banner_appear .5s 1 ease-in;
- width:100%;
- z-index:999;
- padding:15px;
- position: absolute;
- top:0%;
- left:0%;
- opacity:1;
- transform: translateY(0px);
+  animation: banner_appear .5s 1 ease-in;
+  width:100%;
+  z-index:999;
+  padding:15px;
+  position: absolute;
+  top:0%;
+  left:0%;
+  opacity:1;
+  transform: translateY(0px);
 }
 
 .delete_banner{
