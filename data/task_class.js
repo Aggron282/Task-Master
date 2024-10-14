@@ -1,6 +1,6 @@
 const generateUniqueId = require('generate-unique-id');
 
-class Task {
+class TaskList {
 
   constructor(data,query){
 
@@ -17,4 +17,4 @@ class Task {
 }
 
 
-module.exports = Task;
+module.exports = TaskList;

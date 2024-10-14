@@ -1,0 +1,26 @@
+const AddTaskListToBoard = (e,cb) =>{
+
+  var modal = e.target.parentElement;
+  var input = modal.querySelector("#taskInput");
+  var list_id = modal.getAttribute("_id");
+
+  if(input.value.length < 1){
+    alert("Name of List too Short");
+    return;
+  }
+
+  var config = {
+    name:input.value,
+    board_id:id,
+    list_id:modal.getAttribute("_id")
+  }
+
+  if(isEditing){
+
+    axios.post(`/my_board/id=${id}/name=${name}/task/add`,config).then((result)=>{
+      InitMyBoard();
+    }).catch(err => console.log(err));
+
+  }
+
+}

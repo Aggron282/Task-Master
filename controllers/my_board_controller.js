@@ -1,5 +1,5 @@
 const User = require("./../models/users.js");
-const Task = require("./../data/task_class.js");
+const TaskList = require("./../data/task_class.js");
 const Board = require("./../models/tasks.js");
 
 const generateUniqueId = require('generate-unique-id');
@@ -17,18 +17,17 @@ const ExtractColor = (req,res,next) => {
   })
 
 }
-
-const AddTaskList = (req,res,next) => {
+const AddListToBoard = (req,res,next) => {
 
   const data = req.body;
   const query = req.params;
 
-  var new_task = new Task(data,query);
+  var new_task_list = new TaskList(data,query);
 
   let chosen_board = null;
 
   User.findOne({username:req.user.username}).then((result)=>{
-    console.log(new_task);
+
     if(!result){
       res.json(false);
       return;
@@ -41,16 +40,14 @@ const AddTaskList = (req,res,next) => {
 
       var no_space_name = boards[i].name.replace(/\s/g, '');
 
-      if(no_space_name == new_task.board.name && new_task.board.id == boards[i]._id){
+      if(no_space_name == new_task_list.board.name && new_task_list.board.id == boards[i]._id){
 
         chosen_board = boards[i];
 
-        boards[i] = chosen_board;
-
-        chosen_board.list = [...chosen_board.list, new_task];
+        chosen_board.list = [...chosen_board.list, new_task_list];
 
         updated_user.boards = [...boards];
-        console.log(updated_user.boards);
+
         User.replaceOne({username:result.username},updated_user).then((output)=>{
 
             if(!output){
@@ -78,11 +75,11 @@ const AddTaskList = (req,res,next) => {
 const AddTaskToList = async (req,res,next) => {
 
   const body = req.body;
+  const query = req.params;
 
   var boards = req.user.boards;
 
-  var found_board = await board_util.FindBoardById(boards,body.board_id);
-
+  var found_board = await board_util.FindBoardById(boards,query.board);
   var index = found_board.index;
   var board_data = found_board.board;
 
@@ -113,7 +110,7 @@ const AddTaskToList = async (req,res,next) => {
   });
 
   new_board.list = found_list;
-
+  console.log(found_list);
   req.user.boards[index] = new_board;
 
   var set_board = {$set:{boards:req.user.boards}} ;
@@ -131,9 +128,7 @@ const GetMyBoardPage = (req,res,next) => {
   res.sendFile(path.join(__dirname,"..","public","board.html"));
 }
 
-
-
 module.exports.ExtractColor = ExtractColor;
-module.exports.AddTaskList = AddTaskList;
 module.exports.AddTaskToList = AddTaskToList;
+module.exports.AddListToBoard = AddListToBoard;
 module.exports.GetMyBoardPage = GetMyBoardPage;

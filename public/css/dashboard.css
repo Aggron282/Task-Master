@@ -10,25 +10,30 @@
   padding:10px;
   overflow: auto;
 }
+
 .taskboard--delete{
   animation:shake .1s ease-in infinite;
 }
+
 .taskboard--delete .delete_button_{
   visibility: visible !important;
   z-index: 99999;
 }
+
 a {
   text-decoration: none; /* no underline */
 }
+
 .taskboard--delete:hover{
   transform: none !important;
   animation:none !important;
 }
+
 @keyframes shake {
   0%{transform:rotateZ(1deg)},
   100%{transform:rotateZ(-1deg)}
-
 }
+
 .delete_button_{
   width:30px;
   visibility: hidden;
@@ -38,9 +43,10 @@ a {
   top:-5%;
   color:white;
   border-radius: 50%;
-text-align: center;
+  text-align: center;
   background:orangered;
 }
+
 .board_task{
   float:left;
   margin-left:2.5%;
@@ -171,6 +177,7 @@ body{
   float:left;
   margin-top:-5px;
 }
+
 .board_search{
   padding:2px;
   width:50%;

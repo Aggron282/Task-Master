@@ -9,7 +9,9 @@ let id = url.split("id=:")[1];
 
 var chosen_board;
 
+var isEditingTask = false;
 var isEditing = false;
+var didSetColors = false;
 
 const ExitOutOfListModals = () => {
 
@@ -47,6 +49,14 @@ const AddEventToAddList = () => {
 
     var create_button = document.querySelector("#addList");
 
+    var document_board = document.querySelector(".overlay--board");
+    document_board.addEventListener("click",(e)=>{
+      console.log(e.target);
+      if(e.target.classList.contains("create_list_inner_modal") == false){
+        add_list_modal.innerHTML = "";
+      }
+    })
+
     create_button.addEventListener("click",(e)=>{
       AddListToBoard(e,(result)=>{console.log(result)});
     });
@@ -55,49 +65,48 @@ const AddEventToAddList = () => {
 
 }
 
-const AddEventsToAddTask = (element) => {
-
-  var task_list = document.getElementsByClassName("task_list");
-  var add_list_modal = element.querySelector(".add_additional_list_modal");
-  var create_button =  add_list_modal.querySelector("#addTask");
-
-  for(var i =0; i < task_list.length; i++){
-
-    task_list[i].addEventListener("click",(e)=>{
-
-      var element = e.target;
-
-      isEditing = true;
-
-      if(!element.classList.contains("task_list")){
-        element = e.target.parentElement;
-      }
-      if(element.parentElement.classList.contains("create_list")){
-        return;
-      }
-
-
-      if(add_list_modal){
-
-        var list_id = element.getAttribute("_id");
-
-        add_list_modal.innerHTML = RenderAddTaskModal(list_id);
-
-        create_button.addEventListener("click",(e)=>{
-
-          if(isEditing){
-            AddTaskToBoard(e);
-          }
-
-        });
-
-      }
-
-    })
-
-  }
-
-}
+// const AddEventsToAddTask = (element) => {
+//
+//   var task_list = document.getElementsByClassName("task_list");
+//   var add_list_modal = element.querySelector(".add_additional_list_modal");
+//   var create_button =  add_list_modal.querySelector("#addTask");
+//
+//   for(var i =0; i < task_list.length; i++){
+//
+//     task_list[i].addEventListener("click",(e)=>{
+//
+//       var element = e.target;
+//
+//       isEditing = true;
+//
+//       if(!element.classList.contains("task_list")){
+//         element = e.target.parentElement;
+//       }
+//       if(element.parentElement.classList.contains("create_list")){
+//         return;
+//       }
+//
+//       if(add_list_modal){
+//
+//         var list_id = element.getAttribute("_id");
+//
+//         add_list_modal.innerHTML = RenderAddTaskModal(list_id);
+//
+//         create_button.addEventListener("click",(e)=>{
+//
+//           if(isEditing){
+//             AddTaskToBoard(e);
+//           }
+//
+//         });
+//
+//       }
+//
+//     })
+//
+//   }
+//
+// }
 
 const AddListToBoard = (e,cb) => {
 
@@ -114,37 +123,13 @@ const AddListToBoard = (e,cb) => {
     date_of_creation: new Date()
   }
 
-  axios.post(`/my_board/create/id=${id}/name=${name}`,config).then((result)=>{
+  axios.post(`/my_board/id=${id}/name=${name}/list/add`,config).then((result)=>{
     InitMyBoard();
     cb(result);
   }).catch(err => console.log(err));
 
 }
 
-const AddTaskToBoard = (e,cb) =>{
-
-  var modal = e.target.parentElement;
-  var input = modal.querySelector("#taskInput");
-  var list_id = modal.getAttribute("_id");
-
-  if(input.value.length < 1){
-    alert("Name of List too Short");
-    return;
-  }
-
-  var config = {
-    name:input.value,
-    board_id:id,
-    list_id:modal.getAttribute("_id")
-  }
-
-  if(isEditing){
-    axios.post(`/my_board/add/task`,config).then((result)=>{
-      InitMyBoard();
-    }).catch(err => console.log(err));
-  }
-
-}
 
 const SetCurrentBoard = async () => {
 
@@ -176,13 +161,81 @@ const SetCurrentBoard = async () => {
 
 }
 
-const InitMyBoard = () => {
+const AddEventsToAddTask = () => {
+
+  var add_task_to_list_buttons = document.getElementsByClassName("add_additional_list_modal");
+
+  for(var i =0; i < add_task_to_list_buttons.length; i++){
+
+        add_task_to_list_buttons[i].addEventListener("click",(e)=>{
+            if(e.target.getAttribute("isEditing") == 1){
+              return;
+            }
+            for(var x = 0; x < add_task_to_list_buttons.length; x++){
+              if(add_task_to_list_buttons[x].getAttribute("isEditing") == 1){
+                var parent = add_task_to_list_buttons[x].parentElement;
+                var modal_container= parent.querySelector(".create_task_to_board_modal");
+                add_task_to_list_buttons[x].setAttribute("isEditing",0)
+                modal_container.innerHTML = "";
+
+              }
+            }
+          if(e.target.getAttribute("isEditing") == 0){
+            AddTaskToDBEvent(e);
+          }
+        })
+
+  }
+
+}
+
+const AddTaskToDBEvent = (e) => {
+
+  var parent = e.target.parentElement
+  var _id = parent.getAttribute("_id");
+  var modal_container = parent.querySelector(".create_task_to_board_modal");
+  modal_container.innerHTML = RenderAddTaskModal(_id);
+
+  e.target.setAttribute("isEditing",1);
+  console.log(e.target);
+  var add_task_button_to_db = modal_container.parentElement.querySelector(".add_additional_list_modal");
+
+  add_task_button_to_db.addEventListener("click", async (e)=>{
+    var parent = e.target.parentElement;
+    if(e.target.getAttribute("isEditing") == 0 && isEditingTask){
+      return;
+    }
+    var task_input = parent.querySelector(".add_task_to_list_input");
+    console.log(task_input.value);
+    isEditingTask = true;
+
+    if(task_input.value.length < 1){
+      alert("Task is Empty");
+    }
+    else{
+
+      isEditingTask = false;
+      var _id = parent.getAttribute("_id");
+      console.log(_id,task_input.value);
+      await axios.post(`/my_board/id=${id}/name=${name}/task/add`,{list_id:_id, name: task_input.value});
+      InitMyBoard();
+    }
+
+  });
+
+}
+
+const InitMyBoard = async () => {
 
    isEditing = false;
+   isEditingTask = false;
 
    await SetCurrentBoard();
 
-   SetDynamicColors(chosen_board);
+   if(!didSetColors){
+     SetDynamicColors(chosen_board);
+     didSetColors = true;
+   }
 
    ExitOutOfListModals();
    ExitOutOfTaskModals();
@@ -190,6 +243,7 @@ const InitMyBoard = () => {
    BuildListHTML(chosen_board);
 
    AddEventToAddList();
+   AddEventsToAddTask();
 
 }
 
@@ -198,8 +252,7 @@ const BuildListHTML = async (board) =>{
   inner_container.innerHTML =  html;
 }
 
-
-const SetDynamicColors = (chosen_board) => {
+const SetDynamicColors = async (chosen_board) => {
 
   var task_heading = document.querySelector(".task_heading");
   var side_nav = document.querySelector("#sidebackground");
@@ -216,6 +269,7 @@ const SetDynamicColors = (chosen_board) => {
    background = chosen_board.background_img ? `url("/images/${chosen_board.background_img.filename}")` : chosen_board.background;
    rgb = chosen_board.background_img ?  chosen_board.background_img.filename : chosen_board.background;
    color_data = await axios.post("/api/color/all",{src:rgb});
+   overlay.style.background = background;
   }
   else{
 
@@ -289,7 +343,6 @@ const SetDynamicColors = (chosen_board) => {
 
     task_heading.style.background = linear_grad;
     side_nav.style.background = linear_grad;
-
   }
 
 }

@@ -1,9 +1,10 @@
 const RenderListItem = (task_list) => {
 
   var list_of_tasks = RenderTaskItems(task_list.list);
-
+  console.log(task_list.list)
   return(`
     <div class=" task_list relative" _id = "${task_list._id}" isClicked = "0">
+
 
       <div class="list_heading inactive_list"  >
         ${task_list.name}
@@ -13,7 +14,9 @@ const RenderListItem = (task_list) => {
         ${list_of_tasks}
       </div>
 
-      <div class="add_additional_list_modal"> +  Add Task </div>
+      <div class="create_task_to_board_modal"></div>
+
+      <div class="add_additional_list_modal" isEditing = "0"> +  Add Task </div>
 
   </div>`);
 
@@ -37,14 +40,8 @@ const RenderAddList = () => {
 const RenderAddTaskModal = (id) => {
 
   return (
-    `<div class="create_list_inner_modal create_list_inner_modal--task" _id = "${id}">
-
-      <input class="list_create_input" id = "taskInput" placeholder = "Enter Name" >
-
-      <button class="list_create_button" id="addTask">
-        + Add Task
-      </button>
-
+    `<div class="create_list_inner_modal--task" _id = "${id}">
+      <input class="add_task_to_list_input" id = "taskInput" placeholder = "Enter Name" >
     </div>
     `
   )
@@ -60,7 +57,7 @@ const RenderAddListModal = () => {
 
         <input class="list_create_input" id = "listInput" placeholder = "Enter Name" >
 
-        <button class="list_create_button" id = "addList">
+        <button class="list_create_button " id = "addList">
           + Add List
         </button>
 
