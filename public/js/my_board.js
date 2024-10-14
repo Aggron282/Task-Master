@@ -11,7 +11,7 @@ var chosen_board;
 
 var isEditing = false;
 
-function ExitOutOfListModals(){
+const ExitOutOfListModals = () => {
 
   var modals = document.getElementsByClassName("add_list_modal");
 
@@ -21,7 +21,7 @@ function ExitOutOfListModals(){
 
 }
 
-function ExitOutOfTaskModals(){
+const ExitOutOfTaskModals = () => {
 
   var modals = document.getElementsByClassName("add_additional_list_modal");
 
@@ -99,7 +99,7 @@ const AddEventsToAddTask = (element) => {
 
 }
 
-function AddListToBoard(e,cb){
+const AddListToBoard = (e,cb) => {
 
   var modal = e.target.parentElement;
   var input = modal.querySelector("#listInput");
@@ -121,7 +121,7 @@ function AddListToBoard(e,cb){
 
 }
 
-function AddTaskToBoard(e,cb){
+const AddTaskToBoard = (e,cb) =>{
 
   var modal = e.target.parentElement;
   var input = modal.querySelector("#taskInput");
@@ -146,7 +146,7 @@ function AddTaskToBoard(e,cb){
 
 }
 
-async function SetCurrentBoard(){
+const SetCurrentBoard = async () => {
 
   id = id.split("/name=:")[0]
 
@@ -176,100 +176,13 @@ async function SetCurrentBoard(){
 
 }
 
-async function InitMyBoard (){
+const InitMyBoard = () => {
 
    isEditing = false;
 
    await SetCurrentBoard();
 
-   var background = chosen_board.background;
-   var rgb = chosen_board.background;
-   var color_data = chosen_board.background;
-   var task_heading = document.querySelector(".task_heading");
-   var side_nav = document.querySelector("#sidebackground");
-   var linear_grad = `linear-gradient(to bottom`;
-
-   task_heading.style.background = background;
-
-   if(chosen_board.background_img){
-    background = chosen_board.background_img ? `url("/images/${chosen_board.background_img.filename}")` : chosen_board.background;
-    rgb = chosen_board.background_img ?  chosen_board.background_img.filename : chosen_board.background;
-    color_data = await axios.post("/api/color/all",{src:rgb});
-  }else{
-
-   var side_nav_background = null;
-   var current_background = background;
-
-   current_background = background.split(",");
-   current_background[0] = current_background[0].substr(4);
-   current_background[2] = current_background[2].replace(")","")
-
-   var dom_color = {
-     color:parseInt(current_background[0]),
-     index:0
-   }
-
-   var sub_color = {
-     color:parseInt(current_background[2]),
-     index:2
-   }
-
-   for(var r = 0; r < current_background.length; r++){
-
-      if(parseInt(current_background[r]) > dom_color.color){
-        dom_color.color = current_background[r];
-        dom_color.index = r;
-      }
-      if(parseInt(current_background[r]) < sub_color.color){
-        sub_color.color = current_background[r];
-        sub_color.index = r;
-      }
-
-   }
-
-   console.log(dom_color);
-   console.log(sub_color);
-   var side_color = [...current_background];
-   if(parseInt(sub_color.color) > 30){
-     current_background[sub_color.index] = Math.floor(sub_color.color / 2.5);
-   }else{
-     current_background[dom_color.index] = Math.floor(dom_color.color / 1.2);
-   }
-
-   diff_color_style = `rgb(${current_background[0]},${current_background[1]},${current_background[2]})`;
-
-   if(parseInt(sub_color.color) > 30){
-     side_color[sub_color.index] =sub_color.color - 5;
-   }else{
-     side_color[dom_color.index] =dom_color.color - 15;
-   }
-
-
-   console.log(current_background);
-   side_color_style = `rgb(${side_color[0]},${side_color[1]},${side_color[2]})`;
-
-   side_nav.style.background = side_color_style;
-   side_nav.style.borderRight = `1px solid ${diff_color_style}`;
-   task_heading.style.background = diff_color_style;
- }
-   if(color_data.data){
-
-     for (var i =0; i < color_data.data.length - 3; i++){
-
-       var chosen_color = color_data.data[i];
-
-       linear_grad += `,rgba(${chosen_color.r},${chosen_color.g},${chosen_color.b},${1})`;
-
-     }
-
-     linear_grad+= ")";
-
-     task_heading.style.background = linear_grad;
-     side_nav.style.background = linear_grad;
-
-   }
-
-   overlay.style.background = background;
+   SetDynamicColors(chosen_board);
 
    ExitOutOfListModals();
    ExitOutOfTaskModals();
@@ -280,9 +193,105 @@ async function InitMyBoard (){
 
 }
 
-async function BuildListHTML(board){
+const BuildListHTML = async (board) =>{
   var html = RenderList(board);
   inner_container.innerHTML =  html;
+}
+
+
+const SetDynamicColors = (chosen_board) => {
+
+  var task_heading = document.querySelector(".task_heading");
+  var side_nav = document.querySelector("#sidebackground");
+
+  var background = chosen_board.background;
+  var rgb = chosen_board.background;
+  var color_data = chosen_board.background;
+  var side_nav = document.querySelector("#sidebackground");
+  var linear_grad = `linear-gradient(to bottom`;
+
+  overlay.style.background = background;
+
+  if(chosen_board.background_img){
+   background = chosen_board.background_img ? `url("/images/${chosen_board.background_img.filename}")` : chosen_board.background;
+   rgb = chosen_board.background_img ?  chosen_board.background_img.filename : chosen_board.background;
+   color_data = await axios.post("/api/color/all",{src:rgb});
+  }
+  else{
+
+    var side_nav_background = null;
+    var current_background = background;
+
+    current_background = background.split(",");
+    current_background[0] = current_background[0].substr(4);
+    current_background[2] = current_background[2].replace(")","")
+
+    var dom_color = {
+      color:parseInt(current_background[0]),
+      index:0
+    }
+
+    var sub_color = {
+      color:parseInt(current_background[2]),
+      index:2
+    }
+
+    for(var r = 0; r < current_background.length; r++){
+
+       if(parseInt(current_background[r]) > dom_color.color){
+         dom_color.color = current_background[r];
+         dom_color.index = r;
+       }
+
+       if(parseInt(current_background[r]) < sub_color.color){
+         sub_color.color = current_background[r];
+         sub_color.index = r;
+       }
+
+    }
+
+    var side_color = [...current_background];
+
+    if(parseInt(sub_color.color) > 30){
+      current_background[sub_color.index] = Math.floor(sub_color.color / 2.5);
+    }
+    else{
+      current_background[dom_color.index] = Math.floor(dom_color.color / 1.2);
+    }
+
+    diff_color_style = `rgb(${current_background[0]},${current_background[1]},${current_background[2]})`;
+
+    if(parseInt(sub_color.color) > 30){
+      side_color[sub_color.index] =sub_color.color - 5;
+    }
+    else{
+      side_color[dom_color.index] =dom_color.color - 15;
+    }
+
+    side_color_style = `rgb(${side_color[0]},${side_color[1]},${side_color[2]})`;
+
+    side_nav.style.background = side_color_style;
+    side_nav.style.borderRight = `1px solid ${diff_color_style}`;
+    task_heading.style.background = diff_color_style;
+  }
+
+  if(color_data.data){
+
+    for (var i =0; i < color_data.data.length - 3; i++){
+
+      var chosen_color = color_data.data[i];
+
+      linear_grad += `,rgba(${chosen_color.r},${chosen_color.g},${chosen_color.b},${1})`;
+
+    }
+
+    linear_grad+= ")";
+
+    task_heading.style.background = linear_grad;
+    side_nav.style.background = linear_grad;
+
+  }
+
 }
 
 InitMyBoard();
