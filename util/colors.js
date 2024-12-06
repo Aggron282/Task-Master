@@ -5,22 +5,6 @@ const path = require('path');
 
 function ExtractColors(src,cb){
 
-  // const options = {
-  //   pixels: 64000,
-  //   distance: 0.22,
-  //   colorValidator: (red, green, blue, alpha = 255) => alpha > 250,
-  //   saturationDistance: 0.2,
-  //   lightnessDistance: 0.2,
-  //   hueDistance: 0.083333333,
-  // };
-  // console.log(src);
-  // extractColors(src, options).then((response)=>{
-  //   console.log(response);
-  //   cb(response);
-  // }).catch((err)=>{
-  //   console.log(err);
-  // });
-
   getColors(path.join(__dirname,"..","public", "images" ,src)).then(colors => {
 
     var rgba = colors.map((color)=>{
