@@ -1,9 +1,8 @@
 const RenderListItem = (task_list) => {
-
-  var list_of_tasks = RenderTaskItems(task_list.list);
-  console.log(task_list.list)
+  console.log(task_list)
+  var list_of_tasks = RenderTaskItems(task_list.list,task_list._id);
   return(`
-    <div class=" task_list relative" _id = "${task_list._id}" isClicked = "0">
+    <div class=" task_list relative" _id = "${task_list._id}" data-list-id = "${task_list._id}" isClicked = "0">
 
 
       <div class="list_heading inactive_list"  >
@@ -95,13 +94,14 @@ const  RenderList = (board)=>{
 }
 
 
-function RenderTaskItems(tasks){
+function RenderTaskItems(tasks,list_id){
 
   var html = ``;
 
   tasks.map((task)=>{
 
     var extra = "";
+    console.log(task);
 
     if(task.description.length > 0){
       extra = `<div class="extra">...</div>`
@@ -109,7 +109,7 @@ function RenderTaskItems(tasks){
 
     html += `
 
-    <div class="task_item_container" _id = ${task._id} status = ${task.status}>
+    <div class="task_item_container" _id = ${task._id} data-task-id = ${task._id}  data-list-id = "${list_id}" status = ${task.status}>
 
       <p class="task_item_name">
         ${task.name}

@@ -1,14 +1,20 @@
 .dropdown_container{
   float:left;
   width:20%;
+}
 
-}
 body{
-  overflow-y: hidden !important;
+  background-size: cover !important;
+  overflow:scroll;
 }
+
 .my_taskboard_container{
-  margin-top:5%;
+  /* margin-top:5%; */
   padding-top: 5%;
+}
+
+.container-fluid{
+  background:transparent !important;
 }
 #taskInput{
   width: 100%;
@@ -16,9 +22,49 @@ body{
   border-width: 1px;
   height: 32px;
 }
+
 #sidebackground{
+
   box-shadow: 0px 0px 20px rgba(255,255,255,.1);
 }
+
+.archive_board{
+  z-index: -9;
+  position: fixed;
+  width:90%;
+  bottom:0%;
+  left:20%;
+  padding:30px;
+  display: grid;
+  grid-template-columns: 1fr 50% 1fr;
+  visibility: hidden;
+}
+
+.archive_board--active{
+  z-index:999;
+  visibility: visible;
+}
+
+.archive-container{
+  border-radius:50%;
+  width:100px;
+  padding:10px;
+  color:black;
+  opacity:1;
+  font-size:15px;
+  background: #282E33;
+}
+.archive-container img{
+  width:100%;
+  filter: brightness(0) saturate(100%) invert(100%) sepia(6%) saturate(7500%) hue-rotate(197deg) brightness(110%) contrast(104%);
+}
+
+.archive-container-hover{
+  background:white !important;
+  filter: brightness(0)  !important;
+
+}
+
 .task_item_container{
   background:white;
   padding:2px;
@@ -43,9 +89,9 @@ body{
   font-family: "Noto Sans";
 }
 
-body{
+/* body{
   overflow-x: scroll !important
-}
+} */
 
 .choices_container{
   margin-left:35%;
@@ -58,19 +104,15 @@ body{
   margin-top:-5%;
 }
 
-.profile_container{
-  float:left;
-}
-
 .my_logo_container{
   float: left;
   width:20%;
-
 }
+
 .dropdown_container{
   padding-top:10px;
-
 }
+
 .dropdown_container p{
   float:left;
   padding-top:0px;
@@ -86,10 +128,12 @@ body{
   position: fixed;
   top:0%;
   left:0%;
-  z-index:999;
-  background:white;
-  padding-bottom:10px;
 
+  z-index:9939049093409403909409309 !important;
+  background:white;
+  z-index: 9999;
+
+  padding-bottom:10px;
 }
 
 .board_icon{
@@ -100,43 +144,53 @@ body{
 .icon_sidenav{
   filter: invert(31%) sepia(15%) saturate(1192%) hue-rotate(180deg) brightness(91%) contrast(86%) !important;
 }
+
 .profile_container p{
   font-size:15px;
   font-weight:800;
 }
+
 .account_icon{
   filter: invert(31%) sepia(15%) saturate(1192%) hue-rotate(180deg) brightness(51%) contrast(86%) !important;
 }
+
 .inner-board--1, .inner-board--2{
   background:#e6e6e6;
-
 }
 
 .profile_container{
   padding-top:2.5%;
 }
+
 .profile_container p {
   margin-top:0px;
 }
+
 .profile_container:hover .board_icon div{
   background:white;
 }
+
 .task_sidenav{
   position: relative;
   z-index: 5;
-  width: 15%;
   height: 100%;
-  float:left;
-  margin-top:-7.5%;
-  padding-top:5%;
+  /* margin-top:-7.5%; */
+  padding-top:50px;
+  position: fixed;
+  width:15%;
+  z-index: 99;
+  z-index: 99934934;
+  margin-top:30px;
 }
+
 .profile_container{
   width:100%;
 }
+
 .profile_container p {
   color:#172B4D;
-
 }
+
 .my_logo{
   filter:brightness(100);
 }
@@ -144,17 +198,17 @@ body{
 .add_icon{
   background:#42526E;
   margin-top:2px;
-
 }
+
 .create_new{
   opacity:.4 !important;
 }
 
 .create_list--list{
-    padding: 20px;
-    width: auto;
-    position: absolute;
-    width:100%;
+  padding: 20px;
+  width: auto;
+  position: absolute;
+  width:100%;
 }
 
 .create_list_inner_modal p{
@@ -164,17 +218,21 @@ body{
 }
 
 .create_list--list button{
-    font-size: 15px;
-    width: 100%;
-    margin:0px;
-    margin-top:10%;
+  font-size: 15px;
+  width: 100%;
+  margin:0px;
+  margin-top:5%;
+
 }
+
 .create_list--list input{
   width:100%;
 }
+
 .options_list{
-  margin-top:-15%;
+  margin-top:3%;
 }
+
 .task_heading{
   padding:0px !important;
 }
@@ -187,7 +245,6 @@ body{
   text-align: center;
   color:black !important;
   width:20%;
-  float:left;
   margin-left:1%;
   transition:  .3s all;
 }
@@ -195,8 +252,13 @@ body{
 .task_title{
   transform: translateY(-30px);
   padding:10px;
+  position: relative;
+  z-index: 999;
   color:white;
-  margin-left:2.5%;
+  padding-left:50px;
+  padding-right:50px;
+  margin-top:7.5%;
+  margin-left:65%;
   font-size:30px;
   border-radius:10px;
   box-shadow:0px 0px 20px rgba(0,0,0,.4);
@@ -209,6 +271,12 @@ body{
 
 }
 
+.inner_container_task{
+  white-space: nowrap;
+}
+.task_item_name{
+  white-space: normal;
+}
 .add_additional_list_modal{
   background: #f1f2f4;
   font-size:17px;
@@ -218,9 +286,7 @@ body{
 }
 
 .task_list{
-  width:20%;
-  float:left;
-  margin-left:2.5%;
+  width:100%;
 }
 
 .list_create_button{
@@ -251,8 +317,11 @@ body{
   left: 37.5%;
   padding-left:5px;
   padding-bottom:10%;
+  white-space: normal;
   padding-right:5px;
   border-radius:10px;
+  width:300px;
+  padding-bottom:30px;
 }
 
 .create_list_inner_modal--task{
@@ -277,7 +346,6 @@ body{
 .options_list li {
   height: 32px;
   list-style-type: none;
-  float: left;
   width: 100%;
   padding:0px;
   padding-left:5px;
@@ -296,13 +364,38 @@ body{
 .list_heading{
   font-size:20px;
   padding:5px;
+  /* overflow-x: scroll !important;
+  scrollbar-width: thin; */
   border-radius:10px;
   transition:  .3s all;
-
 }
 
 .list_heading:hover{
   opacity:1;
+}
+
+.task_parent{
+  width:100%;
+  padding-top:5%;
+  /* display: grid;
+   grid-auto-flow: column; */
+}
+.inner_container_task{
+  width:100%;
+   display: grid;
+   grid-gap:40px;
+   margin-left:-7.5%;
+   padding:30px;
+   /* height:100%; */
+   /* overflow-x: scroll; */
+   grid-auto-columns: 300px;
+   grid-auto-flow: column;
+}
+.inner_board{
+  padding:5px;
+  width:100%;
+  height:100%;
+  transition: all .3s;
 }
 
 .inner_container_task{
@@ -312,4 +405,9 @@ body{
 .my_taskboard_container{
   height:120vh;
   background-size: cover !important;
+  /* overflow: scroll; */
+  display: grid;
+  overflow-x: scroll;
+  /* overflow: visible; */
+  grid-template-columns: 30% 1fr;
 }

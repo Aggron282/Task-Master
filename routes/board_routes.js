@@ -7,7 +7,9 @@ router.get("/my_board/id=:board/name=:name",isAuth,board_controller.GetMyBoardPa
 router.post("/my_board/id=:board/name=:name/list/add",isAuth,board_controller.AddListToBoard);
 router.post("/api/color/all",isAuth, board_controller.ExtractColor);
 router.post("/my_board/id=:board/name=:name/task/add",isAuth,board_controller.AddTaskToList);
-
+router.post("/api/update-task",isAuth, board_controller.ChangeTasks);
+router.post("/api/delete-task",isAuth, board_controller.ArchiveTask);
+router.post("/api/archive-task",isAuth, board_controller.DeleteTask);
 
 
 module.exports = router;

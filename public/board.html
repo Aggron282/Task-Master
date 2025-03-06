@@ -81,58 +81,72 @@
 
         </div>
 
+        <div class="task_sidenav">
+
+
+          <ul class="options_list">
+
+              <li>
+                <span class="profile_container">
+                    <img class="icon_sidenav" src = "/imgs/task.png">
+                    <p> Delete Tasks  </p>
+                </span>
+               </li>
+
+              <li class="list_account">
+                <span class="profile_container">
+                    <img class="icon_sidenav account_icon" src = "./../../imgs/profile.png">
+                    <p> Account </p>
+                </span>
+              </li>
+
+              <li id = "new_board" class = "add_task_button">
+                <span class="profile_container">
+                    <div class="add_icon custom_icon">+</div>
+                    <p> Add Task  </p>
+                </span>
+               </li>
+
+              <li>
+                <span class="profile_container">
+                    <div class="board_icon custom_icon">
+                      <div class="inner-board--1"></div>
+                      <div class="inner-board--2"></div>
+                    </div>
+                    <p> Archived Tasks </p>
+                </span>
+               </li>
+
+              <li class="delete_account">
+                <span class="profile_container">
+                    <img class="icon_sidenav" src = "./../../imgs/settings.png">
+                    <p> Advanced Settings </p>
+                </span>
+               </li>
+
+          </ul>
+
+        </div>
+
+
         <div class="my_taskboard_container">
-
-            <div class="task_sidenav">
-
-              <div class="background" id ="sidebackground"></div>
-
-              <ul class="options_list">
-
-                  <li>
-                    <span class="profile_container">
-                        <img class="icon_sidenav" src = "/imgs/task.png">
-                        <p> Delete Tasks  </p>
-                    </span>
-                   </li>
-
-                  <li class="list_account">
-                    <span class="profile_container">
-                        <img class="icon_sidenav account_icon" src = "./../../imgs/profile.png">
-                        <p> Account </p>
-                    </span>
-                  </li>
-
-                  <li id = "new_board" class = "add_task_button">
-                    <span class="profile_container">
-                        <div class="add_icon custom_icon">+</div>
-                        <p> Add Task  </p>
-                    </span>
-                   </li>
-
-                  <li>
-                    <span class="profile_container">
-                        <div class="board_icon custom_icon">
-                          <div class="inner-board--1"></div>
-                          <div class="inner-board--2"></div>
-                        </div>
-                        <p> Archived Tasks </p>
-                    </span>
-                   </li>
-
-                  <li class="delete_account">
-                    <span class="profile_container">
-                        <img class="icon_sidenav" src = "./../../imgs/settings.png">
-                        <p> Advanced Settings </p>
-                    </span>
-                   </li>
-
-              </ul>
-
-            </div>
+          <div class="task_heading_container"></div>
 
           <div class="task_parent">
-            <div class="task_heading_container"></div>
+            <div class="archive_board">
+                <div class="archive-container archive--container--archive">
+                    <img class = "t-img" src = "/imgs/options/6.png"/>
+
+
+                </div>
+                <div ></div>
+                <div class="archive-container archive--container--delete">
+                    <img class = "t-img" src = "/imgs/options/7.png"/>
+
+                </div>
+            </div>
+            <div></div>
+
             <div class="inner_container_task"></div>
           </div>
 
@@ -143,6 +157,7 @@
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script src = "/js/util.js"></script>
   <script src = "/js/renderer.js"></script>
+  <script src = "/js/drag_drop_tasks.js"></script>
   <script src = "/js/my_board.js"></script>
 
  </body>

@@ -110,7 +110,70 @@ const AddTaskToList = async (req,res,next) => {
   });
 
   new_board.list = found_list;
-  console.log(found_list);
+  req.user.boards[index] = new_board;
+
+  var set_board = {$set:{boards:req.user.boards}} ;
+
+  User.updateOne({_id:req.user._id},set_board).then((result)=>{
+      res.json(result);
+    }).catch((err)=>{
+      next(err);
+  });
+
+}
+
+const GetMyBoardPage = (req,res,next) => {
+  res.sendFile(path.join(__dirname,"..","public","board.html"));
+}
+
+const ChangeTasks = async (req,res) => {
+
+  var {originalListId, newListId, taskId, boardId} = req.body;
+  var found_board = await board_util.FindBoardById(req.user.boards,boardId);
+  var index = found_board.index;
+
+  if(!found_board){
+    throw new Error("Could not find board");
+  }
+
+  var originalList = await board_util.FindListInBoard(found_board,originalListId);
+  var newList = await board_util.FindListInBoard(found_board,newListId);
+  var task_to_replace = await board_util.FindTaskInList(originalList, taskId);
+  console.log(taskId,originalList)
+  console.log(task_to_replace)
+  const listWithRemovedTask = originalList.list.list.filter(task => {
+    return task._id != task_to_replace.task._id;
+  });
+
+  const listWithAddedTask = newList.list.list.push(task_to_replace.task);
+
+  var new_board = {...found_board.board};
+
+  new_board.list = new_board.list.map((list)=>{
+
+        if(list._id == originalList.list._id){
+          originalList.list.list = listWithRemovedTask.list ? listWithRemovedTask.list : [] ;
+          return originalList.list
+        }
+        else{
+          return list;
+       }
+
+  });
+
+  new_board.list = new_board.list.map((list)=>{
+
+      if(list._id === newList._id){
+        newList.list.list = listWithAddedTask.list ? listWithAddedTask.list : [] ;
+        console.log(newList)
+        return newList.list
+      }
+      else{
+        return list;
+      }
+
+  });
+
   req.user.boards[index] = new_board;
 
   var set_board = {$set:{boards:req.user.boards}} ;
@@ -124,10 +187,44 @@ const AddTaskToList = async (req,res,next) => {
 
 }
 
-const GetMyBoardPage = (req,res,next) => {
-  res.sendFile(path.join(__dirname,"..","public","board.html"));
+const ArchiveTask = async (req,res) => {
+  var {originalListId, taskId, boardId} = req.body;
+
+  var found_board = await board_util.FindBoardById(req.user.boards,boardId);
+  var index = found_board.index;
+
+  if(!found_board){
+    throw new Error("Could not find board");
+  }
+
+  var originalList = await board_util.FindListInBoard(found_board,originalListId);
+  var task_to_archive = await board_util.FindTaskInList(originalList, taskId);
+
+  console.log(task_to_archive)
+
 }
 
+const DeleteTask = async (req,res) => {
+
+  var {originalListId, taskId, boardId} = req.body;
+
+  var found_board = await board_util.FindBoardById(req.user.boards,boardId);
+  var index = found_board.index;
+
+  if(!found_board){
+    throw new Error("Could not find board");
+  }
+
+  var originalList = await board_util.FindListInBoard(found_board,originalListId);
+  var task_to_delete = await board_util.FindTaskInList(originalList, taskId);
+
+}
+
+
+module.exports.ArchiveTask = ArchiveTask;
+
+module.exports.DeleteTask = DeleteTask;
+module.exports.ChangeTasks   = ChangeTasks;
 module.exports.ExtractColor = ExtractColor;
 module.exports.AddTaskToList = AddTaskToList;
 module.exports.AddListToBoard = AddListToBoard;

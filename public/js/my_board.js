@@ -1,7 +1,7 @@
 const board_container = document.querySelector(".my_taskboard_container");
 const inner_container = document.querySelector(".inner_container_task");
 const task_heading_container = document.querySelector(".task_heading_container");
-const overlay = document.querySelector(".overlay--board");
+// const overlay = document.querySelector(".overlay--board");
 
 const url = window.location.href;
 const name = url.split("name=:")[1];
@@ -37,7 +37,7 @@ const AddEventToAddList = () => {
 
   var create_list = document.querySelector(".create_list");
   var add_list_modal = document.querySelector(".add_list_modal");
-
+  
   create_list.addEventListener("click",(e)=>{
 
     ExitOutOfListModals();
@@ -244,7 +244,7 @@ const InitMyBoard = async () => {
 
    AddEventToAddList();
    AddEventsToAddTask();
-
+   EnableDragDrop();
 }
 
 const BuildListHTML = async (board) =>{
@@ -255,21 +255,20 @@ const BuildListHTML = async (board) =>{
 const SetDynamicColors = async (chosen_board) => {
 
   var task_heading = document.querySelector(".task_heading");
-  var side_nav = document.querySelector("#sidebackground");
+  var side_nav = document.querySelector(".task_sidenav");
 
   var background = chosen_board.background;
   var rgb = chosen_board.background;
   var color_data = chosen_board.background;
-  var side_nav = document.querySelector("#sidebackground");
   var linear_grad = `linear-gradient(to bottom`;
 
-  overlay.style.background = background;
+  document.body.style.background = background;
 
   if(chosen_board.background_img){
    background = chosen_board.background_img ? `url("/images/${chosen_board.background_img.filename}")` : chosen_board.background;
    rgb = chosen_board.background_img ?  chosen_board.background_img.filename : chosen_board.background;
    color_data = await axios.post("/api/color/all",{src:rgb});
-   overlay.style.background = background;
+   document.body.style.background = background;
   }
   else{
 
