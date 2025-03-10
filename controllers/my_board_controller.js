@@ -200,7 +200,37 @@ const ArchiveTask = async (req,res) => {
   var originalList = await board_util.FindListInBoard(found_board,originalListId);
   var task_to_archive = await board_util.FindTaskInList(originalList, taskId);
 
-  console.log(task_to_archive)
+  task_to_archive.task.isArchived = true;
+
+  originalList.list.list.map((list)=>{
+    if(list._id == task_to_archive.task._id){
+      return task_to_archive.task;
+    }else{
+      return list;
+    }
+  });
+
+  var new_board = {...found_board.board};
+
+  new_board.list = new_board.list.map((list)=>{
+
+        if(list._id == originalList.list._id){
+          return originalList.list
+        }
+        else{
+          return list;
+       }
+
+  });
+
+  var set_board = {$set:{boards:req.user.boards}} ;
+
+  User.updateOne({_id:req.user._id},set_board).then((result)=>{
+        res.json(result);
+      }).catch((err)=>{
+        console.log(err);
+        next(err);
+    });
 
 }
 
@@ -218,6 +248,34 @@ const DeleteTask = async (req,res) => {
   var originalList = await board_util.FindListInBoard(found_board,originalListId);
   var task_to_delete = await board_util.FindTaskInList(originalList, taskId);
 
+  originalList.list = originalList.list.list.filter((task) => {
+    // Only keep tasks where the _id is not equal to the task we're deleting
+    return task._id !== task_to_delete.task._id;
+  });
+
+  console.log(originalList.list)
+
+  var new_board = {...found_board.board};
+
+  new_board.list = new_board.list.map((list)=>{
+
+        if(list._id == originalList.list._id){
+          return originalList.list
+        }
+        else{
+          return list;
+       }
+
+  });
+
+  var set_board = {$set:{boards:req.user.boards}} ;
+
+  User.updateOne({_id:req.user._id},set_board).then((result)=>{
+        res.json(result);
+      }).catch((err)=>{
+        console.log(err);
+        next(err);
+    });
 }
 
 

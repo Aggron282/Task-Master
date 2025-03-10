@@ -21,6 +21,105 @@ const RenderListItem = (task_list) => {
 
 }
 
+const RenderDetailPage = () => {
+
+  return(
+    `
+    <div class="wrapper">
+      <div class="overlay"></div>
+      <div class="detail_page">
+        <p class="exit">X</p>
+          <form>
+              <div class="detail_grid">
+                  <div class="main_container">
+                      <div class="title_detail_container">
+                          <input class="title_input" name = "title" value = "">
+                          <div class="list_name_container">
+                              <img class="o-img"src =""/>
+                              <p class="title">Belongs to List 1 </p>
+                          </div>
+                      </div>
+                      <div class="save_container">
+                          <button class="save-btn">
+                            Save Changes
+                          </button>
+                      </div>
+                      <div class="notification_container">
+                        <button class="option-card watch-btn">
+                          <img class="o-img"  src = "/imgs/options/13.png"/>
+                          <p class="title">Watch Task </p>
+                        </button>
+                      </div>
+                      <div class="description_container">
+                          <div class="list-art">
+                              <div class="l-long l"></div>
+                              <div class="l-long l"></div>
+                              <div class="l-short l"></div>
+                              <div class="l-short l"></div>
+
+                          </div>
+                          <p class="title">Description</p>
+                      </div>
+                      <div class="text-area-container">
+                        <textarea class="description_box" name = "description" rows = "3" cols="3">
+
+                        </textarea>
+                      </div>
+                      <div class="feature_container">
+
+                          <div class="feature_box">
+                            <img class="o-img" src = "/imgs/options/1.png"/>
+                            <p class="title"> Add Cover </p>
+                          </div>
+                          <div class="feature_box">
+                            <img class="o-img" src = "/imgs/options/1.png"/>
+                            <p class="title"> Add Links </p>
+                          </div>
+                          <div class="feature_box">
+                            <img class="o-img" src = "/imgs/options/1.png"/>
+                            <p class="title"> Add Images </p>
+                          </div>
+
+                      </div>
+                  </div>
+                  <div class="side_container">
+                      <div class="option-card">
+                          <img class="o-img" src = "/imgs/options/1.png"/>
+                          <p class="title">Add Member</p>
+                      </div>
+                      <div class="option-card">
+                          <img class="o-img"  src = "/imgs/options/3.png"/>
+                          <p class="title">Current Members</p>
+                      </div>
+                      <div class="option-card">
+                          <img class="o-img"  src = "/imgs/options/9.png"/>
+                          <p class="title">Move</p>
+                      </div>
+                      <div class="option-card">
+                          <img class="o-img"  src = "/imgs/options/4.png"/>
+                          <p class="title">Add Due Date</p>
+                      </div>
+                      <div class="option-card">
+                          <img class="o-img" src = "/imgs/options/8.png"/>
+                          <p class="title">Copy</p>
+                      </div>
+                      <div class="option-card">
+                          <img class="o-img"  src = "/imgs/options/6.png"/>
+                          <p class="title">Archive</p>
+                      </div>
+                      <div class="option-card">
+                          <img class="o-img" src = "/imgs/options/7.png"/>
+                          <p class="title">Delete</p>
+                      </div>
+                  </div>
+              </div>
+          </form>
+      </div>
+    </div>
+    `
+  )
+}
+
 const RenderAddList = () => {
 
     return (`
@@ -106,18 +205,19 @@ function RenderTaskItems(tasks,list_id){
     if(task.description.length > 0){
       extra = `<div class="extra">...</div>`
     }
+    if(task.isArchived != true){
+      html += `
 
-    html += `
+      <div class="task_item_container" _id = ${task._id} data-task-id = ${task._id}  data-list-id = "${list_id}" status = ${task.status}>
 
-    <div class="task_item_container" _id = ${task._id} data-task-id = ${task._id}  data-list-id = "${list_id}" status = ${task.status}>
+        <p class="task_item_name">
+          ${task.name}
+        </p>
 
-      <p class="task_item_name">
-        ${task.name}
-      </p>
+        ${extra}
 
-      ${extra}
-
-    </div>`
+      </div>`
+    }
 
   });
 

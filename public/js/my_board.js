@@ -37,7 +37,7 @@ const AddEventToAddList = () => {
 
   var create_list = document.querySelector(".create_list");
   var add_list_modal = document.querySelector(".add_list_modal");
-  
+
   create_list.addEventListener("click",(e)=>{
 
     ExitOutOfListModals();
@@ -65,48 +65,20 @@ const AddEventToAddList = () => {
 
 }
 
-// const AddEventsToAddTask = (element) => {
-//
-//   var task_list = document.getElementsByClassName("task_list");
-//   var add_list_modal = element.querySelector(".add_additional_list_modal");
-//   var create_button =  add_list_modal.querySelector("#addTask");
-//
-//   for(var i =0; i < task_list.length; i++){
-//
-//     task_list[i].addEventListener("click",(e)=>{
-//
-//       var element = e.target;
-//
-//       isEditing = true;
-//
-//       if(!element.classList.contains("task_list")){
-//         element = e.target.parentElement;
-//       }
-//       if(element.parentElement.classList.contains("create_list")){
-//         return;
-//       }
-//
-//       if(add_list_modal){
-//
-//         var list_id = element.getAttribute("_id");
-//
-//         add_list_modal.innerHTML = RenderAddTaskModal(list_id);
-//
-//         create_button.addEventListener("click",(e)=>{
-//
-//           if(isEditing){
-//             AddTaskToBoard(e);
-//           }
-//
-//         });
-//
-//       }
-//
-//     })
-//
-//   }
-//
-// }
+const AddClickEventsToTasks =()=>{
+    const taskLists = document.querySelectorAll('.task_list');
+
+    taskLists.forEach((list) => {
+      list.addEventListener("click",(e)=>{
+        e.preventDefault();
+        console.log(list);
+
+        var html = RenderDetailPage();
+        var detail_container = document.querySelector(".detail-wrapper");
+        detail_container.innerHTML = html;
+      })
+    })
+}
 
 const AddListToBoard = (e,cb) => {
 
@@ -245,6 +217,7 @@ const InitMyBoard = async () => {
    AddEventToAddList();
    AddEventsToAddTask();
    EnableDragDrop();
+   AddClickEventsToTasks();
 }
 
 const BuildListHTML = async (board) =>{

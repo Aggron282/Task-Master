@@ -48,6 +48,7 @@ body{
 .archive-container{
   border-radius:50%;
   width:100px;
+  z-index: 9999;
   padding:10px;
   color:black;
   opacity:1;
@@ -61,10 +62,13 @@ body{
 
 .archive-container-hover{
   background:white !important;
-  filter: brightness(0)  !important;
+
 
 }
 
+.archive-container-hover img{
+  filter: brightness(0)  !important;
+}
 .task_item_container{
   background:white;
   padding:2px;
