@@ -18,9 +18,9 @@ body{
 }
 #taskInput{
   width: 100%;
-  border-radius: 10px;
+  border-radius: 4px;
   border-width: 1px;
-  height: 32px;
+  height: 50px;
 }
 
 #sidebackground{
@@ -70,10 +70,11 @@ body{
   filter: brightness(0)  !important;
 }
 .task_item_container{
-  background:white;
+  background:#22272b;
   padding:2px;
   padding-top:5px;
   margin-top:10px;
+  color:darkgrey !important;
   margin-bottom: 10px;
   border-radius:10px;
   box-shadow: 0px 0px 2px rgba(0,0,0,.5);
@@ -218,7 +219,7 @@ body{
 .create_list_inner_modal p{
   text-align:  center;
   font-size:18px;
-  color:black;
+  color:#9FADBC !important;
 }
 
 .create_list--list button{
@@ -244,10 +245,10 @@ body{
 .task_list{
   font-size:20px;
   padding:5px;
-  background:#f1f2f4;
+  background-color: #16191d;
   border-radius:5px;
   text-align: center;
-  color:black !important;
+  color:#9FADBC !important;
   width:20%;
   margin-left:1%;
   transition:  .3s all;
@@ -257,21 +258,24 @@ body{
   transform: translateY(-30px);
   padding:10px;
   position: relative;
+      background-color: rgb(22, 25, 29);
   z-index: 999;
   color:white;
   padding-left:50px;
   padding-right:50px;
   margin-top:7.5%;
-  margin-left:65%;
+  margin-left:5%;
   font-size:30px;
   border-radius:10px;
   box-shadow:0px 0px 20px rgba(0,0,0,.4);
   font-weight: 200;
+  width:100%;
+  text-align: center;
   display: inline-block;
 
 }
 .task_list p {
-  color:black !important;
+  color:#9FADBC !important;
 
 }
 
@@ -282,7 +286,7 @@ body{
   white-space: normal;
 }
 .add_additional_list_modal{
-  background: #f1f2f4;
+  background-color: #16191d;
   font-size:17px;
   font-weight:200;
   text-align: center;
@@ -294,8 +298,8 @@ body{
 }
 
 .list_create_button{
-  background:#38b6ff;
-  color:white;
+    background: rgb(34, 39, 43) !important;
+    color:#9FADBC !important;
   font-size:18px;
   font-family: "Montserrat";
   border:none;
@@ -316,12 +320,13 @@ body{
 }
 
 .create_list_inner_modal{
-  background:white;
+  background-color: #16191d;
   position: absolute;
   left: 37.5%;
   padding-left:5px;
   padding-bottom:10%;
-  white-space: normal;
+    color: rgb(159, 173, 188) !important;
+      white-space: normal;
   padding-right:5px;
   border-radius:10px;
   width:300px;
@@ -338,6 +343,13 @@ body{
   margin-top:2.5%;
 }
 
+.list_create_input{
+      background: rgb(34, 39, 43);
+      padding:10px;
+      color: rgb(159, 173, 188) !important;
+
+      border:none;
+}
 .overlay--board{
   z-index:1;
   height:120vh;
@@ -388,7 +400,7 @@ body{
   width:100%;
    display: grid;
    grid-gap:40px;
-   margin-left:-7.5%;
+   margin-left:-37.5%;
    padding:30px;
    /* height:100%; */
    /* overflow-x: scroll; */
@@ -403,7 +415,11 @@ body{
 }
 
 .inner_container_task{
-  padding-top:0%;
+  padding-top:5%;
+}
+
+body{
+  padding-bottom:0%;
 }
 
 .my_taskboard_container{
@@ -414,4 +430,77 @@ body{
   overflow-x: scroll;
   /* overflow: visible; */
   grid-template-columns: 30% 1fr;
+}
+
+h6 {
+  color:darkgrey;
+
+}
+
+
+.sidebar-container {
+    position: relative;
+    height: 110vh;
+    position: sticky;
+    /* gap: 10px; */
+}
+.board-grid {
+  display: grid;
+  grid-template-columns: 15% 100%;
+
+}
+.board-display{
+  display: grid;
+  padding:10px;
+  grid-gap:10px;
+  grid-template-columns: 30px 1fr;
+}
+
+.icon-display{
+  width:100%;
+  background-size:cover;
+}
+
+.sidebar-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(40, 40, 40, 0.6);
+    backdrop-filter: blur(10px);
+    z-index: -1;
+}
+
+.sidebar {
+    display: grid;
+    /* gap: 10px; */
+    /* padding: 15px; */
+    position: relative;
+}
+
+.menu-item {
+    padding: 10px;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.menu-item:hover {
+  background-color: #2a2a2a;
+}
+
+.board {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    background-color: #444;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+}
+
+.board:hover {
+    background-color: #555;
 }

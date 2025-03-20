@@ -112,15 +112,13 @@ async function Archive(e){
       // draggedTask.dataset.listId = newListId;
 
       try {
-          var r = await axios.post('/api/archive-task', {
-              taskId: draggedTask.dataset.taskId,
-              boardId: boardId,
-              originalListId: originalListId,
+          var r = await axios.post('/api/task/archive/', {
+              task_id: draggedTask.dataset.taskId,
+              board_id: boardId,
+              list_id: originalListId,
           });
-          console.log(r)
-          // listContainer.appendChild(draggedTask);
+
           draggedTask.style.display = "block";
-          // draggedTask.dataset.listId = newListId;
 
           originalListId = null;
 
@@ -144,8 +142,6 @@ async function Delete(e){
 
   if(draggedTask){
 
-      // const newListId = list.dataset.listId;
-      // const listContainer = list.querySelector(".all_tasks_in_list");
       const taskId = draggedTask.dataset.taskId;
       const url = window.location.href;
       const boardId = url.split("id=:")[1]?.split("/")[0];
@@ -154,10 +150,10 @@ async function Delete(e){
 
       try {
 
-          var r = await axios.post('/api/delete-task', {
-              taskId: draggedTask.dataset.taskId,
-              boardId: boardId,
-              originalListId: originalListId,
+          var r = await axios.post("/api/task/delete/", {
+              task_id: draggedTask.dataset.taskId,
+              board_id: boardId,
+              list_id: originalListId,
           });
 
           draggedTask.style.display = "block";
@@ -205,8 +201,6 @@ function addDragListeners(task) {
         if (!draggedTask.parentElement || !draggedTask.parentElement.classList.contains('task_list')) {
             originalList.appendChild(draggedTask);
         }
-
-        // ToggleArchive(false)
 
     });
 

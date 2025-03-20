@@ -44,6 +44,14 @@
   opacity:1;
 }
 
+.task_item_container{
+  position: relative;
+  z-index:999;
+}
+
+
+
+
 .taskboard .task_heading {
   font-size:20px;
   top:0%;
@@ -84,4 +92,57 @@
 
 body{
   overflow-y: scroll !important;
+}
+
+
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #16191d;
+    padding: 10px 20px;
+    color: white;
+}
+.logo {
+    font-size: 20px;
+    font-weight: bold;
+}
+.menu {
+    display: flex;
+    gap: 15px;
+}
+.menu span {
+    cursor: pointer;
+}
+.create-btn {
+    background-color: #0079bf;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+.create-btn:hover {
+    background-color: #026aa7;
+}
+.search-bar input {
+    padding: 6px;
+    border: none;
+    border-radius: 4px;
+}
+.subtitle{
+  text-align: left;
+  padding-left: 20px !important;
+  padding:10px;
+  width:100%;
+}
+.profile {
+    background-color: orange;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-weight: bold;
 }

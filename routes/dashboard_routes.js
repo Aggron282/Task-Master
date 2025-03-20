@@ -6,5 +6,4 @@ const isAuth = require("./../util/isAuth.js");
 router.post("/board/create",isAuth,dashboard_controller.AddBoard);
 router.post("/my_board/delete/one", isAuth, dashboard_controller.DeleteOneBoard)
 
-
 module.exports  = router;

@@ -31,103 +31,35 @@
     <div class="detail-wrapper"></div>
     <div class = "container-fluid">
 
-        <div class = "task_heading">
-
-          <a href = "/dashboard" >
-
-            <div class="my_logo_container">
-              <img class= "my_logo"  src = "/imgs/logo.png">
-              <p class="my_title_logo">Task Master</p>
-           </div>
-
-          </a>
-
-          <div class="choices_container">
-
-            <div class="dropdown_container">
-                <p >Preferences</p>
-                <svg width="24" height="24"
-                xmlns="http://www.w3.org/2000/svg"
-                fill-rule="evenodd"
-                clip-rule="evenodd">
-                  <path d="M11 21.883l-6.235-7.527-.765.644 7.521 9 7.479-9-.764-.645-6.236 7.529v-21.884h-1v21.883z"/>
-              </svg>
-            </div>
-
-            <div class="dropdown_container">
-                <p >Recent Boards</p>
-                <svg width="24" height="24"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill-rule="evenodd"
-                  clip-rule="evenodd">
-                <path d="M11 21.883l-6.235-7.527-.765.644 7.521 9 7.479-9-.764-.645-6.236 7.529v-21.884h-1v21.883z"/>
-              </svg>
-            </div>
-
-            <div class="dropdown_container">
-                <p >Favorites</p>
-                <svg width="24" height="24"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill-rule="evenodd"
-                  clip-rule="evenodd">
-                <path d="M11 21.883l-6.235-7.527-.765.644 7.521 9 7.479-9-.764-.645-6.236 7.529v-21.884h-1v21.883z"/>
-              </svg>
-            </div>
-
-            <div class="dropdown_container">
-              <img class="my_profile_img"  src = "/imgs/profile.png"/>
-            </div>
-
+      <nav class="navbar">
+          <div class="logo">Trello</div>
+          <div class="menu">
+              <span>Workspaces</span>
+              <span>Recent</span>
+              <span>Starred</span>
+              <span>Templates</span>
           </div>
+          <button class="create-btn">Create</button>
+          <div class="search-bar">
+              <input type="text" placeholder="Search">
+          </div>
+          <div class="profile">MK</div>
+      </nav>
+      <div class="board-grid">
+      <div class="sidebar-container">
+          <div class="sidebar-bg"></div>
+          <div class="sidebar">
+              <div class="menu-item">➕ Add List</div>
+              <div class="menu-item">📂 Boards</div>
+              <div class="menu-item">🗃 Show Archived Tasks</div>
+              <h6 class="subtitle"> Your Boards </h6>
+              <div class="board-display">
 
-        </div>
-
-        <div class="task_sidenav">
-
-
-          <ul class="options_list">
-
-              <li>
-                <span class="profile_container">
-                    <img class="icon_sidenav" src = "/imgs/task.png">
-                    <p> Delete Tasks  </p>
-                </span>
-               </li>
-
-              <li class="list_account">
-                <span class="profile_container">
-                    <img class="icon_sidenav account_icon" src = "./../../imgs/profile.png">
-                    <p> Account </p>
-                </span>
-              </li>
-
-              <li id = "new_board" class = "add_task_button">
-                <span class="profile_container">
-                    <div class="add_icon custom_icon">+</div>
-                    <p> Add Task  </p>
-                </span>
-               </li>
-
-              <li>
-                <span class="profile_container">
-                    <div class="board_icon custom_icon">
-                      <div class="inner-board--1"></div>
-                      <div class="inner-board--2"></div>
-                    </div>
-                    <p> Archived Tasks </p>
-                </span>
-               </li>
-
-              <li class="delete_account">
-                <span class="profile_container">
-                    <img class="icon_sidenav" src = "./../../imgs/settings.png">
-                    <p> Advanced Settings </p>
-                </span>
-               </li>
-
-          </ul>
-
-        </div>
+              <img class="icon-display" src = "/imgs/l.png"/>
+              <p> Sample Board</p>
+          </div>
+          </div>
+      </div>
 
 
         <div class="my_taskboard_container">
@@ -152,7 +84,7 @@
           </div>
 
         </div>
-
+      </div>
     </div>
 
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>

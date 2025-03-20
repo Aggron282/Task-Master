@@ -14,12 +14,12 @@ async function FindBoardById(boards,id){
 
 
 async function FindTaskInList(list,id){
-  // console.log(list.list.list);
-  for(var i =0; i < list.list.list.length; i ++){
+  for(var i =0; i < list.length; i ++){
 
-    var task = list.list.list[i];
-
+    var task = list[i];
+    console.log(task._id , id);
     if(id == task._id){
+
       return {task:task,index:i};
     }
 
@@ -30,9 +30,9 @@ async function FindTaskInList(list,id){
 }
 
 async function FindListInBoard(board,id){
-  for(var i =0; i < board.board.list.length; i ++){
+  for(var i =0; i < board.list.length; i ++){
 
-    var list = board.board.list[i];
+    var list = board.list[i];
 
     if(id == list._id){
       return {list:list,index:i};
@@ -44,7 +44,31 @@ async function FindListInBoard(board,id){
 
 }
 
+async function ChangeTask(board, list_id, task_id, new_task){
 
+  var found_list = null;
+
+  for(var i =0; i < board.list.length; i ++){
+
+     if(board.list[i]._id == list_id){
+       found_list = board.list[i];
+
+       for(var k =0; i < found_list.length; k ++){
+          if(task_id == found_list.list[k]._id){
+            found_list.list[k] = new_task;
+            console.log(new_task,found_list)
+          }
+       }
+
+     }
+
+  }
+
+  return board;
+
+}
+
+module.exports.ChangeTask = ChangeTask;
 module.exports.FindBoardById = FindBoardById;
 module.exports.FindListInBoard = FindListInBoard;
 module.exports.FindTaskInList = FindTaskInList;

@@ -21,19 +21,34 @@ const RenderListItem = (task_list) => {
 
 }
 
-const RenderDetailPage = () => {
+const ExitDetailPage = () => {
+
+  var overlay = document.querySelector(".overlay");
+  var detail_page = document.querySelector(".detail_page");
+  var wrapper = document.querySelector(".wrapper");
+
+  detail_page.classList.add("detail_page--away");
+  wrapper.classList.add("overlay--away");
+  overlay.classList.add("wrapper--away");
+  var detail_container = document.querySelector(".detail-wrapper");
+  setTimeout(()=>{
+    detail_container.innerHTML = "";
+  },500)
+}
+
+const RenderDetailPage = (task,board_id, task_id, list_id) => {
 
   return(
     `
     <div class="wrapper">
       <div class="overlay"></div>
       <div class="detail_page">
-        <p class="exit">X</p>
-          <form>
+        <p class="exit" id = "exit-detail"">X</p>
+          <form id = "detail-form"  data-task-id = "${task_id}" data-list-id = "${list_id}"  data-board-id = "${board_id}" >
               <div class="detail_grid">
                   <div class="main_container">
                       <div class="title_detail_container">
-                          <input class="title_input" name = "title" value = "">
+                          <input class="title_input" name = "title" value = "${task.name}" id = "task-name">
                           <div class="list_name_container">
                               <img class="o-img"src =""/>
                               <p class="title">Belongs to List 1 </p>
@@ -61,9 +76,10 @@ const RenderDetailPage = () => {
                           <p class="title">Description</p>
                       </div>
                       <div class="text-area-container">
-                        <textarea class="description_box" name = "description" rows = "3" cols="3">
-
+                        <textarea class="description_box" id = "task-description" value =""  name = "description" rows = "3" cols="3">
+                          ${task.description}
                         </textarea>
+
                       </div>
                       <div class="feature_container">
 
@@ -103,11 +119,11 @@ const RenderDetailPage = () => {
                           <img class="o-img" src = "/imgs/options/8.png"/>
                           <p class="title">Copy</p>
                       </div>
-                      <div class="option-card">
+                      <div class="option-card option-card--archive">
                           <img class="o-img"  src = "/imgs/options/6.png"/>
                           <p class="title">Archive</p>
                       </div>
-                      <div class="option-card">
+                      <div class="option-card option-card--delete">
                           <img class="o-img" src = "/imgs/options/7.png"/>
                           <p class="title">Delete</p>
                       </div>

@@ -51,7 +51,6 @@ const AddEventToAddList = () => {
 
     var document_board = document.querySelector(".overlay--board");
     document_board.addEventListener("click",(e)=>{
-      console.log(e.target);
       if(e.target.classList.contains("create_list_inner_modal") == false){
         add_list_modal.innerHTML = "";
       }
@@ -66,18 +65,99 @@ const AddEventToAddList = () => {
 }
 
 const AddClickEventsToTasks =()=>{
+
     const taskLists = document.querySelectorAll('.task_list');
 
     taskLists.forEach((list) => {
-      list.addEventListener("click",(e)=>{
-        e.preventDefault();
-        console.log(list);
 
-        var html = RenderDetailPage();
+      list.addEventListener("click", async (e)=>{
+        e.preventDefault();
+        e.stopPropagation();
+
+        var element = e.target;
+
+        if(!element.dataset.taskId){
+          element = e.target.parentElement;
+        }
+        console.log(element)
+        var {data} = await axios.get(`/api/task/${id}/${element.dataset.listId}/${element.dataset.taskId}`);
+        console.log(data)
+        var html = RenderDetailPage(data.task.task, id, element.dataset.taskId, element.dataset.listId);
         var detail_container = document.querySelector(".detail-wrapper");
+
         detail_container.innerHTML = html;
-      })
-    })
+
+        document.getElementById('task-description').value = '';
+
+        var exit = document.querySelector("#exit-detail")
+        var save_btn = document.querySelector(".save-btn");
+        var archive_btn = document.querySelector(".option-card--archive");
+        var delete_btn = document.querySelector(".option-card--delete");
+        var watch_btn = document.querySelector(".watch-btn");
+
+        function GetTaskData(){
+
+          var form = document.querySelector("#detail-form");
+          var board_id = form.dataset.boardId;
+          var list_id = form.dataset.listId;
+          var task_id = form.dataset.taskId;
+
+          return {
+            board_id: board_id,
+            list_id:list_id,
+            task_id:task_id
+          }
+
+        }
+
+        save_btn.addEventListener("click", async (e)=>{
+
+          e.preventDefault();
+
+          var form = document.querySelector("#detail-form");
+          var form_data = {};
+
+          var {board_id,list_id,task_id} = GetTaskData();
+
+          form_data.name = form.querySelector("#task-name").value;
+          form_data.description = form.querySelector("#task-description").value;
+
+          var {data} = await axios.post("/api/task/change", {form:form_data, board_id: board_id, list_id: list_id, task_id: task_id});
+
+          ExitDetailPage();
+
+        });
+
+        archive_btn.addEventListener("click", async (e)=>{
+          e.preventDefault();
+          var {board_id,list_id,task_id} = GetTaskData();
+          var {data} = await axios.post("/api/task/archive", {board_id: board_id, list_id: list_id, task_id: task_id});
+          ExitDetailPage();
+        });
+
+        delete_btn.addEventListener("click", async (e)=>{
+          e.preventDefault();
+          var {board_id,list_id,task_id} = GetTaskData();
+          var {data} = await axios.post("/api/task/delete", {board_id: board_id, list_id: list_id, taskId: task_id});
+          ExitDetailPage();
+        });
+
+        watch_btn.addEventListener("click", async (e)=>{
+          e.preventDefault();
+          var {board_id,list_id,task_id} = GetTaskData();
+          var {data} = await axios.post("/api/task/watch", {board_id: board_id, list_id: list_id, task_id: task_id});
+          ExitDetailPage();
+        })
+
+        exit.addEventListener("click",(e)=>{
+          ExitDetailPage();
+        });
+
+
+      });
+
+    });
+
 }
 
 const AddListToBoard = (e,cb) => {
@@ -94,6 +174,8 @@ const AddListToBoard = (e,cb) => {
     name:input.value,
     date_of_creation: new Date()
   }
+
+  console.log(id,name,config)
 
   axios.post(`/my_board/id=${id}/name=${name}/list/add`,config).then((result)=>{
     InitMyBoard();
@@ -135,29 +217,36 @@ const SetCurrentBoard = async () => {
 
 const AddEventsToAddTask = () => {
 
-  var add_task_to_list_buttons = document.getElementsByClassName("add_additional_list_modal");
+    var add_task_to_list_buttons = document.getElementsByClassName("add_additional_list_modal");
 
-  for(var i =0; i < add_task_to_list_buttons.length; i++){
+    for(var i =0; i < add_task_to_list_buttons.length; i++){
 
         add_task_to_list_buttons[i].addEventListener("click",(e)=>{
             if(e.target.getAttribute("isEditing") == 1){
               return;
             }
+
             for(var x = 0; x < add_task_to_list_buttons.length; x++){
+
               if(add_task_to_list_buttons[x].getAttribute("isEditing") == 1){
+
                 var parent = add_task_to_list_buttons[x].parentElement;
                 var modal_container= parent.querySelector(".create_task_to_board_modal");
+
                 add_task_to_list_buttons[x].setAttribute("isEditing",0)
                 modal_container.innerHTML = "";
 
               }
-            }
-          if(e.target.getAttribute("isEditing") == 0){
-            AddTaskToDBEvent(e);
-          }
-        })
 
-  }
+            }
+
+            if(e.target.getAttribute("isEditing") == 0){
+              AddTaskToDBEvent(e);
+            }
+
+        });
+
+    }
 
 }
 
@@ -166,19 +255,23 @@ const AddTaskToDBEvent = (e) => {
   var parent = e.target.parentElement
   var _id = parent.getAttribute("_id");
   var modal_container = parent.querySelector(".create_task_to_board_modal");
+
   modal_container.innerHTML = RenderAddTaskModal(_id);
 
   e.target.setAttribute("isEditing",1);
-  console.log(e.target);
+
   var add_task_button_to_db = modal_container.parentElement.querySelector(".add_additional_list_modal");
 
   add_task_button_to_db.addEventListener("click", async (e)=>{
+
     var parent = e.target.parentElement;
+
     if(e.target.getAttribute("isEditing") == 0 && isEditingTask){
       return;
     }
+
     var task_input = parent.querySelector(".add_task_to_list_input");
-    console.log(task_input.value);
+
     isEditingTask = true;
 
     if(task_input.value.length < 1){
@@ -187,10 +280,13 @@ const AddTaskToDBEvent = (e) => {
     else{
 
       isEditingTask = false;
+
       var _id = parent.getAttribute("_id");
-      console.log(_id,task_input.value);
+
       await axios.post(`/my_board/id=${id}/name=${name}/task/add`,{list_id:_id, name: task_input.value});
+
       InitMyBoard();
+
     }
 
   });
@@ -218,6 +314,7 @@ const InitMyBoard = async () => {
    AddEventsToAddTask();
    EnableDragDrop();
    AddClickEventsToTasks();
+
 }
 
 const BuildListHTML = async (board) =>{
@@ -238,12 +335,14 @@ const SetDynamicColors = async (chosen_board) => {
   document.body.style.background = background;
 
   if(chosen_board.background_img){
+
    background = chosen_board.background_img ? `url("/images/${chosen_board.background_img.filename}")` : chosen_board.background;
    rgb = chosen_board.background_img ?  chosen_board.background_img.filename : chosen_board.background;
    color_data = await axios.post("/api/color/all",{src:rgb});
+
    document.body.style.background = background;
-  }
-  else{
+
+  }else{
 
     var side_nav_background = null;
     var current_background = background;
@@ -299,6 +398,7 @@ const SetDynamicColors = async (chosen_board) => {
     side_nav.style.background = side_color_style;
     side_nav.style.borderRight = `1px solid ${diff_color_style}`;
     task_heading.style.background = diff_color_style;
+
   }
 
   if(color_data.data){

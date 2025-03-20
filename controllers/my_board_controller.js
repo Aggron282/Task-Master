@@ -17,6 +17,7 @@ const ExtractColor = (req,res,next) => {
   })
 
 }
+
 const AddListToBoard = (req,res,next) => {
 
   const data = req.body;
@@ -128,19 +129,20 @@ const GetMyBoardPage = (req,res,next) => {
 
 const ChangeTasks = async (req,res) => {
 
-  var {originalListId, newListId, taskId, boardId} = req.body;
-  var found_board = await board_util.FindBoardById(req.user.boards,boardId);
+
+  var {list_id, newListId, task_id, board_id} = req.body;
+  var found_board = await board_util.FindBoardById(req.user.boards,board_id);
+
   var index = found_board.index;
 
   if(!found_board){
     throw new Error("Could not find board");
   }
 
-  var originalList = await board_util.FindListInBoard(found_board,originalListId);
-  var newList = await board_util.FindListInBoard(found_board,newListId);
-  var task_to_replace = await board_util.FindTaskInList(originalList, taskId);
-  console.log(taskId,originalList)
-  console.log(task_to_replace)
+  var originalList = await board_util.FindListInBoard(found_board.board,list_id);
+  var newList = await board_util.FindListInBoard(found_board.list,newListId);
+  var task_to_replace = await board_util.FindTaskInList(originalList.list, task_id);
+
   const listWithRemovedTask = originalList.list.list.filter(task => {
     return task._id != task_to_replace.task._id;
   });
@@ -165,7 +167,6 @@ const ChangeTasks = async (req,res) => {
 
       if(list._id === newList._id){
         newList.list.list = listWithAddedTask.list ? listWithAddedTask.list : [] ;
-        console.log(newList)
         return newList.list
       }
       else{
@@ -188,26 +189,29 @@ const ChangeTasks = async (req,res) => {
 }
 
 const ArchiveTask = async (req,res) => {
-  var {originalListId, taskId, boardId} = req.body;
 
-  var found_board = await board_util.FindBoardById(req.user.boards,boardId);
+  var {list_id, task_id, board_id} = req.body;
+  var found_board = await board_util.FindBoardById(req.user.boards,board_id);
   var index = found_board.index;
 
   if(!found_board){
     throw new Error("Could not find board");
   }
 
-  var originalList = await board_util.FindListInBoard(found_board,originalListId);
-  var task_to_archive = await board_util.FindTaskInList(originalList, taskId);
-
+  console.log(found_board);
+  var originalList = await board_util.FindListInBoard(found_board.board,list_id);
+  var task_to_archive = await board_util.FindTaskInList(originalList.list.list, task_id);
+  console.log(originalList.list,task_to_archive);
   task_to_archive.task.isArchived = true;
 
   originalList.list.list.map((list)=>{
+
     if(list._id == task_to_archive.task._id){
       return task_to_archive.task;
     }else{
       return list;
     }
+
   });
 
   var new_board = {...found_board.board};
@@ -224,6 +228,7 @@ const ArchiveTask = async (req,res) => {
   });
 
   var set_board = {$set:{boards:req.user.boards}} ;
+  SetNewBoard(req,new_board)
 
   User.updateOne({_id:req.user._id},set_board).then((result)=>{
         res.json(result);
@@ -234,29 +239,33 @@ const ArchiveTask = async (req,res) => {
 
 }
 
-const DeleteTask = async (req,res) => {
+const WatchTask = async (req,res) => {
 
-  var {originalListId, taskId, boardId} = req.body;
-
-  var found_board = await board_util.FindBoardById(req.user.boards,boardId);
+  var {list_id, task_id, board_id} = req.body;
+  var found_board = await board_util.FindBoardById(req.user.boards,board_id);
   var index = found_board.index;
 
   if(!found_board){
     throw new Error("Could not find board");
   }
 
-  var originalList = await board_util.FindListInBoard(found_board,originalListId);
-  var task_to_delete = await board_util.FindTaskInList(originalList, taskId);
+  var originalList = await board_util.FindListInBoard(found_board.board,list_id);
+  var task_to_archive = await board_util.FindTaskInList(originalList.list.list, task_id);
 
-  originalList.list = originalList.list.list.filter((task) => {
-    // Only keep tasks where the _id is not equal to the task we're deleting
-    return task._id !== task_to_delete.task._id;
+  task_to_archive.task.isWatched = !task_to_archive.task.isWatched;
+
+  originalList.list.list.map((list)=>{
+
+    if(list._id == task_to_archive.task._id){
+      return task_to_archive.task;
+    }
+    else{
+      return list;
+    }
+
   });
-
-  console.log(originalList.list)
-
   var new_board = {...found_board.board};
-
+  console.log(new_board.list.list)
   new_board.list = new_board.list.map((list)=>{
 
         if(list._id == originalList.list._id){
@@ -270,17 +279,114 @@ const DeleteTask = async (req,res) => {
 
   var set_board = {$set:{boards:req.user.boards}} ;
 
+  SetNewBoard(req,new_board)
+
   User.updateOne({_id:req.user._id},set_board).then((result)=>{
         res.json(result);
       }).catch((err)=>{
         console.log(err);
         next(err);
     });
+
 }
 
 
-module.exports.ArchiveTask = ArchiveTask;
+function SetNewBoard(req,board){
+  var new_boards = {...req.user.boards};
 
+  for(var i =0; i < new_boards.length;i++){
+
+    if(new_boards[i].id == board.id ){
+      new_boards[i] =  board;
+    }
+
+  }
+
+  req.user.boards = new_boards;
+
+}
+
+
+const DeleteTask = async (req, res) => {
+    try {
+        const { list_id, taskId, board_id } = req.body;
+        const task_id = taskId;
+
+        // Find the board
+        const found_board = await board_util.FindBoardById(req.user.boards, board_id);
+        if (!found_board) throw new Error("Could not find board");
+
+        const boardIndex = found_board.index;
+        let boardData = found_board.board;
+
+        // Find the list
+        const originalList = await board_util.FindListInBoard(boardData, list_id);
+        if (!originalList) throw new Error("Could not find list");
+
+        // Remove task from list
+        originalList.list.list = originalList.list.list.filter(task => task._id !== task_id);
+
+        // Update the board with the new list
+        const updatedBoard = { ...boardData };
+        updatedBoard.list = updatedBoard.list.map(list =>
+            list._id === originalList.list._id ? originalList.list : list
+        );
+
+        req.user.boards[boardIndex] = updatedBoard;
+
+        // Update in database
+        await User.updateOne({ _id: req.user._id }, { $set: { boards: req.user.boards } });
+
+        res.json({ success: true, message: "Task deleted successfully" });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+};
+
+const GetTaskData = async (req,res) => {
+
+  var {board_id, list_id, task_id} = req.params
+  console.log(req.params)
+  var found_board= await board_util.FindBoardById(req.user.boards,board_id);
+  console.log(found_board.board.list)
+  var found_list = await board_util.FindListInBoard(found_board.board, list_id);
+  console.log(found_list)
+  var found_task = await board_util.FindTaskInList(found_list.list.list, task_id);
+  console.log(found_task)
+  res.json({task:found_task});
+
+}
+
+const ChangeTask = async (req,res) => {
+
+  var {board_id, list_id, task_id, form} = req.body;
+
+  var found_board= await board_util.FindBoardById(req.user.boards,board_id);
+  var found_list = await board_util.FindListInBoard(found_board.board, list_id);
+  var found_task = await board_util.FindTaskInList(found_list.list.list, task_id);
+
+  found_task = found_task.task;
+  found_task.name = form.name;
+  found_task.description = form.description;
+
+  var new_board = await board_util.ChangeTask(found_board.board, list_id, task_id, found_task);
+
+  var set_board = {$set:{boards:new_board}} ;
+
+  User.updateOne({_id:req.user._id},set_board).then((result)=>{
+      res.json(result);
+    }).catch((err)=>{
+      console.log(err);
+      next(err);
+  });
+
+}
+
+module.exports.WatchTask = WatchTask;
+module.exports.ChangeTask = ChangeTask;
+module.exports.ArchiveTask = ArchiveTask;
+module.exports.GetTaskData = GetTaskData;
 module.exports.DeleteTask = DeleteTask;
 module.exports.ChangeTasks   = ChangeTasks;
 module.exports.ExtractColor = ExtractColor;
