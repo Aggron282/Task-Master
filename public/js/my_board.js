@@ -49,14 +49,14 @@ const AddEventToAddList = () => {
 
     var create_button = document.querySelector("#addList");
 
-    var document_board = document.querySelector(".overlay--board");
-    document_board.addEventListener("click",(e)=>{
-      if(e.target.classList.contains("create_list_inner_modal") == false){
-        add_list_modal.innerHTML = "";
-      }
-    })
+    // document_board.addEventListener("click",(e)=>{
+    //   if(e.target.classList.contains("create_list_inner_modal") == false){
+    //     add_list_modal.innerHTML = "";
+    //   }
+    // })
 
     create_button.addEventListener("click",(e)=>{
+      console.log(e.target);
       AddListToBoard(e,(result)=>{console.log(result)});
     });
 
@@ -79,9 +79,13 @@ const AddClickEventsToTasks =()=>{
         if(!element.dataset.taskId){
           element = e.target.parentElement;
         }
-        console.log(element)
+
+        if(!element.classList.contains("task_item_container")){
+          return;
+        }
+
         var {data} = await axios.get(`/api/task/${id}/${element.dataset.listId}/${element.dataset.taskId}`);
-        console.log(data)
+
         var html = RenderDetailPage(data.task.task, id, element.dataset.taskId, element.dataset.listId);
         var detail_container = document.querySelector(".detail-wrapper");
 
@@ -176,7 +180,6 @@ const AddListToBoard = (e,cb) => {
   }
 
   console.log(id,name,config)
-
   axios.post(`/my_board/id=${id}/name=${name}/list/add`,config).then((result)=>{
     InitMyBoard();
     cb(result);
@@ -395,27 +398,26 @@ const SetDynamicColors = async (chosen_board) => {
 
     side_color_style = `rgb(${side_color[0]},${side_color[1]},${side_color[2]})`;
 
-    side_nav.style.background = side_color_style;
-    side_nav.style.borderRight = `1px solid ${diff_color_style}`;
-    task_heading.style.background = diff_color_style;
+    // side_nav.style.background = side_color_style;
+    // side_nav.style.borderRight = `1px solid ${diff_color_style}`;
+    // task_heading.style.background = diff_color_style;
 
   }
 
-  if(color_data.data){
-
-    for (var i =0; i < color_data.data.length - 3; i++){
-
-      var chosen_color = color_data.data[i];
-
-      linear_grad += `,rgba(${chosen_color.r},${chosen_color.g},${chosen_color.b},${1})`;
-
-    }
-
-    linear_grad+= ")";
-
-    task_heading.style.background = linear_grad;
-    side_nav.style.background = linear_grad;
-  }
+  // if(color_data.data){
+  //
+  //   for (var i =0; i < color_data.data.length - 3; i++){
+  //
+  //     var chosen_color = color_data.data[i];
+  //
+  //     linear_grad += `,rgba(${chosen_color.r},${chosen_color.g},${chosen_color.b},${1})`;
+  //
+  //   }
+  //
+  //   linear_grad+= ")";
+  //   // task_heading.style.background = linear_grad;
+  //   // side_nav.style.background = linear_grad;
+  // }
 
 }
 

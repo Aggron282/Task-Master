@@ -8,6 +8,14 @@ const path = require("path");
 const color_util = require("./../util/colors.js");
 const board_util = require("./../util/board.js");
 
+const GetBoards = (req,res,next) => {
+
+  var boards = req.user.boards;
+
+  res.json({boards:boards});
+
+}
+
 const ExtractColor = (req,res,next) => {
 
   const src = req.body.src;
@@ -349,11 +357,8 @@ const GetTaskData = async (req,res) => {
   var {board_id, list_id, task_id} = req.params
   console.log(req.params)
   var found_board= await board_util.FindBoardById(req.user.boards,board_id);
-  console.log(found_board.board.list)
   var found_list = await board_util.FindListInBoard(found_board.board, list_id);
-  console.log(found_list)
   var found_task = await board_util.FindTaskInList(found_list.list.list, task_id);
-  console.log(found_task)
   res.json({task:found_task});
 
 }
@@ -393,3 +398,4 @@ module.exports.ExtractColor = ExtractColor;
 module.exports.AddTaskToList = AddTaskToList;
 module.exports.AddListToBoard = AddListToBoard;
 module.exports.GetMyBoardPage = GetMyBoardPage;
+module.exports.GetBoards = GetBoards;

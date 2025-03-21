@@ -15,5 +15,5 @@ router.post("/api/task/archive/", isAuth, board_controller.ArchiveTask);
 router.post("/api/task/delete/", isAuth, board_controller.DeleteTask);
 router.post("/api/task/watch/", isAuth, board_controller.WatchTask);
 router.get("/api/task/:board_id/:list_id/:task_id", isAuth, board_controller.GetTaskData);
-
+router.get("/api/myboards", isAuth, board_controller.GetBoards)
 module.exports = router;

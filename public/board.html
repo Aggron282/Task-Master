@@ -27,12 +27,12 @@
 
   <body>
 
-    <div class="overlay--board"></div>
+    <!-- <div class="overlay--board"></div> -->
     <div class="detail-wrapper"></div>
     <div class = "container-fluid">
 
       <nav class="navbar">
-          <div class="logo">Trello</div>
+          <div class="logo">Task-Master</div>
           <div class="menu">
               <span>Workspaces</span>
               <span>Recent</span>
@@ -45,6 +45,7 @@
           </div>
           <div class="profile">MK</div>
       </nav>
+
       <div class="board-grid">
       <div class="sidebar-container">
           <div class="sidebar-bg"></div>
@@ -53,17 +54,14 @@
               <div class="menu-item">📂 Boards</div>
               <div class="menu-item">🗃 Show Archived Tasks</div>
               <h6 class="subtitle"> Your Boards </h6>
-              <div class="board-display">
+              <div class="board-holder">
 
-              <img class="icon-display" src = "/imgs/l.png"/>
-              <p> Sample Board</p>
-          </div>
+              </div>
           </div>
       </div>
 
 
         <div class="my_taskboard_container">
-          <div class="task_heading_container"></div>
 
           <div class="task_parent">
             <div class="archive_board">
@@ -80,7 +78,10 @@
             </div>
             <div></div>
 
-            <div class="inner_container_task"></div>
+            <div class="inner_container_task-">
+              <div class="task_heading_container"></div>
+                <div class="inner_container_task"></div>
+            </div>
           </div>
 
         </div>
@@ -92,6 +93,7 @@
   <script src = "/js/renderer.js"></script>
   <script src = "/js/drag_drop_tasks.js"></script>
   <script src = "/js/my_board.js"></script>
+  <script src = "/js/side_bar.js"></script>
 
  </body>
 

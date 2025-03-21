@@ -1,5 +1,4 @@
 const RenderListItem = (task_list) => {
-  console.log(task_list)
   var list_of_tasks = RenderTaskItems(task_list.list,task_list._id);
   return(`
     <div class=" task_list relative" _id = "${task_list._id}" data-list-id = "${task_list._id}" isClicked = "0">
@@ -141,7 +140,7 @@ const RenderAddList = () => {
     return (`
       <div class="relative" isClicked = "0">
 
-        <div class="list_heading inactive_list task_list create_list create_new "  >
+        <div class="list_heading inactive_list task_list--add create_list create_new "  >
           + Add List
         </div>
 
@@ -216,7 +215,6 @@ function RenderTaskItems(tasks,list_id){
   tasks.map((task)=>{
 
     var extra = "";
-    console.log(task);
 
     if(task.description.length > 0){
       extra = `<div class="extra">...</div>`

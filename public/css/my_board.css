@@ -254,22 +254,33 @@ body{
   transition:  .3s all;
 }
 
+.task_list--add{
+  font-size:20px;
+  padding:5px;
+  background-color: #16191d;
+  border-radius:5px;
+  text-align: center;
+  color:#9FADBC !important;
+  width:250px;
+  margin-left:1%;
+  transition:  .3s all;
+}
+
 .task_title{
   transform: translateY(-30px);
   padding:10px;
   position: relative;
-      background-color: rgb(22, 25, 29);
+  background-color: rgb(22, 25, 29);
   z-index: 999;
   color:white;
   padding-left:50px;
   padding-right:50px;
-  margin-top:7.5%;
-  margin-left:5%;
+  margin-top:30px;
+  margin-left:20px;
   font-size:30px;
   border-radius:10px;
   box-shadow:0px 0px 20px rgba(0,0,0,.4);
   font-weight: 200;
-  width:100%;
   text-align: center;
   display: inline-block;
 
@@ -315,7 +326,7 @@ body{
 .add_list_modal{
   position: absolute;
   top:-5%;
-  left:-5%;
+  left:-15%;
   width: 20%;
 }
 
@@ -392,7 +403,6 @@ body{
 
 .task_parent{
   width:100%;
-  padding-top:5%;
   /* display: grid;
    grid-auto-flow: column; */
 }
@@ -400,12 +410,23 @@ body{
   width:100%;
    display: grid;
    grid-gap:40px;
-   margin-left:-37.5%;
+   /* margin-left:-10.5%; */
    padding:30px;
+   padding-left:100px;
+   padding-right:250px;
    /* height:100%; */
    /* overflow-x: scroll; */
    grid-auto-columns: 300px;
    grid-auto-flow: column;
+   height:110vh;
+   display: grid;
+   grid-auto-flow: column; /* Forces items to be placed in a row */
+   grid-auto-columns: minmax(250px, auto); /* Ensures lists are a proper width */
+   /* overflow-x: scroll; /* Allows horizontal scrolling */ */
+   white-space: nowrap; /* Prevents wrapping */
+   gap: 40px; /* Adds spacing between lists */
+   align-items: start; /* Prevents items from shifting vertically */
+   padding-bottom: 10px; /* Keeps the add button visible */
 }
 .inner_board{
   padding:5px;
@@ -414,9 +435,9 @@ body{
   transition: all .3s;
 }
 
-.inner_container_task{
+/* .inner_container_task{
   padding-top:5%;
-}
+} */
 
 body{
   padding-bottom:0%;
@@ -429,12 +450,16 @@ body{
   display: grid;
   overflow-x: scroll;
   /* overflow: visible; */
-  grid-template-columns: 30% 1fr;
+  grid-template-columns:1fr;
 }
 
 h6 {
   color:darkgrey;
 
+}
+
+.board-preview-text {
+  margin-top:5px;
 }
 
 
