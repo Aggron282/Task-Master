@@ -8,6 +8,13 @@ body{
   overflow:scroll;
 }
 
+.icon_holders{
+  display: flex;
+  justify-content: space-between; /* puts items at each end */
+  align-items: center;            /* optional: center them vertically */
+  padding: 1rem;
+}
+
 .my_taskboard_container{
   /* margin-top:5%; */
   padding-top: 5%;
@@ -242,6 +249,19 @@ body{
   padding:0px !important;
 }
 
+.watching--active{
+  border:2px solid lightblue !important;
+}
+.watching--active p{
+  fill:lightblue;
+  color:lightblue;
+}
+.watch-input{
+  position: absolute;
+  visibility: hidden;
+  z-index: -2;
+}
+
 .task_list{
   font-size:20px;
   padding:5px;
@@ -420,11 +440,11 @@ body{
    grid-auto-flow: column;
    height:110vh;
    display: grid;
-   grid-auto-flow: column; /* Forces items to be placed in a row */
-   grid-auto-columns: minmax(250px, auto); /* Ensures lists are a proper width */
+   /* grid-auto-flow: column; /* Forces items to be placed in a row */ */
+   grid-auto-columns: minmax(200px, auto); /* Ensures lists are a proper width */
    /* overflow-x: scroll; /* Allows horizontal scrolling */ */
    white-space: nowrap; /* Prevents wrapping */
-   gap: 40px; /* Adds spacing between lists */
+   gap: 20px; /* Adds spacing between lists */
    align-items: start; /* Prevents items from shifting vertically */
    padding-bottom: 10px; /* Keeps the add button visible */
 }

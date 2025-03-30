@@ -1,3 +1,44 @@
+const menu_icon=`
+<svg
+xmlns="http://www.w3.org/2000/svg"
+width="24" height="24"
+viewBox="0 0 24 24"
+fill="none" stroke="currentColor"
+stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+>
+<line x1="3" y1="12" x2="21" y2="12" />
+<line x1="3" y1="6" x2="21" y2="6" />
+<line x1="3" y1="18" x2="21" y2="18" />
+</svg>
+`
+
+const watch_icon = `
+<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-eye" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="20" height="20">
+<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+  d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+</svg>
+`
+
+const deadline_icon =
+`
+  <svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="24" height="24"
+  viewBox="0 0 24 24"
+  fill="none" stroke="currentColor"
+  stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+  >
+  <circle cx="12" cy="14" r="8" />
+  <line x1="12" y1="14" x2="12" y2="10" />
+  <line x1="9" y1="2" x2="15" y2="2" />
+  <line x1="12" y1="6" x2="12" y2="6" />
+  </svg>
+
+`
+
+
 const RenderListItem = (task_list) => {
   var list_of_tasks = RenderTaskItems(task_list.list,task_list._id);
   return(`
@@ -27,25 +68,38 @@ const ExitDetailPage = () => {
   var wrapper = document.querySelector(".wrapper");
 
   detail_page.classList.add("detail_page--away");
+
   wrapper.classList.add("overlay--away");
   overlay.classList.add("wrapper--away");
+
   var detail_container = document.querySelector(".detail-wrapper");
+
   setTimeout(()=>{
     detail_container.innerHTML = "";
   },500)
+
 }
 
 const RenderDetailPage = (task,board_id, task_id, list_id) => {
 
+  var watching_class = task.watching ? "watching--active" : "";
+
   return(
     `
     <div class="wrapper">
+
       <div class="overlay"></div>
+
       <div class="detail_page">
+
         <p class="exit" id = "exit-detail"">X</p>
+
           <form id = "detail-form"  data-task-id = "${task_id}" data-list-id = "${list_id}"  data-board-id = "${board_id}" >
+
               <div class="detail_grid">
+
                   <div class="main_container">
+
                       <div class="title_detail_container">
                           <input class="title_input" name = "title" value = "${task.name}" id = "task-name">
                           <div class="list_name_container">
@@ -53,83 +107,111 @@ const RenderDetailPage = (task,board_id, task_id, list_id) => {
                               <p class="title">Belongs to List 1 </p>
                           </div>
                       </div>
+
                       <div class="save_container">
                           <button class="save-btn">
                             Save Changes
                           </button>
                       </div>
+
                       <div class="notification_container">
-                        <button class="option-card watch-btn">
+
+                        <button class="option-card watch-btn ${watching_class}">
                           <img class="o-img"  src = "/imgs/options/13.png"/>
                           <p class="title">Watch Task </p>
+                          <input class="watch-input" type="checkbox" name = "watched"/>
                         </button>
+
                       </div>
+
+                      <div class="date_container">
+
+                        <div class="option-card">
+                            <img class="o-img"  src = "/imgs/options/4.png"/>
+                            <p class="title">Add Due Date</p>
+                            <input value = "${task.deadline}" class="date-board" style="width:100%;min-width:300px;background:none;border:none;color:white;font-size:22px" type="date" id="date" name="date" />
+                        </div>
+
+                      </div>
+
                       <div class="description_container">
+
                           <div class="list-art">
                               <div class="l-long l"></div>
                               <div class="l-long l"></div>
                               <div class="l-short l"></div>
                               <div class="l-short l"></div>
-
                           </div>
+
                           <p class="title">Description</p>
-                      </div>
-                      <div class="text-area-container">
-                        <textarea class="description_box" id = "task-description" value =""  name = "description" rows = "3" cols="3">
-                          ${task.description}
-                        </textarea>
 
                       </div>
+
+                      <div class="text-area-container">
+                        <textarea class="description_box" id="task-description" name="description" rows="3" cols="3">${task.description}</textarea>
+                      </div>
+
                       <div class="feature_container">
 
                           <div class="feature_box">
                             <img class="o-img" src = "/imgs/options/1.png"/>
                             <p class="title"> Add Cover </p>
                           </div>
+
                           <div class="feature_box">
                             <img class="o-img" src = "/imgs/options/1.png"/>
                             <p class="title"> Add Links </p>
                           </div>
+
                           <div class="feature_box">
                             <img class="o-img" src = "/imgs/options/1.png"/>
                             <p class="title"> Add Images </p>
                           </div>
 
                       </div>
+
                   </div>
+
                   <div class="side_container">
+
                       <div class="option-card">
                           <img class="o-img" src = "/imgs/options/1.png"/>
                           <p class="title">Add Member</p>
                       </div>
+
                       <div class="option-card">
                           <img class="o-img"  src = "/imgs/options/3.png"/>
                           <p class="title">Current Members</p>
                       </div>
+
                       <div class="option-card">
                           <img class="o-img"  src = "/imgs/options/9.png"/>
                           <p class="title">Move</p>
                       </div>
-                      <div class="option-card">
-                          <img class="o-img"  src = "/imgs/options/4.png"/>
-                          <p class="title">Add Due Date</p>
-                      </div>
+
                       <div class="option-card">
                           <img class="o-img" src = "/imgs/options/8.png"/>
                           <p class="title">Copy</p>
                       </div>
+
                       <div class="option-card option-card--archive">
                           <img class="o-img"  src = "/imgs/options/6.png"/>
                           <p class="title">Archive</p>
                       </div>
+
                       <div class="option-card option-card--delete">
                           <img class="o-img" src = "/imgs/options/7.png"/>
                           <p class="title">Delete</p>
                       </div>
+
                   </div>
+
               </div>
+
           </form>
+
       </div>
+
     </div>
     `
   )
@@ -215,10 +297,39 @@ function RenderTaskItems(tasks,list_id){
   tasks.map((task)=>{
 
     var extra = "";
+    console.log(task);
+    // const p_element = task.querySelector(".task_item_name");
+    // const description_holder = task.querySelector(".description_holder");
+    // const deadline_holder = task.querySelector(".deadline_holder");
 
-    if(task.description.length > 0){
-      extra = `<div class="extra">...</div>`
-    }
+    var name = task.name;
+    var description_html = task.description.length > 0 ? menu_icon : "";
+    var deadline_html = task.deadline.length > 0 ? deadline_icon : "";
+    var watch_html = task.watching ? watch_icon : "";
+
+
+    // if (deadline_holder) {
+    //
+    //   if (form_data.date) {
+    //
+    //     deadline_holder.innerHTML = deadline_icon;
+    //
+    //     const now = new Date();
+    //
+    //     if (new Date(form_data.date) < now) {
+    //       deadline_holder.classList.remove("deadline_holder--active");
+    //     } else {
+    //       deadline_holder.classList.add("deadline_holder--active");
+    //     }
+    //
+    //   }
+    //   else {
+    //     deadline_holder.innerHTML = "";
+    //   }
+    //
+    // }
+
+
     if(task.isArchived != true){
       html += `
 
@@ -227,6 +338,18 @@ function RenderTaskItems(tasks,list_id){
         <p class="task_item_name">
           ${task.name}
         </p>
+
+        <div class="icon_holders">
+          <div class="description_holder">
+          ${description_html}
+          </div>
+          <div class="deadline_holder">
+          ${deadline_html}
+          </div>
+          <div class="watch_holder">
+          ${watch_html}
+          </div>
+        </div>
 
         ${extra}
 
@@ -283,14 +406,16 @@ function RenderModalElement(colors){
 
       <p class="title"> Choose Background </p>
 
-      ${RenderColorElements()}
-
+      <div class="color-grid">
+        ${RenderColorElements()}
+      </div>
       <br />
       <br />
 
       <form method = "POST" action = "/board/create" id="createboard"  enctype = "multipart/form-data">
-        <input class="chosen_color_input" name='${colors[0]}' type="hidden"/>
-
+        <label> Color Picker </label>
+        <input class="chosen_color_input" name='${colors[0]}' type="color"/>
+        <br>
         <p class="title"> Choose Uploaded Background </p>
 
         <input type='file' class=" upload_button" name="thumbnail"  placeholder="Image URL">

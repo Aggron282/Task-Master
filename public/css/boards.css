@@ -88,6 +88,7 @@
 
 .taskboard:hover .inner_board p {
   background:white;
+  color:black !important;
 }
 
 body{

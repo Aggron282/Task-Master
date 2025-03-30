@@ -1,4 +1,27 @@
-const colors = ["rgb(1,1,1)","rgb(187,187,187)","rgb(200,200,200)","rgb(232,201,161)","rgb(27,211,126)","rgb(65,45,32)","rgb(187,191,222)","rgb(167,30,148)","rgb(113,108,127)","rgb(102,208,47)","rgb(251,86,170)","rgb(195,2,48)"]
+const colors = [
+"#010101", // Original
+ "#BBBBBB",
+ "#C8C8C8",
+ "#E8C9A1",
+ "#1BD37E",
+ "#412D20",
+ "#BBBFDE",
+ "#A71E94",
+ "#716C7F",
+ "#66D02F",
+ "#FB56AA",
+ "#C30230",
+ "#00BFFF", // Extra
+ "#FF7F50",
+ "#7B68EE",
+ "#00FA9A",
+ "#FF6347",
+ "#FFD700",
+ "#6A5ACD",
+ "#20B2AA",
+ "#FF4500",
+ "#DA70D6"
+]
 
 const board_modal_wrapper = document.querySelector(".board_wrapper");
 const board_modal_container = document.querySelector(".board_modal_container");
@@ -21,10 +44,15 @@ function BuildModalHTML(){
   isModalRendered = true;
 
   var html = RenderModalElement(colors);
+
   board_modal_container.innerHTML = html;
 
   chosen_color_input = document.querySelector(".chosen_color_input");
   board_modal_wrapper.classList.add("wrapper_active");
+
+  chosen_color_input.addEventListener("change",(e)=>{
+    ChangeBoardColor(chosen_color_input.value);
+  })
 
   AddColorBoxEvents();
 
@@ -138,6 +166,9 @@ function AddColorBoxEvents(){
       if(chosen_color_input){
         chosen_color_input.setAttribute("name",chosen_color);
       }
+
+      chosen_color_input.value = chosen_color;
+      console.log(chosen_color_input);
 
     });
 

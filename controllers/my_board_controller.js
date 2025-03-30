@@ -105,6 +105,8 @@ const AddTaskToList = async (req,res,next) => {
 
         list.list.push({
           name:body.name,
+          watched:null,
+          deadline:"",
           status:false,
           description:"",
           _id:generateUniqueId()
@@ -206,10 +208,9 @@ const ArchiveTask = async (req,res) => {
     throw new Error("Could not find board");
   }
 
-  console.log(found_board);
   var originalList = await board_util.FindListInBoard(found_board.board,list_id);
   var task_to_archive = await board_util.FindTaskInList(originalList.list.list, task_id);
-  console.log(originalList.list,task_to_archive);
+
   task_to_archive.task.isArchived = true;
 
   originalList.list.list.map((list)=>{
@@ -272,8 +273,11 @@ const WatchTask = async (req,res) => {
     }
 
   });
+
   var new_board = {...found_board.board};
+
   console.log(new_board.list.list)
+
   new_board.list = new_board.list.map((list)=>{
 
         if(list._id == originalList.list._id){
@@ -300,6 +304,7 @@ const WatchTask = async (req,res) => {
 
 
 function SetNewBoard(req,board){
+
   var new_boards = {...req.user.boards};
 
   for(var i =0; i < new_boards.length;i++){
@@ -313,7 +318,6 @@ function SetNewBoard(req,board){
   req.user.boards = new_boards;
 
 }
-
 
 const DeleteTask = async (req, res) => {
     try {
@@ -350,15 +354,17 @@ const DeleteTask = async (req, res) => {
         console.log(error);
         res.status(500).json({ success: false, error: error.message });
     }
+
 };
 
 const GetTaskData = async (req,res) => {
 
   var {board_id, list_id, task_id} = req.params
-  console.log(req.params)
+
   var found_board= await board_util.FindBoardById(req.user.boards,board_id);
   var found_list = await board_util.FindListInBoard(found_board.board, list_id);
   var found_task = await board_util.FindTaskInList(found_list.list.list, task_id);
+
   res.json({task:found_task});
 
 }
@@ -372,15 +378,18 @@ const ChangeTask = async (req,res) => {
   var found_task = await board_util.FindTaskInList(found_list.list.list, task_id);
 
   found_task = found_task.task;
+
   found_task.name = form.name;
-  found_task.description = form.description;
-
+  found_task.description =  form.description;
+  found_task.deadline =form.date;
+  found_task.watching = form.watching;
+  console.log(found_task)
   var new_board = await board_util.ChangeTask(found_board.board, list_id, task_id, found_task);
-
   var set_board = {$set:{boards:new_board}} ;
 
   User.updateOne({_id:req.user._id},set_board).then((result)=>{
-      res.json(result);
+    console.log(new_board);
+      res.json({result:result,board:new_board});
     }).catch((err)=>{
       console.log(err);
       next(err);

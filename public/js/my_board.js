@@ -1,10 +1,10 @@
 const board_container = document.querySelector(".my_taskboard_container");
 const inner_container = document.querySelector(".inner_container_task");
 const task_heading_container = document.querySelector(".task_heading_container");
-// const overlay = document.querySelector(".overlay--board");
 
 const url = window.location.href;
 const name = url.split("name=:")[1];
+
 let id = url.split("id=:")[1];
 
 var chosen_board;
@@ -49,14 +49,7 @@ const AddEventToAddList = () => {
 
     var create_button = document.querySelector("#addList");
 
-    // document_board.addEventListener("click",(e)=>{
-    //   if(e.target.classList.contains("create_list_inner_modal") == false){
-    //     add_list_modal.innerHTML = "";
-    //   }
-    // })
-
     create_button.addEventListener("click",(e)=>{
-      console.log(e.target);
       AddListToBoard(e,(result)=>{console.log(result)});
     });
 
@@ -64,17 +57,110 @@ const AddEventToAddList = () => {
 
 }
 
-const AddClickEventsToTasks =()=>{
+const SaveTaskChange = async (e) => {
+
+  e.preventDefault();
+
+  const form = document.querySelector("#detail-form");
+  const { board_id, list_id, task_id } = GetTaskData();
+
+  const taskElement = document.querySelector(`.task_item_container[data-task-id="${task_id}"]`);
+
+  const form_data = {
+    name: form.querySelector("#task-name").value,
+    description: form.querySelector("#task-description").value,
+    date: form.querySelector(".date-board").value,
+    watching: form.querySelector(".watch-input").checked
+  };
+
+  const task_data = {
+    name: taskElement?.querySelector(".task_item_name"),
+    description: taskElement?.querySelector(".description_holder"),
+    date: taskElement?.querySelector(".deadline_holder"),
+    watching: taskElement?.querySelector(".watch_holder")
+  }
+
+  if (form_data.name && task_data.name) {
+    task_data.name.innerText = form_data.name;
+  }
+
+  console.log(form_data)
+  // if (task_data.description.innerHTML.trim() === "") {
+    task_data.description.innerHTML = form_data.description?.length > 0 ? menu_icon : "";
+  // }
+
+  // if (task_data.description.innerHTML.trim() === "") {
+    task_data.date.innerHTML = form_data.date?.length > 0 ? deadline_icon : "";
+  // }
+
+  // if (task_data.watching.innerHTML.trim() === "") {
+    task_data.watching.innerHTML = form_data.watching ? watch_icon : "";
+  // }
+
+  const { data } = await axios.post("/api/task/change", {
+    form: form_data,
+    board_id,
+    list_id,
+    task_id
+  });
+
+  ExitDetailPage();
+
+}
+
+function GetTaskData(){
+
+  var form = document.querySelector("#detail-form");
+  var board_id = form.dataset.boardId;
+  var list_id = form.dataset.listId;
+  var task_id = form.dataset.taskId;
+
+  return {
+    board_id: board_id,
+    list_id:list_id,
+    task_id:task_id
+  }
+
+}
+
+const WatchTask = async (e,watch_btn) => {
+
+  e.preventDefault();
+
+  var watch_input = watch_btn.querySelector(".watch-input");
+
+  watch_input.checked = !watch_input.checked;
+
+  if(watch_input.checked){
+    watch_btn.classList.add("watching--active");
+  }
+  else{
+    watch_btn.classList.remove("watching--active");
+  }
+
+}
+
+const ChangeTaskState = async (e, url) => {
+  e.preventDefault();
+  var {board_id,list_id,task_id} = GetTaskData();
+  var {data} = await axios.post(url, {board_id: board_id, list_id: list_id, task_id: task_id});
+  ExitDetailPage();
+}
+
+const AddClickEventsToTasks = () =>{
 
     const taskLists = document.querySelectorAll('.task_list');
 
     taskLists.forEach((list) => {
 
       list.addEventListener("click", async (e)=>{
+
         e.preventDefault();
         e.stopPropagation();
 
         var element = e.target;
+        var p_element = element.querySelector(".task_item_name");
+        var description_holder = element.querySelector(".description_holder");
 
         if(!element.dataset.taskId){
           element = e.target.parentElement;
@@ -91,76 +177,35 @@ const AddClickEventsToTasks =()=>{
 
         detail_container.innerHTML = html;
 
-        document.getElementById('task-description').value = '';
-
         var exit = document.querySelector("#exit-detail")
         var save_btn = document.querySelector(".save-btn");
         var archive_btn = document.querySelector(".option-card--archive");
         var delete_btn = document.querySelector(".option-card--delete");
         var watch_btn = document.querySelector(".watch-btn");
 
-        function GetTaskData(){
-
-          var form = document.querySelector("#detail-form");
-          var board_id = form.dataset.boardId;
-          var list_id = form.dataset.listId;
-          var task_id = form.dataset.taskId;
-
-          return {
-            board_id: board_id,
-            list_id:list_id,
-            task_id:task_id
-          }
-
-        }
-
-        save_btn.addEventListener("click", async (e)=>{
-
-          e.preventDefault();
-
-          var form = document.querySelector("#detail-form");
-          var form_data = {};
-
-          var {board_id,list_id,task_id} = GetTaskData();
-
-          form_data.name = form.querySelector("#task-name").value;
-          form_data.description = form.querySelector("#task-description").value;
-
-          var {data} = await axios.post("/api/task/change", {form:form_data, board_id: board_id, list_id: list_id, task_id: task_id});
-
-          ExitDetailPage();
-
+        save_btn.addEventListener("click", async (e) => {
+          SaveTaskChange(e);
         });
 
         archive_btn.addEventListener("click", async (e)=>{
-          e.preventDefault();
-          var {board_id,list_id,task_id} = GetTaskData();
-          var {data} = await axios.post("/api/task/archive", {board_id: board_id, list_id: list_id, task_id: task_id});
-          ExitDetailPage();
+          ChangeTaskState(e,"/api/task/archive")
         });
 
         delete_btn.addEventListener("click", async (e)=>{
-          e.preventDefault();
-          var {board_id,list_id,task_id} = GetTaskData();
-          var {data} = await axios.post("/api/task/delete", {board_id: board_id, list_id: list_id, taskId: task_id});
-          ExitDetailPage();
+          ChangeTaskState(e,"/api/task/delete")
         });
 
         watch_btn.addEventListener("click", async (e)=>{
-          e.preventDefault();
-          var {board_id,list_id,task_id} = GetTaskData();
-          var {data} = await axios.post("/api/task/watch", {board_id: board_id, list_id: list_id, task_id: task_id});
-          ExitDetailPage();
-        })
+          WatchTask(e,watch_btn);
+        });
 
         exit.addEventListener("click",(e)=>{
           ExitDetailPage();
         });
 
-
-      });
-
     });
+
+  });
 
 }
 
@@ -179,14 +224,12 @@ const AddListToBoard = (e,cb) => {
     date_of_creation: new Date()
   }
 
-  console.log(id,name,config)
   axios.post(`/my_board/id=${id}/name=${name}/list/add`,config).then((result)=>{
     InitMyBoard();
     cb(result);
   }).catch(err => console.log(err));
 
 }
-
 
 const SetCurrentBoard = async () => {
 
@@ -196,10 +239,7 @@ const SetCurrentBoard = async () => {
 
   if(!result){
 
-    console.log("No Data Found");
-
     window.location.assign("/user/login");
-
     return;
 
   }
@@ -398,26 +438,7 @@ const SetDynamicColors = async (chosen_board) => {
 
     side_color_style = `rgb(${side_color[0]},${side_color[1]},${side_color[2]})`;
 
-    // side_nav.style.background = side_color_style;
-    // side_nav.style.borderRight = `1px solid ${diff_color_style}`;
-    // task_heading.style.background = diff_color_style;
-
   }
-
-  // if(color_data.data){
-  //
-  //   for (var i =0; i < color_data.data.length - 3; i++){
-  //
-  //     var chosen_color = color_data.data[i];
-  //
-  //     linear_grad += `,rgba(${chosen_color.r},${chosen_color.g},${chosen_color.b},${1})`;
-  //
-  //   }
-  //
-  //   linear_grad+= ")";
-  //   // task_heading.style.background = linear_grad;
-  //   // side_nav.style.background = linear_grad;
-  // }
 
 }
 

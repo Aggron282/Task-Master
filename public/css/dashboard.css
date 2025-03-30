@@ -15,6 +15,11 @@
   animation:shake .1s ease-in infinite;
 }
 
+.color-grid{
+  grid-template-columns: repeat(autofill, minmax(50px,1fr));
+  grid-gap:10px;
+}
+
 .taskboard--delete .delete_button_{
   visibility: visible !important;
   z-index: 99999;

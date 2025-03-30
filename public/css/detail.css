@@ -257,6 +257,7 @@ h4 {
 
 .title_input {
     color: white;
+    overflow-x: visible;
     border: none;
     background:none;
     padding: 10px;

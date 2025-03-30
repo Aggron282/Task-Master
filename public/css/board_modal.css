@@ -57,11 +57,25 @@
   margin-top:0px;
   margin-bottom:15px;
 }
+#createboard{
+  clear:both;
+padding-top:40px;
+}
+#createboard p {
+  margin-top:20px;
+}
+#createboard label{
+  width:100%;
+}
+#createboard input {
+  margin-top:10px;
+}
 .color_box{
   transform: scale(1);
   transition: .2s all;
   border-radius:5px;
   padding:10px;
+  margin-top:10px;
   float:left;
   border:5px solid none;
   margin-left:2.5%;
