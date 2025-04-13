@@ -1,7 +1,7 @@
 const board_container = document.querySelector(".my_taskboard_container");
 const inner_container = document.querySelector(".inner_container_task");
 const task_heading_container = document.querySelector(".task_heading_container");
-
+var didInit = false;
 const url = window.location.href;
 const name = url.split("name=:")[1];
 
@@ -13,6 +13,10 @@ var isEditingTask = false;
 var isEditing = false;
 var didSetColors = false;
 
+var showArchiveOnly = false;
+var showAll = false;
+
+
 const ExitOutOfListModals = () => {
 
   var modals = document.getElementsByClassName("add_list_modal");
@@ -22,6 +26,7 @@ const ExitOutOfListModals = () => {
   }
 
 }
+
 
 const ExitOutOfTaskModals = () => {
 
@@ -140,11 +145,25 @@ const WatchTask = async (e,watch_btn) => {
 
 }
 
-const ChangeTaskState = async (e, url) => {
+const ChangeTaskState = async (e, url, isRemoving) => {
   e.preventDefault();
   var {board_id,list_id,task_id} = GetTaskData();
+
   var {data} = await axios.post(url, {board_id: board_id, list_id: list_id, task_id: task_id});
+
+  if(isRemoving){
+
+    const showAll = localStorage.getItem('show_all') === 'true';
+    const showArchivedOnly = localStorage.getItem('show_archived_only') === 'true';
+
+    if (!showAll && !showArchivedOnly && taskElement) {
+      taskElement.remove();
+    }
+
+  }
+
   ExitDetailPage();
+
 }
 
 const AddClickEventsToTasks = () =>{
@@ -188,11 +207,11 @@ const AddClickEventsToTasks = () =>{
         });
 
         archive_btn.addEventListener("click", async (e)=>{
-          ChangeTaskState(e,"/api/task/archive")
+          ChangeTaskState(e,"/api/task/archive",true)
         });
 
         delete_btn.addEventListener("click", async (e)=>{
-          ChangeTaskState(e,"/api/task/delete")
+          ChangeTaskState(e,"/api/task/delete",true)
         });
 
         watch_btn.addEventListener("click", async (e)=>{
@@ -336,12 +355,112 @@ const AddTaskToDBEvent = (e) => {
 
 }
 
+let showButtonEventsAttached = false;
+
+function StyleShowBars(showAll,showArchiveOnly){
+
+
+  console.log(showAll,showArchiveOnly)
+
+  const show_archive_tasks = document.querySelector(".menu-item--archive");
+  const show_all_tasks = document.querySelector(".menu-item--all");
+
+  if(showArchiveOnly){
+    show_archive_tasks.style.border = "2px solid white";
+    show_all_tasks.style.border = "none";
+  }
+  else if(showAll){
+    show_all_tasks.style.border = "2px solid white";
+    show_archive_tasks.style.border = "none";
+  }
+  else if(showAll == false && showArchiveOnly == false){
+    show_all_tasks.style.border = "none";
+    show_archive_tasks.style.border = "none";
+  }
+
+}
+
+const AddShowButtonEvents = () => {
+
+  if (showButtonEventsAttached) return;
+
+  showButtonEventsAttached = true;
+
+  const show_archive_tasks = document.querySelector(".menu-item--archive");
+  const show_all_tasks = document.querySelector(".menu-item--all");
+
+  show_archive_tasks.addEventListener("click", () => {
+
+    const togglingOn = !showArchiveOnly;
+
+    showArchiveOnly = togglingOn;
+    showAll = false;
+
+    localStorage.setItem("show_archived_only", togglingOn);
+    localStorage.setItem("show_all", false);
+
+    StyleShowBars(showAll,showArchiveOnly);
+    InitMyBoard();
+
+  });
+
+  show_all_tasks.addEventListener("click", () => {
+
+    const togglingOn = !showAll;
+
+    showAll = togglingOn;
+    showArchiveOnly = false;
+
+    localStorage.setItem("show_all", togglingOn);
+    localStorage.setItem("show_archived_only", false);
+
+    StyleShowBars(showAll,showArchiveOnly);
+
+    InitMyBoard();
+
+  });
+
+};
+
+const AddEventsToMore = () => {
+
+  var more_buttons = document.querySelectorAll(".more");
+
+  for(var i =0; i < more_buttons.length; i++){
+
+    more_buttons[i].addEventListener("click",(e)=>{
+      console.log(e);
+      e.stopPropagation();
+      e.preventDefault();
+
+      var parentElement =  e.target.parentElement;
+
+      var _id = parentElement.getAttribute("_id");
+
+      var modal = parentElement.querySelector(".list-settings-modal");
+      var exit_modal = modal.querySelector(".lsm-exit");
+      console.log(modal,exit_modal)
+      exit_modal.addEventListener("click",(e)=>{
+        modal.classList.remove("list-settings-modal--active");
+      });
+
+      modal.classList.add("list-settings-modal--active");
+
+    });
+
+  }
+
+}
+
 const InitMyBoard = async () => {
 
-   isEditing = false;
-   isEditingTask = false;
+  isEditing = false;
+  isEditingTask = false;
 
-   await SetCurrentBoard();
+  showAll = localStorage.getItem('show_all') === 'true';
+  showArchiveOnly = localStorage.getItem('show_archived_only') === 'true';
+
+  await SetCurrentBoard();
 
    if(!didSetColors){
      SetDynamicColors(chosen_board);
@@ -351,18 +470,29 @@ const InitMyBoard = async () => {
    ExitOutOfListModals();
    ExitOutOfTaskModals();
 
-   BuildListHTML(chosen_board);
+   BuildListHTML(chosen_board,showAll,showArchiveOnly);
 
    AddEventToAddList();
    AddEventsToAddTask();
+   AddEventsToMore();
    EnableDragDrop();
+
    AddClickEventsToTasks();
+
+   if(!didInit){
+     AddShowButtonEvents();
+  }
+  StyleShowBars(showAll,showArchiveOnly);
+  didInit = true;
 
 }
 
-const BuildListHTML = async (board) =>{
-  var html = RenderList(board);
+const BuildListHTML = async (board,showAll,showArchiveOnly) =>{
+
+  var html = RenderList(board,showAll,showArchiveOnly);
+
   inner_container.innerHTML =  html;
+
 }
 
 const SetDynamicColors = async (chosen_board) => {
@@ -385,7 +515,8 @@ const SetDynamicColors = async (chosen_board) => {
 
    document.body.style.background = background;
 
-  }else{
+  }
+  else{
 
     var side_nav_background = null;
     var current_background = background;

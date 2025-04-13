@@ -15,6 +15,21 @@ body{
   padding: 1rem;
 }
 
+.list_heading{
+  position: relative;
+   height: 30px;
+   margin-bottom: 20px;
+}
+
+.list_heading .more{
+  font-size:20px;
+  font-weight: bold;
+  align-items: center;
+  position: absolute;
+  right:10px;
+  top:10px;
+
+}
 .my_taskboard_container{
   /* margin-top:5%; */
   padding-top: 5%;
@@ -339,8 +354,9 @@ body{
   margin-top:5%;
 }
 
-.inner_container_task *{
-  z-index:9999;
+.inner_container_task {
+  z-index:99 !important;
+  position: relative;
 }
 
 .add_list_modal{

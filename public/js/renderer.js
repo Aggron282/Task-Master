@@ -39,14 +39,16 @@ const deadline_icon =
 `
 
 
-const RenderListItem = (task_list) => {
-  var list_of_tasks = RenderTaskItems(task_list.list,task_list._id);
+const RenderListItem = (task_list,showAll,showArchiveOnly) => {
+  var list_of_tasks = RenderTaskItems(task_list.list,task_list._id, showAll, showArchiveOnly);
   return(`
     <div class=" task_list relative" _id = "${task_list._id}" data-list-id = "${task_list._id}" isClicked = "0">
 
 
-      <div class="list_heading inactive_list"  >
-        ${task_list.name}
+      <div class="list_heading inactive_list"  _id = "${task_list._id}" data-list-id = "${task_list._id}" >
+        <p>${task_list.name}</p>
+        <p class="more" data-toggle = "0" > ... </p>
+        ${ReturnListModal(task_list._id)}
       </div>
 
       <div class="all_tasks_in_list">
@@ -58,6 +60,32 @@ const RenderListItem = (task_list) => {
       <div class="add_additional_list_modal" isEditing = "0"> +  Add Task </div>
 
   </div>`);
+
+}
+
+
+const ReturnListModal = (list_id) =>{
+
+  var html = `
+  <div class="list-settings-modal" list_id = ${list_id} >
+    <div class="lsm-sidebar">
+      <div class="lsm-title-container">
+        <h2>List actions</h2>
+        <span class="lsm-exit exit-list-modal"> X </span>
+      </div>
+      <div class="list-modal-grid">
+        <button>Add card</button>
+        <button>Copy list</button>
+        <button>Move list</button>
+        <button>Move all cards in this list</button>
+        <button>Sort by...</button>
+        <button>Watch</button>
+      </div>
+    </div>
+  </div>
+  `
+
+  return html;
 
 }
 
@@ -263,7 +291,7 @@ const RenderAddListModal = () => {
 }
 
 
-const  RenderList = (board)=>{
+const  RenderList = (board,showAll,showArchiveOnly)=>{
 
   var html = ``;
 
@@ -282,7 +310,7 @@ const  RenderList = (board)=>{
   }
 
   for(var k = 0; k < board.list.length; k++){
-    html += RenderListItem(board.list[k]);
+    html += RenderListItem(board.list[k],showAll,showArchiveOnly);
   }
 
   return html;
@@ -290,47 +318,32 @@ const  RenderList = (board)=>{
 }
 
 
-function RenderTaskItems(tasks,list_id){
+function RenderTaskItems(tasks,list_id,showAll = false, showArchiveOnly = false){
 
   var html = ``;
+
 
   tasks.map((task)=>{
 
     var extra = "";
-    console.log(task);
-    // const p_element = task.querySelector(".task_item_name");
-    // const description_holder = task.querySelector(".description_holder");
-    // const deadline_holder = task.querySelector(".deadline_holder");
 
     var name = task.name;
     var description_html = task.description.length > 0 ? menu_icon : "";
     var deadline_html = task.deadline.length > 0 ? deadline_icon : "";
     var watch_html = task.watching ? watch_icon : "";
 
+    let should_show = false;
+    const isArchived = task.isArchived === true;
 
-    // if (deadline_holder) {
-    //
-    //   if (form_data.date) {
-    //
-    //     deadline_holder.innerHTML = deadline_icon;
-    //
-    //     const now = new Date();
-    //
-    //     if (new Date(form_data.date) < now) {
-    //       deadline_holder.classList.remove("deadline_holder--active");
-    //     } else {
-    //       deadline_holder.classList.add("deadline_holder--active");
-    //     }
-    //
-    //   }
-    //   else {
-    //     deadline_holder.innerHTML = "";
-    //   }
-    //
-    // }
+     if (showAll) {
+       should_show = true;
+     } else if (showArchiveOnly) {
+       should_show = isArchived;
+     } else {
+       should_show = !isArchived;
+     }
 
-
-    if(task.isArchived != true){
+    if(should_show){
       html += `
 
       <div class="task_item_container" _id = ${task._id} data-task-id = ${task._id}  data-list-id = "${list_id}" status = ${task.status}>

@@ -1,13 +1,22 @@
 .navbar--board{
   padding:10px;
-  border-bottom:1px solid #e6e6e6;
+  box-shadow: 0px 0px 10px rgba(0,0,0,.5);
   padding-bottom:0px;
-  background: white;
+  /* background: white; */
   height:11vh;
+}
+.navbar{
+  background-color: #2c2d30 !important;
+
 }
 
 body{
   background: white;
+}
+
+svg{
+  fill:white;
+  color:white;
 }
 
 .choice_container{
@@ -102,20 +111,22 @@ body{
 }
 .options_list li:hover  .profile_container .add_icon{
   background: #0C66E4;
-  color:white;
+  color:darkgrey;
 }
 .board_icon{
   margin-top:10px;
 }
 .options_list li:hover  .profile_container .board_icon{
   background: #0C66E4;
-  color:white;
+  color: #2c2d30;
 }
 
 
 
 .add_icon p {
   margin-top:-10px;
+  color: #2c2d30;
+
 }
 
 .inner-board--1{

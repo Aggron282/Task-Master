@@ -50,8 +50,7 @@ app.use((req,res,next)=>{
       next();
     });
 
-  }
-  else{
+  }else{
     next();
   }
 

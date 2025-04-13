@@ -10,6 +10,8 @@
   z-index:95;
   transform:scale(1);
   background:white;
+  z-index:90099;
+
   animation:modal_appear_board .5s 1 ease-in;
 }
 
@@ -135,7 +137,7 @@ padding-top:40px;
   width:100%;
   position: absolute;
   top:0%;
-  z-index:90;
+  z-index:9009;
 }
 
 .wrapper_active{
