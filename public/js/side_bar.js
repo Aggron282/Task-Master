@@ -1,12 +1,11 @@
 var board_holder = document.querySelector(".board-holder");
 
-const GenerateOtherBoards = async () =>{
+const GenerateOtherBoards = async (holder) =>{
 
   const url = window.location.href;
   const name = url.split("name=:")[1];
-
+  holder.innerHTML = "";
   let id = url.split("id=:")[1];
-
 
   var {data} = await axios.get("/api/myboards");
 
@@ -36,9 +35,9 @@ const GenerateOtherBoards = async () =>{
     boardDisplay.appendChild(paragraph);
 
     anchor.appendChild(boardDisplay);
-    board_holder.appendChild(anchor);
+    holder.appendChild(anchor);
   }
 
 }
 
- GenerateOtherBoards();
+ GenerateOtherBoards(board_holder);

@@ -40,7 +40,9 @@ const deadline_icon =
 
 
 const RenderListItem = (task_list,showAll,showArchiveOnly) => {
+
   var list_of_tasks = RenderTaskItems(task_list.list,task_list._id, showAll, showArchiveOnly);
+
   return(`
     <div class=" task_list relative" _id = "${task_list._id}" data-list-id = "${task_list._id}" isClicked = "0">
 
@@ -49,6 +51,7 @@ const RenderListItem = (task_list,showAll,showArchiveOnly) => {
         <p>${task_list.name}</p>
         <p class="more" data-toggle = "0" > ... </p>
         ${ReturnListModal(task_list._id)}
+        ${ReturnBoardListModal(task_list._id)}
       </div>
 
       <div class="all_tasks_in_list">
@@ -76,10 +79,30 @@ const ReturnListModal = (list_id) =>{
       <div class="list-modal-grid">
         <button>Add card</button>
         <button>Copy list</button>
-        <button>Move list</button>
+        <button class="move--list">Move list</button>
         <button>Move all cards in this list</button>
         <button>Sort by...</button>
         <button>Watch</button>
+      </div>
+    </div>
+  </div>
+  `
+
+  return html;
+
+}
+
+const ReturnBoardListModal = (list_id, boards) =>{
+
+  var html = `
+  <div class="lbl-list-settings-modal" list_id = ${list_id} >
+    <div class="lbl-sidebar">
+      <div class="lbl-title-container">
+        <h2>Move To</h2>
+        <span class="lbl-exit exit-list-modal"> X </span>
+      </div>
+      <div class="list-board-holder">
+
       </div>
     </div>
   </div>

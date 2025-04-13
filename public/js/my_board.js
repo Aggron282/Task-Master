@@ -359,9 +359,6 @@ let showButtonEventsAttached = false;
 
 function StyleShowBars(showAll,showArchiveOnly){
 
-
-  console.log(showAll,showArchiveOnly)
-
   const show_archive_tasks = document.querySelector(".menu-item--archive");
   const show_all_tasks = document.querySelector(".menu-item--all");
 
@@ -422,6 +419,42 @@ const AddShowButtonEvents = () => {
 
 };
 
+const AddEventsToMove = () => {
+
+  var move_buttons = document.querySelectorAll(".move--list");
+
+  for(var i =0; i < move_buttons.length; i++){
+
+    move_buttons[i].addEventListener("click",(e)=>{
+
+      console.log(e);
+
+      e.stopPropagation();
+      e.preventDefault();
+
+      var parentElement =  e.target.parentElement.parentElement;
+      var _id = parentElement.getAttribute("_id");
+
+      var modal = document.querySelector(".lbl-list-settings-modal");
+      console.log(modal)
+      var exit_modal = modal.querySelector(".lbl-exit");
+
+      exit_modal.addEventListener("click",(e)=>{
+        modal.classList.remove("list-settings-modal--active");
+      });
+
+      modal.classList.add("list-settings-modal--active");
+
+      var holder = modal.querySelector(".list-board-holder");
+
+      GenerateOtherBoards(holder);
+
+    });
+
+  }
+
+}
+
 const AddEventsToMore = () => {
 
   var more_buttons = document.querySelectorAll(".more");
@@ -475,6 +508,7 @@ const InitMyBoard = async () => {
    AddEventToAddList();
    AddEventsToAddTask();
    AddEventsToMore();
+   AddEventsToMove();
    EnableDragDrop();
 
    AddClickEventsToTasks();

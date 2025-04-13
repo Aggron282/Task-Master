@@ -7,6 +7,7 @@
 }
 
 
+
 .list-settings-modal {
   visibility: hidden;
   height:0;
@@ -14,9 +15,10 @@
 }
 
 .list-settings-modal--active{
-  visibility: visible;
-  height:100%;
-  z-index: 99900009;
+  visibility: visible !important;
+  height:100% !important;
+  width:300px;
+  z-index: 99900009 !important;
 }
 
 .list-settings-modal  .list-modal-grid{
@@ -72,7 +74,86 @@
   padding-right:10px;
   font-size:20px;
 }
+
 .list-settings-modal  .lsm-title-container {
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ margin-bottom: 15px;
+ font-family: "Montserrat";
+}
+
+.lbl-list-settings-modal .lbl-sidebar {
+  background-color: #2c2d30;
+  width: 500px;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+}
+
+.lbl-list-settings-modal {
+  visibility: hidden;
+  height:0;
+  z-index: -2;
+}
+
+.lbl-list-settings-modal--active{
+  visibility: visible;
+  height:100%;
+  z-index: 99900009;
+}
+
+.lbl-task_item_container{
+  position: relative;
+  z-index: 9;
+}
+
+.lbl-task_item_container{
+  position: relative;
+  z-index: 9;
+}
+
+.list_heading{
+  position: relative;
+}
+
+.lbl-list-settings-modal{
+  position: absolute;
+  right:0;
+  top:0;
+}
+
+.lbl-list-settings-modal h2 {
+  font-size: 15px !important;
+  color:white;
+  text-align: left;
+  font-family: "Montserrat";
+  margin-bottom: 10px;
+}
+
+.lbl-list-settings-modal button {
+  background: transparent;
+  color: white;
+  border: none;
+  text-align: left;
+  padding: 10px 0;
+  font-size: 15px;
+  cursor: pointer;
+  border-bottom: 1px solid #3c3d40;
+}
+
+.lbl-list-settings-modal button:hover {
+  background-color: #3c3d40;
+}
+
+.lbl-list-settings-modal .lbl-exit{
+  color:white;
+  text-align: right;
+  padding-right:10px;
+  font-size:20px;
+}
+
+.lbl-list-settings-modal  .lbl-title-container {
  display: flex;
  justify-content: space-between;
  align-items: center;
