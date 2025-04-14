@@ -1,3 +1,10 @@
+.detail_page .option-card {
+  position: relative;
+  z-index: 9;
+}
+.detail_page{
+    border:2px solid black;
+}
 
 .exit {
   position: absolute;
@@ -8,6 +15,10 @@
 
   font-size:20px;
   font-weight:400;
+}
+
+.task_item_container{
+  border:3px solid none;
 }
 .list-art{
   position: relative;
@@ -220,6 +231,7 @@ h4 {
     transition:   all .5s;
     color: #ffffff;
 }
+
 
 .detail_page--away{
   transform: translateY(-1000px);

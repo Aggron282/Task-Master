@@ -12,6 +12,7 @@ router.post("/api/update-task",isAuth, board_controller.ChangeTasks);
 router.post("/api/delete-task",isAuth, board_controller.DeleteTask);
 router.post("/api/task/change/", isAuth, board_controller.ChangeTask);
 router.post("/api/task/archive/", isAuth, board_controller.ArchiveTask);
+router.post("/api/task/label/", isAuth, board_controller.LabelTask);
 router.post("/api/task/delete/", isAuth, board_controller.DeleteTask);
 router.post("/api/task/watch/", isAuth, board_controller.WatchTask);
 router.get("/api/task/:board_id/:list_id/:task_id", isAuth, board_controller.GetTaskData);

@@ -201,9 +201,62 @@ const AddClickEventsToTasks = () =>{
         var archive_btn = document.querySelector(".option-card--archive");
         var delete_btn = document.querySelector(".option-card--delete");
         var watch_btn = document.querySelector(".watch-btn");
-
+        var label_maker = document.querySelector(".label-maker");
+        var label_modal = document.querySelector("#label-modal");
+        var exit_label_maker = document.querySelector(".exit-label-modal");
+        var detail_page = document.querySelector(".detail_page");
         save_btn.addEventListener("click", async (e) => {
           SaveTaskChange(e);
+        });
+
+        label_maker.addEventListener("click",async (e)=>{
+
+          label_modal.classList.add("label-modal--active");
+
+          var label_list = document.querySelector(".label-modal-list");
+          var label_items = document.querySelectorAll(".label-modal-item");
+
+          async function ActivateLabels(type){
+
+            const { board_id, list_id, task_id } = GetTaskData();
+
+            for(var i = 0; i < label_items.length; i++){
+
+              if(label_items[i].dataset.labelType == type){
+
+                label_items[i].classList.add("label-modal-item--active");
+                detail_page.style.borderColor = label_items[i].dataset.color;
+
+                var _id = label_modal.dataset.taskId;
+                var task_item =  document.querySelector(`.task_item_container[data-task-id="${_id}"]`);
+                var {data} = await axios.post("/api/task/label",{task_id:task_id, list_id:list_id, board_id:board_id,label:type});
+
+                task_item.style.border = `${label_items[i].dataset.color} 3px solid`;
+              }
+              else{
+                label_items[i].classList.remove("label-modal-item--active");
+              }
+
+            }
+
+          }
+
+          for(var i = 0; i < label_items.length; i++){
+
+              label_items[i].addEventListener("click",(e)=>{
+                  e.stopPropagation();
+                  console.log(e.target.dataset.labelType)
+                  var type = e.target.dataset.labelType;
+                  ActivateLabels(type);
+              });
+
+          }
+
+        });
+
+        exit_label_maker.addEventListener("click",async (e)=>{
+          e.stopPropagation();
+          label_modal.classList.remove("label-modal--active");
         });
 
         archive_btn.addEventListener("click", async (e)=>{
@@ -462,8 +515,9 @@ const AddEventsToMore = () => {
   for(var i =0; i < more_buttons.length; i++){
 
     more_buttons[i].addEventListener("click",(e)=>{
-      console.log(e);
+
       e.stopPropagation();
+
       e.preventDefault();
 
       var parentElement =  e.target.parentElement;
@@ -472,7 +526,7 @@ const AddEventsToMore = () => {
 
       var modal = parentElement.querySelector(".list-settings-modal");
       var exit_modal = modal.querySelector(".lsm-exit");
-      console.log(modal,exit_modal)
+
       exit_modal.addEventListener("click",(e)=>{
         modal.classList.remove("list-settings-modal--active");
       });
@@ -507,8 +561,10 @@ const InitMyBoard = async () => {
 
    AddEventToAddList();
    AddEventsToAddTask();
+
    AddEventsToMore();
    AddEventsToMove();
+
    EnableDragDrop();
 
    AddClickEventsToTasks();
@@ -516,7 +572,9 @@ const InitMyBoard = async () => {
    if(!didInit){
      AddShowButtonEvents();
   }
+
   StyleShowBars(showAll,showArchiveOnly);
+
   didInit = true;
 
 }

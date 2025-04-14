@@ -38,6 +38,34 @@ const deadline_icon =
 
 `
 
+const ReturnLabelModal = (task_id) => {
+
+  return (
+    `
+    <div id="label-modal" class="label-modal" data-task-id="${task_id}">
+      <p class="exit-label-modal exit">X</p> <!-- FIXED: closed <p> tag properly -->
+
+      <div class="label-modal-content">
+        <h2 class="label-modal-title">Labels</h2>
+
+        <div class="label-modal-list">
+          <div class="label-modal-item" data-color ="#2e7d32" data-is-active = "0" data-label-type="0" style="--label-color: #2e7d32;">Warning</div>
+          <div class="label-modal-item" data-color ="#f9a825" data-is-active = "0" data-label-type="1" style="--label-color: #f9a825;">Urgent</div>
+          <div class="label-modal-item" data-color ="#ef6c00" data-is-active = "0" data-label-type="3" style="--label-color: #ef6c00;">Low Priority</div>
+          <div class="label-modal-item" data-color ="#d32f2f" data-is-active = "0" data-label-type="2" style="--label-color: #d32f2f;">High Priority</div>
+          <div class="label-modal-item" data-color ="#7e57c2" data-is-active = "0" data-label-type="10" style="--label-color: #7e57c2;">Habit</div>
+          <div class="label-modal-item" data-color ="#1976d2" data-is-active = "0" data-label-type="-1" style="--label-color: #1976d2;">Incomplete</div>
+        </div>
+
+        <button class="label-modal-btn">New Feature Coming Soon</button>
+      </div>
+    </div>
+
+
+    `
+  );
+
+}
 
 const RenderListItem = (task_list,showAll,showArchiveOnly) => {
 
@@ -225,9 +253,12 @@ const RenderDetailPage = (task,board_id, task_id, list_id) => {
 
                   <div class="side_container">
 
-                      <div class="option-card">
+                      <div class="option-card label-maker">
                           <img class="o-img" src = "/imgs/options/1.png"/>
-                          <p class="title">Add Member</p>
+                          <p class="title">Add Label</p>
+                          <div class="label-modal md relative">
+                            ${ReturnLabelModal(task_id)}
+                          </div>
                       </div>
 
                       <div class="option-card">

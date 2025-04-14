@@ -303,6 +303,59 @@ const WatchTask = async (req,res) => {
 }
 
 
+const LabelTask = async (req,res) => {
+
+  var {list_id, task_id, board_id, label} = req.body;
+  var found_board = await board_util.FindBoardById(req.user.boards,board_id);
+  var index = found_board.index;
+
+  if(!found_board){
+    throw new Error("Could not find board");
+  }
+
+  var originalList = await board_util.FindListInBoard(found_board.board,list_id);
+  var task_to_archive = await board_util.FindTaskInList(originalList.list.list, task_id);
+
+  task_to_archive.task.label = label;
+
+  originalList.list.list.map((list)=>{
+
+    if(list._id == task_to_archive.task._id){
+      return task_to_archive.task;
+    }
+    else{
+      return list;
+    }
+
+  });
+
+  var new_board = {...found_board.board};
+
+  new_board.list = new_board.list.map((list)=>{
+
+        if(list._id == originalList.list._id){
+          return originalList.list
+        }
+        else{
+          return list;
+       }
+
+  });
+
+  var set_board = {$set:{boards:req.user.boards}} ;
+
+  SetNewBoard(req,new_board)
+
+  User.updateOne({_id:req.user._id},set_board).then((result)=>{
+        res.json(result);
+      }).catch((err)=>{
+        console.log(err);
+        next(err);
+    });
+
+}
+
+
 function SetNewBoard(req,board){
 
   var new_boards = {...req.user.boards};
@@ -397,6 +450,7 @@ const ChangeTask = async (req,res) => {
 
 }
 
+module.exports.LabelTask = LabelTask;
 module.exports.WatchTask = WatchTask;
 module.exports.ChangeTask = ChangeTask;
 module.exports.ArchiveTask = ArchiveTask;
