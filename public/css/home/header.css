@@ -1,13 +1,37 @@
 header {
   display: grid;
-  grid-template-columns: 30% 20% 50%;
+  grid-template-columns: 40% 10% 30% 20%;
   padding:20px;
 
+}
+.logo-container{
+  display: flex;
+}
+.logo{
+  width:50px;
+  height:50px;
 }
 
 html,body{
   box-sizing: border-box;
-  font-family: "Dancing Script";
+  font-family: "Montserrat";
+
+  /* font-family: "Dancing Script"; */
+}
+
+h1,h2,h3,h4 {
+  font-family: "Archivo Black"
+}
+
+button{
+  color:black;
+  border:1px solid grey;
+}
+section{
+  margin-top:80px;
+}
+p {
+  font-family: "Montserrat";
 }
 
 header .logo-container .logo{
@@ -29,6 +53,16 @@ header .logo-container .title{
 .login-options{
   display: grid;
   grid-template-columns: repeat(3,1fr);
+}
+
+.link-options a {
+  text-decoration: none;
+  color:black;
+  font-size:20px;
+}
+
+.links-options a h3 {
+  font-size:16px !important;
 }
 
 .login-options .btn{

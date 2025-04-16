@@ -1,15 +1,17 @@
 .features-section{
-    padding:40px;
+    padding:100px;
     display: grid;
+    padding-top:20px;
     grid-template-columns: 60% 40%;
 }
 
 .features-section .list-container{
   padding:20px;
+  padding-left:50px;
 
 }
 .features-section .list-container .title{
-  font-size:70px;
+  font-size:50px;
   font-weight: 800;
 }
 
@@ -20,12 +22,14 @@
 
 .feature-container{
   display: grid;
+  margin-top:20px;
+  grid-gap: 30px;
   grid-template-columns: minmax(50px,100px) 1fr;
 }
 
 .icon-container{
   background:black;
-
+  border-radius: 10px;
 }
 .icon-container svg{
   color:white;
@@ -45,14 +49,16 @@
 }
 
 .board-container{
-  padding:10px;
+  padding:20px;
+  border-radius: 10px;
   box-shadow:0px 0px 10px rgba(0,0,0.5);
-  border:2px solid lightgrey;
-
+  /* border:2px solid lightgrey; */
+  padding-bottom:50px;
 }
 
 .board-container .title{
   font-size:40px;
+  margin-top:10px;
   font-weight: 600;
 }
 .input-container{

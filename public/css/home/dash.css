@@ -15,7 +15,8 @@
 }
 
 .dash-grid{
-  grid-template-columns: repeat(6,1fr);
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
   grid-gap:20px;
 }
 

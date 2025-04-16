@@ -48,42 +48,60 @@
 
 .card-container{
   border-radius:15px;
+  box-shadow: 0px 0px 10px rgba(0,0,0,.5);
+  border-radius: 10px;
 }
 
 .card-container .heading-container{
   font-size:40px;
   color:white;
   background:black;
+  border-radius: 10px;
   padding:10px;
 }
 
 .card-container .title{
   font-size:30px;
   font-weight: 700;
+  padding:20px;
 }
 
 .checkmark-container{
     display: flex;
-    flex-direction: row;
+
+      align-items: center;
+      gap:10px;
+    /* flex-direction: row; */
 }
 .checkmark-radial{
   border-radius:10px;
   border:3px solid darkgrey;
   background:white;
   width:40px;
-  display: flex;
   height:40px;
+}
+.checkmark-radial--active{
+  background:limegreen;
+}
+.checkmark-wrapper{
+  padding:40px;
+  padding-top:10px;
+}
+.checkmark-container{
+  width:100%;
+  margin-top:10px;
 }
 .checkmark-radial svg{
   color:white;
   fill:white;
-  width:50%;
+  height:100%;
+  width:100%;
   align-self: center;
   justify-self: center;
 }
 
-.checkmark-radial .description{
-  font-size:15px;
+.checkmark-container .description{
+  font-size:19px;
   font-weight: 400;
   align-self:center;
   justify-self:center;
