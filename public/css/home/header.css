@@ -1,0 +1,45 @@
+header {
+  display: grid;
+  grid-template-columns: 30% 20% 50%;
+  padding:20px;
+
+}
+
+html,body{
+  box-sizing: border-box;
+  font-family: "Dancing Script";
+}
+
+header .logo-container .logo{
+  max-width: 90px;
+  max-height: 90px;
+}
+
+header .logo-container .title{
+  font-size:20px;
+}
+
+.link-options {
+  display: grid;
+  padding:10px;
+  font-size:18px;
+  grid-template-columns: repeat(3,1fr);
+}
+
+.login-options{
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+}
+
+.login-options .btn{
+  padding: 10px;
+  background:white;
+  font-size:18px;
+  border-radius: 10px;
+  border:none;
+}
+
+.login-options .login-btn{
+  color:white;
+  background: azure;
+}

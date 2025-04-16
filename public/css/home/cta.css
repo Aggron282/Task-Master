@@ -1,0 +1,26 @@
+.cta-section{
+  padding:30px;
+justify-content: center;
+justify-items:center;
+align-items: center;
+}
+
+.cta-section .title{
+  font-size:90px;
+  font-weight: 800;
+  text-align: center;
+}
+
+.cta-section .description{
+  font-size:30px;
+  font-weight: 400;
+}
+
+.cta-section .cta-btn{
+  padding:50px;
+  border-radius:10px;
+  font-size:40px;
+  color:white;
+  background:azure;
+  justify-content: center;
+}

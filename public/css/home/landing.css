@@ -1,0 +1,90 @@
+.landing-section{
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  padding:20px;
+}
+
+.landing-section .text-container {
+  padding:30px;
+}
+
+
+.landing-section .text-container .title {
+  font-size:80px;
+  font-weight: 800;
+}
+
+
+.landing-section .text-container .subtitle {
+  font-size:30px;
+  font-weight: 300;
+}
+
+
+.button-grid--landing{
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  padding:20px;
+  grid-gap:10px;
+}
+
+.button-grid--landing .btn{
+  font-size:20px;
+  border:none;
+  background:white;
+  font-weight:600;
+  padding:10px;
+  border-radius: 10px;
+}
+
+.signup--landing{
+  background:azure;
+  color:white;
+}
+
+.img-container{
+  padding:40px;
+}
+
+.card-container{
+  border-radius:15px;
+}
+
+.card-container .heading-container{
+  font-size:40px;
+  color:white;
+  background:black;
+  padding:10px;
+}
+
+.card-container .title{
+  font-size:30px;
+  font-weight: 700;
+}
+
+.checkmark-container{
+    display: flex;
+    flex-direction: row;
+}
+.checkmark-radial{
+  border-radius:10px;
+  border:3px solid darkgrey;
+  background:white;
+  width:40px;
+  display: flex;
+  height:40px;
+}
+.checkmark-radial svg{
+  color:white;
+  fill:white;
+  width:50%;
+  align-self: center;
+  justify-self: center;
+}
+
+.checkmark-radial .description{
+  font-size:15px;
+  font-weight: 400;
+  align-self:center;
+  justify-self:center;
+}

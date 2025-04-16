@@ -3,7 +3,7 @@
 
   <head>
     <meta charset="utf-8">
-    <title></title>
+    <title>Homepage | Task-Master </title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link href="https://fonts.cdnfonts.com/css/amazon-ember" rel="stylesheet">
@@ -13,47 +13,185 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
     <link href ='/css/animations.css' rel="stylesheet"/>
-    <link rel = "stylesheet" href = "/css/header.css"/>
+
+    <link rel = "stylesheet" href = "/css/home/header.css"/>
+    <link rel = "stylesheet" href = "/css/home/landing.css"/>
+    <link rel = "stylesheet" href = "/css/home/features.css"/>
+    <link rel = "stylesheet" href = "/css/home/dash.css"/>
+    <link rel = "stylesheet" href = "/css/home/cta.css"/>
 
   </head>
 
   <body>
 
-      <header>
+    <header>
 
-          <div class="logo_container">
-            <img src = "/imgs/logo.png"/>
-            <p class="title">Task Master</p>
-          </div>
+        <div class="logo-container">
+            <img class="logo" src = "./assets/images/logo.png" alt = "Logo of the task-master company"/>
+            <h1 class="title">Task Master</h1>
+        </div>
 
-          <div class="account_container">
-              <a href = "/auth/login/"><button class="account_button login">
-                Login
-              </button></a>
-              <a href = "/auth/create_account">  <button class="account_button create_account">
-                  Create Account
-              </button></a>
-          </div>
+        <div class="divider"></div>
 
-      </header>
+        <div class="link-options">
+            <a href = "">
+                <h3 class="title">
+                    Home
+                </h3>
+              </a>
+              <a href="">
+                <h3 class="title">
+                    About
+                </h3>
+              </a>
+              <a href="">
+                <h3 class="title">
+                    Features
+                </h3>
+            </a>
+        </div>
 
-      <main>
+        <div class="login-options">
+          <button class="btn login-btn">Login</button>
+          <button class="btn create-btn">Create Account</button>
+        </div>
 
-        <p class="showcase_title">
-          Task Master manages all your tasks and projects together!
-          Organize your workspace and set yourself up for success!
-        </p>
-        <p class="showcase_subtitle">
-          Your bosses will love your for it!
-        </p>
+    </header>
 
-        <button class="showcase_button">
-          Sign Up
-        </button>
+    <main>
 
-        <img src = "/imgs/showcase.png" class="showcase_img"/>
+        <section class="landing-section">
+            <div class="text-container--landing text-container">
+                  <h1 class="title">Organize Your Work</h1>
+                  <p class="subtitle">The task management app that tracks taks in your project for a better workflow!</p>
+                  <div class="button-grid--landing">
+                      <button class="btn signup--landing">Signup</button
+                      <button class="btn login--landing">Login</button
+                  </div>
+            </div>
+            <div class="img-container">
+                <div class="card-container">
+                    <div class="heading-container">
+                        Tasks
+                    </div>
+                    <h2 class="title">To Do Lists</h2>
+                    <div class="checkmark-container">
+                        <div class="checkmark-radial">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check" viewBox="0 0 16 16">
+                            <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425z"/>
+                          </svg>
+                          <p class="description">Design Home Page</p>
+                        </div>
+                        <div class="checkmark-radial">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check" viewBox="0 0 16 16">
+                            <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425z"/>
+                          </svg>
+                          <p class="description">Design About Page</p>
+                        </div>
+                        <div class="checkmark-radial">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check" viewBox="0 0 16 16">
+                            <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425z"/>
+                          </svg>
+                          <p class="description">Design Contact Page</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="features-section">
 
-      </main>
+            <div class="list-container">
+
+                <h1 class="title">Features</h1>
+
+                <div class="inner-list-container">
+                    <div class="feature-container">
+                      <div class="icon-container">
+
+                      </div>
+                      <div class="text-container">
+                          <h2 class="title">Create Boards</h2>
+                          <p class="description">Organize your projects into boards</h2>
+                      </div>
+                    </div>
+
+                    <div class="feature-container">
+                      <div class="icon-container">
+
+                      </div>
+                      <div class="text-container">
+                          <h2 class="title">List and Tasks</h2>
+                          <p class="description">Break down your work with lists and tasks</h2>
+                      </div>
+                    </div>
+
+                    <div class="feature-container">
+                      <div class="icon-container">
+
+                      </div>
+                      <div class="text-container">
+                          <h2 class="title">Customize Tasks</h2>
+                          <p class="description">Adjust task details to your needs</h2>
+                      </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="board-container">
+                <h2 class="title">Edit Tasks</h2>
+                <div class="input-container">
+                    <p class='title'>Title</p>
+                    <div class="fake-input">Write documentation</div>
+                </div>
+                <div class="input-container">
+                    <p class='title'>Due Date</p>
+                    <div class="fake-input">Aug 23, 2025</div>
+                </div>
+                <div class="input-container">
+                    <p class='title'>Priority</p>
+                    <div class="fake-input">High</div>
+                </div>
+            </div>
+
+        </section>
+        <section class="dash-section">
+              <h1 class="title">Features </h1>
+              <p class="description">Create boards, lists and tasks. Customize each task to fit your needs!</p>
+              <div class="dash-grid">
+                <div class="board-item board-item--1">
+                  <h2 class="title">Boards</h2>
+                  <p class="description"> Organize your projects with boards </p>
+                </div>
+                <div class="board-item board-item--2">
+                  <h2 class="title">Boards</h2>
+                  <p class="description"> Organize your projects with boards </p>
+                </div>
+                <div class="board-item board-item--3">
+                  <h2 class="title">Boards</h2>
+                  <p class="description"> Organize your projects with boards </p>
+                </div>
+
+                <div class="board-item board-item--4">
+                  <h2 class="title">Boards</h2>
+                  <p class="description"> Organize your projects with boards </p>
+                </div>
+                <div class="board-item board-item--5">
+                  <h2 class="title">Boards</h2>
+                  <p class="description"> Organize your projects with boards </p>
+                </div>
+                <div class="board-item board-item--6">
+                  <h2 class="title">Boards</h2>
+                  <p class="description"> Organize your projects with boards </p>
+                </div>
+              </div>
+        </section>
+        <section class="cta-section">
+            <h1 class="title"> Boost your Productivity </h1>
+            <p class="description"> Get started today and streamline your workflow </p>
+            <button class="cta-btn btn">Sign Up </button>
+        </section>
+
+    </main>
 
   </body>
 
