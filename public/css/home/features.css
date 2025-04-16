@@ -1,7 +1,7 @@
 .features-section{
     padding:100px;
     display: grid;
-    padding-top:20px;
+    padding-top:10px;
     grid-template-columns: 60% 40%;
 }
 
@@ -11,8 +11,14 @@
 
 }
 .features-section .list-container .title{
-  font-size:50px;
+  font-size:70px;
+  /* color:#38b6ff; */
   font-weight: 800;
+}
+
+ .list-title{
+   font-size:80px;
+   margin-bottom:50px;
 }
 
 .inner-list-container{
@@ -28,11 +34,14 @@
 }
 
 .icon-container{
-  background:black;
+  background:#38b6ff;
   border-radius: 10px;
 }
+
 .icon-container svg{
   color:white;
+  width:100%;
+  height:100%;
   fill:white;
 }
 
@@ -48,16 +57,24 @@
   font-size:18px;
 }
 
-.board-container{
+.board-wrapper{
+  background: azure;
   padding:20px;
   border-radius: 10px;
-  box-shadow:0px 0px 10px rgba(0,0,0.5);
+}
+
+.board-container{
+  padding:20px;
+  background: white;
+  border-radius: 10px;
+  /* box-shadow:0px 0px 5px rgba(0,0,0.5); */
   /* border:2px solid lightgrey; */
   padding-bottom:50px;
 }
 
 .board-container .title{
   font-size:40px;
+  /* color:#38b6ff; */
   margin-top:10px;
   font-weight: 600;
 }

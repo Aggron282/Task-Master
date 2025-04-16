@@ -17,10 +17,12 @@ align-items: center;
 }
 
 .cta-section .cta-btn{
-  padding:50px;
+  padding:30px;
+  width:100%;
   border-radius:10px;
   font-size:40px;
+  font-weight: 600;
   color:white;
-  background:azure;
+  background:#38b6ff;
   justify-content: center;
 }

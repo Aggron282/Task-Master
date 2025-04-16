@@ -27,26 +27,36 @@
   padding:20px;
   grid-gap:10px;
 }
+body{
 
+    background: linear-gradient(135deg, #f0f4f8, #e6f7ff);
+
+}
 .button-grid--landing .btn{
   font-size:20px;
   border:none;
   background:white;
   font-weight:600;
   padding:10px;
+  color:black;
+
   border-radius: 10px;
 }
 
 .signup--landing{
-  background:azure;
-  color:white;
+  background:#38b6ff !important;
+  color:white !important;
 }
 
+.login--landing{
+  background:white !important;
+}
 .img-container{
   padding:40px;
 }
 
 .card-container{
+  background: white;
   border-radius:15px;
   box-shadow: 0px 0px 10px rgba(0,0,0,.5);
   border-radius: 10px;
@@ -55,7 +65,7 @@
 .card-container .heading-container{
   font-size:40px;
   color:white;
-  background:black;
+  background:#38b6ff;
   border-radius: 10px;
   padding:10px;
 }

@@ -22,6 +22,10 @@ html,body{
 h1,h2,h3,h4 {
   font-family: "Archivo Black"
 }
+/* 
+h1{
+  color:#ff8566;
+} */
 
 button{
   color:black;
