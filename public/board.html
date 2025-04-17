@@ -13,6 +13,7 @@
 
     <link href ='/css/login.css' rel="stylesheet"/>
     <link href ='/css/animations.css' rel="stylesheet"/>
+
     <link rel = "stylesheet" href = "/css/list_modal.css"/>
 
     <link rel = "stylesheet" href = "/css/navbar_dashboard.css"/>
@@ -22,6 +23,8 @@
     <link rel = "stylesheet" href = "/css/label_modal.css"/>
     <link rel = "stylesheet" href = "/css/board_modal.css"/>
     <link rel = "stylesheet" href = "/css/detail.css"/>
+    <link rel = "stylesheet" href = "/css/profile_modal.css"/>
+    <link rel = "stylesheet" href = "/css/board_settings.css"/>
 
     <link href="https://fonts.googleapis.com/css2?family=Allerta+Stencil&family=Archivo+Black&family=Dancing+Script:wght@400..700&family=Exo+2:wght@600&family=Exo:wght@800;900&family=Heebo:wght@800&family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,900;1,600&family=Noto+Sans:wght@300&family=Poppins:wght@600&family=Protest+Revolution&family=Roboto+Condensed:wght@300;400&family=Roboto:ital,wght@0,300;1,100&family=Rubik+Distressed&family=Rubik+Moonrocks&family=Special+Elite&family=Teko:wght@300;500&family=Vast+Shadow&family=Work+Sans:wght@200;300;400&display=swap" rel="stylesheet">
 
@@ -29,7 +32,6 @@
 
   <body>
 
-    <!-- <div class="overlay--board"></div> -->
     <div class="detail-wrapper"></div>
     <div class = "container-fluid">
 
@@ -55,7 +57,9 @@
               <div class="menu-item">➕ Add List</div>
               <div class="menu-item">📂 Boards</div>
               <div class="menu-item menu-item--archive" >🗃 Show Archived Tasks</div>
-              <div class="menu-item menu-item--all">🗃 Show All Tasks</div>
+              <div class="menu-item menu-item--all">📁 Show All Tasks</div>
+              <div class="menu-item menu-item--watch">👁️ Show Watched Tasks</div>
+              <div class="menu-item menu-item--settings">⚙️ Board Setting</div>
               <h6 class="subtitle"> Your Boards </h6>
               <div class="board-holder">
 
@@ -89,6 +93,28 @@
 
         </div>
       </div>
+
+      <!-- Include this inside your HTML body -->
+      <div class="board-settings-modal hidden">
+        <div class="board-settings-content">
+          <span class="board-settings-close">&times;</span>
+
+          <div class="board-settings-name">
+            <input type="text" value="Board Name" readonly>
+            <span class="board-settings-edit-icon">✎</span>
+          </div>
+
+          <div class="board-settings-grid">
+            <button>Change background</button>
+            <button>Archive board</button>
+            <button>Copy board</button>
+            <button>Watch board</button>
+            <button class="board-settings-close-board">Close board</button>
+          </div>
+        </div>
+      </div>
+
+
     </div>
 
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
@@ -97,7 +123,32 @@
   <script src = "/js/drag_drop_tasks.js"></script>
   <script src = "/js/my_board.js"></script>
   <script src = "/js/side_bar.js"></script>
+  <script>
 
+    var boardSettings = document.querySelector(".menu-item--settings");
+    var closeBoardSettings = document.querySelector(".board-settings-close");
+    var boardModal = document.querySelector(".board-settings-modal");
+
+    function ToggleBoardSettings(isOn){
+
+      if(isOn){
+        boardModal.classList.remove("hidden");
+      }
+      else{
+        boardModal.classList.add("hidden");
+      }
+
+    }
+
+    boardSettings.addEventListener("click",(e)=>{
+        ToggleBoardSettings(true)
+    });
+
+    closeBoardSettings.addEventListener("click",(e)=>{
+        ToggleBoardSettings(false)
+    })
+
+  </script>
  </body>
 
 </html>

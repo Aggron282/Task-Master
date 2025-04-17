@@ -26,6 +26,7 @@ const fileStorage = multer.diskStorage({
 
 const auth_router = require("./routes/auth_routes.js");
 const main_router = require("./routes/main_routes.js");
+const user_router = require("./routes/user_routes.js");
 const board_router = require("./routes/board_routes.js");
 const dashboard_router = require("./routes/dashboard_routes.js");
 
@@ -60,6 +61,7 @@ app.use(main_router);
 app.use(board_router);
 app.use(dashboard_router);
 app.use(auth_router);
+app.use(user_router);
 
 mongoose.connect(mongodb_connection).then((s)=>{
 

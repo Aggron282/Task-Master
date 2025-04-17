@@ -20,6 +20,7 @@
     <link rel = "stylesheet" href = "/css/boards.css"/>
     <link rel = "stylesheet" href = "/css/board_modal.css"/>
     <link rel = "stylesheet" href = "/css/navbar_dashboard.css"/>
+    <link rel = "stylesheet" href = "/css/profile_modal.css"/>
 
     <link href="https://fonts.googleapis.com/css2?family=Allerta+Stencil&family=Archivo+Black&family=Dancing+Script:wght@400..700&family=Exo+2:wght@600&family=Exo:wght@800;900&family=Heebo:wght@800&family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,900;1,600&family=Noto+Sans:wght@300&family=Poppins:wght@600&family=Protest+Revolution&family=Roboto+Condensed:wght@300;400&family=Roboto:ital,wght@0,300;1,100&family=Rubik+Distressed&family=Rubik+Moonrocks&family=Special+Elite&family=Teko:wght@300;500&family=Vast+Shadow&family=Work+Sans:wght@200;300;400&display=swap" rel="stylesheet">
 
@@ -29,150 +30,152 @@
 
     <div class="container-fluid">
 
-      <div class="board_wrapper"></div>
+      <div class="db">
 
-      <div class="board_modal_container"></div>
+        <div class="board_wrapper"></div>
 
-      <div class="navbar navbar--board">
+        <div class="board_modal_container"></div>
 
-          <div class="row navbar_board_row">
+        <div class="navbar navbar--board">
 
-            <div class="col-2 logo_col">
-              <div class="logo_container--dashboard">
-                  <img class="logo" src = "/imgs/logo.png"/>
-                  <p class="title title--logo"> Task-Master </p>
+            <div class="row navbar_board_row">
+
+              <div class="col-2 logo_col">
+                <div class="logo_container--dashboard">
+                    <img class="logo" src = "/imgs/logo.png"/>
+                    <p class="title title--logo"> Task-Master </p>
+                </div>
               </div>
-            </div>
 
-            <div class="col-5 choices_col">
+              <div class="col-5 choices_col">
 
-              <div class="choice_group_container">
+                <div class="choice_group_container">
 
-                <div class="choice_container">
-                  <div class="dropdown_container">
-                      <p >Preferences</p>
-                      <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg"
-                      fill-rule="evenodd" clip-rule="evenodd"><path d="M11 21.883l-6.235-7.527-.765.644 7.521 9 7.479-9-.764-.645-6.236 7.529v-21.884h-1v21.883z"/></svg>
-                  </div>
-                </div>
-
-                <div class="choice_container">
-                  <div class="dropdown_container">
-                      <p >Recent</p>
-                      <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg"
-                      fill-rule="evenodd" clip-rule="evenodd"><path d="M11 21.883l-6.235-7.527-.765.644 7.521 9 7.479-9-.764-.645-6.236 7.529v-21.884h-1v21.883z"/></svg>
-                  </div>
-                </div>
-
-                <div class="choice_container choice_container--fav">
-
-                  <div class="dropdown_container">
-                      <p >Favorites</p>
-                      <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg"
-                      fill-rule="evenodd" clip-rule="evenodd"><path d="M11 21.883l-6.235-7.527-.765.644 7.521 9 7.479-9-.764-.645-6.236 7.529v-21.884h-1v21.883z"/></svg>
+                  <div class="choice_container">
+                    <div class="dropdown_container">
+                        <p >Preferences</p>
+                        <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg"
+                        fill-rule="evenodd" clip-rule="evenodd"><path d="M11 21.883l-6.235-7.527-.765.644 7.521 9 7.479-9-.764-.645-6.236 7.529v-21.884h-1v21.883z"/></svg>
+                    </div>
                   </div>
 
+                  <div class="choice_container">
+                    <div class="dropdown_container">
+                        <p >Recent</p>
+                        <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg"
+                        fill-rule="evenodd" clip-rule="evenodd"><path d="M11 21.883l-6.235-7.527-.765.644 7.521 9 7.479-9-.764-.645-6.236 7.529v-21.884h-1v21.883z"/></svg>
+                    </div>
+                  </div>
+
+                  <div class="choice_container choice_container--fav">
+
+                    <div class="dropdown_container">
+                        <p >Favorites</p>
+                        <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg"
+                        fill-rule="evenodd" clip-rule="evenodd"><path d="M11 21.883l-6.235-7.527-.765.644 7.521 9 7.479-9-.764-.645-6.236 7.529v-21.884h-1v21.883z"/></svg>
+                    </div>
+
+                  </div>
+
+                </div>
+
+                </div>
+
+              <div class="col-3 board_search_col">
+                <form>
+                   <input class="board_search" placeholder = "Search for your boards">
+                </form>
+              </div>
+
+              <div class="col-2 profile_col">
+
+                <div class="choice_container choice_container--profile">
+
+                  <div class="dropdown_container" id = "openProfile">
+                    <img class="my_profile_img"  src = "/imgs/profile.png"/>
+                  </div>
+
                 </div>
 
               </div>
 
-              </div>
-
-            <div class="col-3 board_search_col">
-              <form>
-                 <input class="board_search" placeholder = "Search for your boards">
-              </form>
             </div>
 
-            <div class="col-2 profile_col">
+        </div>
 
-              <div class="choice_container choice_container--profile">
+        <div class="row dashboard_row">
 
-                <div class="dropdown_container">
-                  <img class="my_profile_img"  src = "/imgs/profile.png"/>
-                </div>
+          <div class="col-2">
 
-              </div>
+            <div class="account_header">
 
-            </div>
+                <div class="options_container">
 
-          </div>
+                    <ul class="options_list">
 
-      </div>
-
-    </div>
-
-      <div class="row dashboard_row">
-
-        <div class="col-2">
-
-          <div class="account_header">
-
-              <div class="options_container">
-
-                  <ul class="options_list">
-
-                    <li class="delete_boards">
-                      <span class="profile_container">
-                          <img class="icon_sidenav" src = "/imgs/settings.png">
-                          <p> Delete Boards </p>
-                      </span>
-                     </li>
-
-                      <li>
-                        <span class="profile_container">
-                            <img class="icon_sidenav" src = "/imgs/task.png">
-                            <p> My Tasks  </p>
-                        </span>
-                       </li>
-
-                      <li class="list_account">
-                        <span class="profile_container">
-                            <img class="icon_sidenav account_icon" src = "/imgs/profile.png">
-                            <p> Account </p>
-                        </span>
-                      </li>
-
-                      <li id = "new_board" class = "add_task_button">
-                        <span class="profile_container">
-                            <div class="add_icon custom_icon">+</div>
-                            <p> Add Board  </p>
-                        </span>
-                       </li>
-
-                      <li>
-                        <span class="profile_container">
-                            <div class="board_icon custom_icon">
-                              <div class="inner-board--1"></div>
-                              <div class="inner-board--2"></div>
-                            </div>
-                            <p> Archived Boards </p>
-                        </span>
-                       </li>
-
-
-                      <li class="delete_account">
+                      <li class="delete_boards">
                         <span class="profile_container">
                             <img class="icon_sidenav" src = "/imgs/settings.png">
-                            <p> Advanced Settings </p>
+                            <p> Delete Boards </p>
                         </span>
                        </li>
 
-                  </ul>
+                        <li>
+                          <span class="profile_container">
+                              <img class="icon_sidenav" src = "/imgs/task.png">
+                              <p> My Tasks  </p>
+                          </span>
+                         </li>
 
-              </div>
+                        <li class="list_account">
+                          <span class="profile_container">
+                              <img class="icon_sidenav account_icon" src = "/imgs/profile.png">
+                              <p> Account </p>
+                          </span>
+                        </li>
+
+                        <li id = "new_board" class = "add_task_button">
+                          <span class="profile_container">
+                              <div class="add_icon custom_icon">+</div>
+                              <p> Add Board  </p>
+                          </span>
+                         </li>
+
+                        <li>
+                          <span class="profile_container">
+                              <div class="board_icon custom_icon">
+                                <div class="inner-board--1"></div>
+                                <div class="inner-board--2"></div>
+                              </div>
+                              <p> Archived Boards </p>
+                          </span>
+                         </li>
+
+
+                        <li class="delete_account">
+                          <span class="profile_container">
+                              <img class="icon_sidenav" src = "/imgs/settings.png">
+                              <p> Advanced Settings </p>
+                          </span>
+                         </li>
+
+                    </ul>
+
+                </div>
+
+            </div>
 
           </div>
 
-        </div>
+          <div class="col-10 board_col">
 
-        <div class="col-10 board_col">
+            <div class="board_container">
 
-          <div class="board_container">
+              <div class="inner_container">
 
-            <div class="inner_container">
+                <div class="board_populate_container"></div>
 
-              <div class="board_populate_container"></div>
+              </div>
 
             </div>
 
@@ -181,6 +184,8 @@
         </div>
 
       </div>
+
+      <div class="profile-holder">    </div>
 
     </div>
 
@@ -189,6 +194,123 @@
     <script src = "/js/renderer.js"></script>
     <script src = "/js/create_board.js"></script>
     <script src = "/js/util.js"></script>
+
+  <script>
+
+    var profileHolder = document.querySelector(".profile-holder");
+
+    profileHolder.innerHTML += ReturnProfileModal(null);
+
+    var dashboard = document.querySelector(".db");
+
+    ToggleProfileModal(false);
+
+    PopulateProfileMenu();
+
+    var exit_profile = document.querySelector(".profile-close-btn");
+    var save_profile = document.querySelector(".profile-save-btn");
+    var open_profile = document.querySelector("#openProfile");
+
+    open_profile.addEventListener("click",(e)=>{
+      ToggleProfileModal(true);
+    });
+
+    exit_profile.addEventListener("click",(e)=>{
+      ToggleProfileModal(false);
+    });
+
+    save_profile.addEventListener("click",(e)=>{
+      SaveChanges();
+    })
+
+
+    function ToggleProfileModal(isOn){
+
+        if(isOn){
+          dashboard.classList.add("hidden");
+          profileHolder.classList.remove("hidden");
+        }
+        else{
+          dashboard.classList.remove("hidden");
+          profileHolder.classList.add("hidden");
+        }
+
+    }
+
+    async function PopulateProfileMenu(){
+
+      try{
+        var {data} = await axios.get("/api/user");
+        console.log(data);
+        var {username,password,profileImg,name} = data.profile;
+
+        var username_input = document.querySelector(".profile-input[name='username']")
+        var password_input = document.querySelector(".profile-input[name='password']")
+        var name_input = document.querySelector(".profile-input[name='name']")
+        var confirm_input = document.querySelector(".profile-input[name='confirm']")
+
+        password_input.addEventListener("onchange",(e)=>{
+
+          var confirm_input = document.querySelector(".profile-input[name='confirm']");
+
+          confirm_input.value = "";
+
+        })
+
+        console.log(name_input,password_input,username_input);
+
+        name_input.value = name;
+        username_input.value = username;
+        password_input.value = password;
+        confirm_input.value = password;
+
+      }catch(error){
+        console.log(error);
+      }
+
+    }
+
+    async function  SaveChanges(){
+
+      var username_input = document.querySelector(".profile-input[name='username']")
+      var password_input = document.querySelector(".profile-input[name='password']")
+      var name_input = document.querySelector(".profile-input[name='name']")
+      var confirm_input = document.querySelector(".profile-input[name='confirm']")
+
+      var name = name_input.value;
+      var username = username_input.value;
+      var password = password_input.value;
+      var confirm = confirm_input.value;
+
+      if(password != confirm){
+        alert("Your passwords do not match")
+        return;
+      }
+
+      var post_data = {
+        username: username,
+        password: password,
+        name: name
+      };
+
+      if(username.length <= 4){
+        alert("Your username must be at least 4 characters")
+        return;
+      }
+
+      var {data} = await axios.post("/api/user/change",post_data);
+      console.log(data);
+      if(data.error == null){
+        alert("Profile Changed!")
+      }
+      else{
+        console.log(data.error);
+        alert("Something went wrong!");
+      }
+
+    }
+
+  </script>
 
   </body>
 

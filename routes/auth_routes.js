@@ -9,4 +9,6 @@ router.get("/auth/login",auth_controller.GetLoginPage);
 router.get("/auth/logout",isAuth,auth_controller.Logout);
 
 
+
+
 module.exports = router;

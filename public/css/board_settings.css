@@ -1,0 +1,94 @@
+.board-settings-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+  padding:40px;
+}
+
+.board-settings-content {
+  background: #1d1f23;
+  padding: 20px;
+  padding:40px;
+  width: 320px;
+  border-radius: 10px;
+  color: #fff;
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+  gap: 20px;
+  position: relative;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+}
+
+.board-settings-close {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  color:orangered !important;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.board-settings-close-board {
+  color:orangered !important;
+}
+
+.board-settings-name {
+  display: flex;
+  align-items: center;
+  background-color: #2b2d30;
+  padding: 8px 10px;
+  border-radius: 6px;
+}
+
+.board-settings-name input {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 16px;
+  flex: 1;
+  outline: none;
+  pointer-events: none;
+}
+
+.board-settings-edit-icon {
+  cursor: pointer;
+  color: #bbb;
+  margin-left: 8px;
+  font-size: 14px;
+}
+
+.board-settings-grid {
+  display: grid;
+  gap: 10px;
+}
+
+.board-settings-grid button {
+  background-color: #2b2d30;
+  color: #ddd;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 6px;
+  text-align: left;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.board-settings-grid button:hover {
+  background-color: #3c3e42;
+}
+
+.board-settings-close-board {
+  background-color: #7c2d2d;
+}
+
+.board-settings-close-board:hover {
+  background-color: #a13333;
+}

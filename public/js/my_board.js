@@ -414,19 +414,25 @@ function StyleShowBars(showAll,showArchiveOnly){
 
   const show_archive_tasks = document.querySelector(".menu-item--archive");
   const show_all_tasks = document.querySelector(".menu-item--all");
+  const show_watch_tasks = document.querySelector(".menu-item--watch");
 
   if(showArchiveOnly){
     show_archive_tasks.style.border = "2px solid white";
     show_all_tasks.style.border = "none";
+    show_watch_tasks.style.border = "none";
   }
   else if(showAll){
     show_all_tasks.style.border = "2px solid white";
     show_archive_tasks.style.border = "none";
+    show_watch_tasks.style.border = "none";
   }
   else if(showAll == false && showArchiveOnly == false){
     show_all_tasks.style.border = "none";
     show_archive_tasks.style.border = "none";
+
   }
+
+
 
 }
 

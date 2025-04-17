@@ -11,7 +11,6 @@ stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
 <line x1="3" y1="18" x2="21" y2="18" />
 </svg>
 `
-
 const watch_icon = `
 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-eye" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="20" height="20">
 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -94,6 +93,65 @@ const RenderListItem = (task_list,showAll,showArchiveOnly) => {
 
 }
 
+const ReturnProfileModal = (user_id) => {
+  return(
+    `
+    <div class="profile-wrapper">
+      <div class="profile-overlay"></div>
+  
+    <div class="profile-modal">
+      <div class="profile-modal-header">
+        <h2>Edit Profile</h2>
+        <button class="profile-close-btn">&times;</button>
+      </div>
+
+      <div class="profile-avatar-section">
+        <div class="profile-avatar">MK</div>
+        <label class="profile-upload-btn">
+          Upload
+          <input type="file"  class="profile-input profile-file-input" name = "profileImg" />
+        </label>
+      </div>
+
+      <div class="profile-input-group">
+        <label for="name">Full Name</label>
+        <div class="profile-input-wrap">
+          <input type="text"  class="profile-input" id="name" placeholder="Your name"  name = "name"/>
+          <svg class="profile-pencil-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2.146-2.146 1.043-1.043a.5.5 0 0 1 .707 0l1.439 1.439zm-1.75 2.456L6 12.147V14h1.854l7.752-7.752-1.854-1.853z"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="profile-input-group">
+        <label for="username">Username</label>
+        <div class="profile-input-wrap">
+          <input type="text" id="username"  class="profile-input" placeholder="marcomac" name = "username"/>
+          <svg class="profile-pencil-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2.146-2.146 1.043-1.043a.5.5 0 0 1 .707 0l1.439 1.439zm-1.75 2.456L6 12.147V14h1.854l7.752-7.752-1.854-1.853z"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="profile-input-group">
+        <label for="password">New Password</label>
+        <input type="password" id="password" class="profile-input" placeholder="••••••••" name="password" />
+      </div>
+
+      <div class="profile-input-group">
+        <label for="confirm">Confirm Password</label>
+        <input type="password" id="confirm"  class="profile-input" placeholder="••••••••" name="confirm" />
+      </div>
+
+      <button class="profile-save-btn">Save Changes</button>
+
+      <span class="profile-delete-btn">Delete Account</span>
+    </div>
+  </div>
+    `
+  )
+
+}
 
 const ReturnListModal = (list_id) =>{
 
@@ -344,7 +402,6 @@ const RenderAddListModal = () => {
 
 }
 
-
 const  RenderList = (board,showAll,showArchiveOnly)=>{
 
   var html = ``;
@@ -370,7 +427,6 @@ const  RenderList = (board,showAll,showArchiveOnly)=>{
   return html;
 
 }
-
 
 function RenderTaskItems(tasks,list_id,showAll = false, showArchiveOnly = false){
 
@@ -428,7 +484,6 @@ function RenderTaskItems(tasks,list_id,showAll = false, showArchiveOnly = false)
   return html;
 
 }
-
 
 function RenderTaskboard(board){
 

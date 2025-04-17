@@ -1,5 +1,5 @@
 const path = require("path");
-
+const bcrypt = require('bcrypt');
 const User = require("./../models/users.js");
 
 const GetLoginPage = (req,res,next) => {
@@ -20,16 +20,16 @@ const Logout = (req,res,next)=>{
 
 }
 
-const Login = (req,res,next)=>{
+const Login = async (req,res,next)=>{
 
   var account = req.body;
 
-  User.findOne({username:account.username}).then((result)=>{
-
+  User.findOne({username:account.username}).then(async (result)=>{
+    const isMatch = await bcrypt.compare(account.password, user.password);
     if(!result){
       res.json({error:"Wrong username/password"});
     }
-    else if(result.password == account.password){
+    else if(isMatch){
 
       req.session.user = result;
       req.session.isAuthenticated = true;
@@ -45,23 +45,23 @@ const Login = (req,res,next)=>{
 
 }
 
-const CreateAccount = (req,res,next) => {
+const CreateAccount = async (req,res,next) => {
 
   var username = req.body.account.username;
   var password = req.body.account.password;
 
-  User.find({username:username}).then((data)=>{
+  User.find({username:username}).then(async (data)=>{
 
     if(data.length > 0){
       res.json({error:"a user exists with same username"});
     }
     else{
-
+      const hashedPassword = await bcrypt.hash(password, 10);
       var new_account = {
           username:username,
           name:"",
           profilePicture:"",
-          password:password,
+          password:hashedPassword,
           boards:[]
       }
 
