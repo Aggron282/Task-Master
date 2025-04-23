@@ -3,9 +3,15 @@
   "version": "1.0.0",
   "description": "Complete Node.js Guide",
   "main": "app.js",
+  "engines": {
+    "node": "v20.15.1",
+    "npm": "10.7.0"
+  },
+  "proxy": "http://localhost:3001",
   "scripts": {
     "sass-watch": "sass --no-source-map --watch sass/main.scss public/css/main.css",
     "nodemon-watch": "nodemon app.js -e *",
+    "start": "node server.js",
     "dev": "npm-run-all --parallel sass-watch nodemon-watch"
   },
   "author": "Maximilian Schwarzmüller",
