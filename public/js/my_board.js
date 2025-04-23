@@ -15,7 +15,7 @@ var didSetColors = false;
 
 var showArchiveOnly = false;
 var showAll = false;
-
+var showWatched  = false;
 
 const ExitOutOfListModals = () => {
 
@@ -410,28 +410,38 @@ const AddTaskToDBEvent = (e) => {
 
 let showButtonEventsAttached = false;
 
-function StyleShowBars(showAll,showArchiveOnly){
+
+
+function StyleShowBars(showAll = false,showArchiveOnly = false, showWatched = false){
 
   const show_archive_tasks = document.querySelector(".menu-item--archive");
   const show_all_tasks = document.querySelector(".menu-item--all");
   const show_watch_tasks = document.querySelector(".menu-item--watch");
 
+  const active_style = "2px solid white";
+
+  const none = "none";
+
   if(showArchiveOnly){
-    show_archive_tasks.style.border = "2px solid white";
-    show_all_tasks.style.border = "none";
-    show_watch_tasks.style.border = "none";
+    show_archive_tasks.style.border = active_style
+    show_all_tasks.style.border = none;
+    show_watch_tasks.style.border = none;
   }
   else if(showAll){
-    show_all_tasks.style.border = "2px solid white";
-    show_archive_tasks.style.border = "none";
-    show_watch_tasks.style.border = "none";
+    show_all_tasks.style.border = active_style
+    show_archive_tasks.style.border = none
+    show_watch_tasks.style.border = none;
   }
-  else if(showAll == false && showArchiveOnly == false){
-    show_all_tasks.style.border = "none";
-    show_archive_tasks.style.border = "none";
-
+  else if(showAll == false && showArchiveOnly == false && showWatched == false){
+    show_all_tasks.style.border = none;
+    show_archive_tasks.style.border = none;
+    show_watch_tasks.style.border = none;
   }
-
+  else if(showWatched){
+    show_all_tasks.style.border = none;
+    show_archive_tasks.style.border = none;
+    show_watch_tasks.style.border = active_style;
+  }
 
 
 }
@@ -444,6 +454,7 @@ const AddShowButtonEvents = () => {
 
   const show_archive_tasks = document.querySelector(".menu-item--archive");
   const show_all_tasks = document.querySelector(".menu-item--all");
+  const show_watch_tasks = document.querySelector(".menu-item--watch");
 
   show_archive_tasks.addEventListener("click", () => {
 
@@ -454,8 +465,10 @@ const AddShowButtonEvents = () => {
 
     localStorage.setItem("show_archived_only", togglingOn);
     localStorage.setItem("show_all", false);
+    localStorage.setItem("show_watch", false);
 
-    StyleShowBars(showAll,showArchiveOnly);
+    StyleShowBars(false,togglingOn,false);
+
     InitMyBoard();
 
   });
@@ -470,7 +483,21 @@ const AddShowButtonEvents = () => {
     localStorage.setItem("show_all", togglingOn);
     localStorage.setItem("show_archived_only", false);
 
-    StyleShowBars(showAll,showArchiveOnly);
+    StyleShowBars(togglingOn,false,false);
+
+    InitMyBoard();
+
+  });
+
+  show_watch_tasks.addEventListener("click", () => {
+
+    const togglingOn = !showWatched;
+
+    localStorage.setItem("show_watch", togglingOn);
+    localStorage.setItem("show_all", false);
+    localStorage.setItem("show_archived_only", false);
+
+    StyleShowBars(false,false,togglingOn)
 
     InitMyBoard();
 
@@ -486,8 +513,6 @@ const AddEventsToMove = () => {
 
     move_buttons[i].addEventListener("click",(e)=>{
 
-      console.log(e);
-
       e.stopPropagation();
       e.preventDefault();
 
@@ -495,7 +520,7 @@ const AddEventsToMove = () => {
       var _id = parentElement.getAttribute("_id");
 
       var modal = document.querySelector(".lbl-list-settings-modal");
-      console.log(modal)
+
       var exit_modal = modal.querySelector(".lbl-exit");
 
       exit_modal.addEventListener("click",(e)=>{
@@ -552,6 +577,7 @@ const InitMyBoard = async () => {
 
   showAll = localStorage.getItem('show_all') === 'true';
   showArchiveOnly = localStorage.getItem('show_archived_only') === 'true';
+  showWatched = localStorage.getItem('show_watch') === 'true';
 
   await SetCurrentBoard();
 
@@ -563,7 +589,7 @@ const InitMyBoard = async () => {
    ExitOutOfListModals();
    ExitOutOfTaskModals();
 
-   BuildListHTML(chosen_board,showAll,showArchiveOnly);
+   BuildListHTML(chosen_board,showAll,showArchiveOnly,showWatched);
 
    AddEventToAddList();
    AddEventsToAddTask();
@@ -579,15 +605,15 @@ const InitMyBoard = async () => {
      AddShowButtonEvents();
   }
 
-  StyleShowBars(showAll,showArchiveOnly);
+  StyleShowBars(showAll,showArchiveOnly,showWatched);
 
   didInit = true;
 
 }
 
-const BuildListHTML = async (board,showAll,showArchiveOnly) =>{
+const BuildListHTML = async (board,showAll,showArchiveOnly,showWatched) =>{
 
-  var html = RenderList(board,showAll,showArchiveOnly);
+  var html = RenderList(board,showAll,showArchiveOnly,showWatched);
 
   inner_container.innerHTML =  html;
 

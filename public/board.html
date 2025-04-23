@@ -47,7 +47,21 @@
           <div class="search-bar">
               <input type="text" placeholder="Search">
           </div>
-          <div class="profile">MK</div>
+          <div class="profile-dropdown-wrapper" onclick = "toggleProfileDropdown()">
+              <div class="profile">P</div>
+
+                <div class="profile-dropdown-modal" id="profileDropdown">
+                  <div class="profile-dropdown-close-btn" onclick="toggleProfileDropdown()">×</div>
+                  <ul class="profile-dropdown-menu">
+                    <li>View Profile</li>
+                    <li>Settings</li>
+                    <li>Notifications</li>
+                    <a href = "/auth/logout">
+                      <li >Logout</li>
+                    </a>
+                  </ul>
+                </div>
+          </div>
       </nav>
 
       <div class="board-grid">
@@ -129,6 +143,8 @@
     var closeBoardSettings = document.querySelector(".board-settings-close");
     var boardModal = document.querySelector(".board-settings-modal");
 
+
+
     function ToggleBoardSettings(isOn){
 
       if(isOn){
@@ -147,6 +163,13 @@
     closeBoardSettings.addEventListener("click",(e)=>{
         ToggleBoardSettings(false)
     })
+
+    function toggleProfileDropdown() {
+      const modal = document.getElementById("profileDropdown");
+      modal.classList.toggle("active");
+    }
+
+
 
   </script>
  </body>

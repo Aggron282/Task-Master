@@ -66,9 +66,9 @@ const ReturnLabelModal = (task_id) => {
 
 }
 
-const RenderListItem = (task_list,showAll,showArchiveOnly) => {
+const RenderListItem = (task_list,showAll,showArchiveOnly,showWatched) => {
 
-  var list_of_tasks = RenderTaskItems(task_list.list,task_list._id, showAll, showArchiveOnly);
+  var list_of_tasks = RenderTaskItems(task_list.list,task_list._id, showAll, showArchiveOnly,showWatched);
 
   return(`
     <div class=" task_list relative" _id = "${task_list._id}" data-list-id = "${task_list._id}" isClicked = "0">
@@ -98,7 +98,7 @@ const ReturnProfileModal = (user_id) => {
     `
     <div class="profile-wrapper">
       <div class="profile-overlay"></div>
-  
+
     <div class="profile-modal">
       <div class="profile-modal-header">
         <h2>Edit Profile</h2>
@@ -402,7 +402,7 @@ const RenderAddListModal = () => {
 
 }
 
-const  RenderList = (board,showAll,showArchiveOnly)=>{
+const  RenderList = (board,showAll,showArchiveOnly,showWatched)=>{
 
   var html = ``;
 
@@ -421,18 +421,18 @@ const  RenderList = (board,showAll,showArchiveOnly)=>{
   }
 
   for(var k = 0; k < board.list.length; k++){
-    html += RenderListItem(board.list[k],showAll,showArchiveOnly);
+    html += RenderListItem(board.list[k],showAll,showArchiveOnly,showWatched);
   }
 
   return html;
 
 }
 
-function RenderTaskItems(tasks,list_id,showAll = false, showArchiveOnly = false){
+function RenderTaskItems(tasks,list_id,showAll = false, showArchiveOnly = false, showWatched = false){
 
   var html = ``;
 
-
+  console.log(showAll,showArchiveOnly,showWatched)
   tasks.map((task)=>{
 
     var extra = "";
@@ -444,12 +444,15 @@ function RenderTaskItems(tasks,list_id,showAll = false, showArchiveOnly = false)
 
     let should_show = false;
     const isArchived = task.isArchived === true;
-
+    const isWatched = task.watching === true;
+    console.log(task.watching)
      if (showAll) {
        should_show = true;
      } else if (showArchiveOnly) {
        should_show = isArchived;
-     } else {
+     } else if(showWatched) {
+       should_show = isWatched;
+     }else{
        should_show = !isArchived;
      }
 
