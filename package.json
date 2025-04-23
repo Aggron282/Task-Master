@@ -14,7 +14,7 @@
     "start": "node server.js",
     "dev": "npm-run-all --parallel sass-watch nodemon-watch"
   },
-  "author": "Maximilian Schwarzmüller",
+  "author": "Marco Khodr MacEwen",
   "license": "ISC",
   "devDependencies": {
     "nodemon": "^1.18.3"
