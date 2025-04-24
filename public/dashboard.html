@@ -210,6 +210,30 @@
     var exit_profile = document.querySelector(".profile-close-btn");
     var save_profile = document.querySelector(".profile-save-btn");
     var open_profile = document.querySelector("#openProfile");
+    var delete_account = document.querySelector(".profile-delete-btn");
+
+    delete_account.addEventListener("click",(e)=>{
+      DeleteAccount();
+    });
+
+    async function DeleteAccount() {
+    try {
+      const deletePrompt = window.prompt(
+        "⚠️ Type DELETE to permanently delete your account. This action cannot be undone."
+      );
+
+      if (deletePrompt === "DELETE") {
+        const { data } = await axios.post("/auth/delete");
+        alert("✅ Your account has been deleted.");
+        // Optionally: redirect the user or log them out
+      } else {
+        alert("❌ Input does not match. Account not deleted.");
+      }
+    } catch (error) {
+      console.error("Error deleting account:", error);
+      alert("An error occurred while trying to delete your account.");
+    }
+  }
 
     open_profile.addEventListener("click",(e)=>{
       ToggleProfileModal(true);

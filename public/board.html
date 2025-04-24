@@ -33,7 +33,7 @@
   <body>
 
     <div class="detail-wrapper"></div>
-    <div class = "container-fluid">
+    <div class = "container-fluid db">
 
       <nav class="navbar">
           <div class="logo">Task-Master</div>
@@ -53,7 +53,7 @@
                 <div class="profile-dropdown-modal" id="profileDropdown">
                   <div class="profile-dropdown-close-btn" onclick="toggleProfileDropdown()">×</div>
                   <ul class="profile-dropdown-menu">
-                    <li>View Profile</li>
+                    <li id = "openProfile">Edit Profile</li>
                     <li>Settings</li>
                     <li>Notifications</li>
                     <a href = "/auth/logout">
@@ -131,6 +131,11 @@
 
     </div>
 
+    <div class="profile-holder">
+
+    </div>
+
+
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script src = "/js/util.js"></script>
   <script src = "/js/renderer.js"></script>
@@ -142,8 +147,6 @@
     var boardSettings = document.querySelector(".menu-item--settings");
     var closeBoardSettings = document.querySelector(".board-settings-close");
     var boardModal = document.querySelector(".board-settings-modal");
-
-
 
     function ToggleBoardSettings(isOn){
 
@@ -170,6 +173,145 @@
     }
 
 
+
+  </script>
+
+  <script>
+
+    var profileHolder = document.querySelector(".profile-holder");
+
+    profileHolder.innerHTML += ReturnProfileModal(null);
+
+    var dashboard = document.querySelector(".db");
+
+    ToggleProfileModal(false);
+
+    PopulateProfileMenu();
+
+    var exit_profile = document.querySelector(".profile-close-btn");
+    var save_profile = document.querySelector(".profile-save-btn");
+    var open_profile = document.querySelector("#openProfile");
+    var delete_account = document.querySelector(".profile-delete-btn");
+
+    open_profile.addEventListener("click",(e)=>{
+      ToggleProfileModal(true);
+    });
+
+    exit_profile.addEventListener("click",(e)=>{
+      ToggleProfileModal(false);
+    });
+
+    save_profile.addEventListener("click",(e)=>{
+      SaveChanges();
+    });
+
+    delete_account.addEventListener("click",(e)=>{
+      DeleteAccount();
+    });
+
+    async function DeleteAccount() {
+      try {
+        const deletePrompt = window.prompt(
+          "Type DELETE to permanently delete your account. This action cannot be undone."
+        );
+
+        if (deletePrompt === "DELETE") {
+          const { data } = await axios.post("/auth/delete");
+          alert("Your account has been deleted.");
+        } else {
+          alert("Input does not match. Account not deleted.");
+        }
+      } catch (error) {
+        console.error("Error deleting account:", error);
+        alert("An error occurred while trying to delete your account.");
+      }
+  }
+
+    function ToggleProfileModal(isOn){
+
+        if(isOn){
+          dashboard.classList.add("hidden");
+          profileHolder.classList.remove("hidden");
+        }
+        else{
+          dashboard.classList.remove("hidden");
+          profileHolder.classList.add("hidden");
+        }
+
+    }
+
+    async function PopulateProfileMenu(){
+
+      try{
+        var {data} = await axios.get("/api/user");
+        console.log(data);
+        var {username,password,profileImg,name} = data.profile;
+
+        var username_input = document.querySelector(".profile-input[name='username']")
+        var password_input = document.querySelector(".profile-input[name='password']")
+        var name_input = document.querySelector(".profile-input[name='name']")
+        var confirm_input = document.querySelector(".profile-input[name='confirm']")
+
+        password_input.addEventListener("onchange",(e)=>{
+
+          var confirm_input = document.querySelector(".profile-input[name='confirm']");
+
+          confirm_input.value = "";
+
+        })
+
+        console.log(name_input,password_input,username_input);
+
+        name_input.value = name;
+        username_input.value = username;
+        password_input.value = password;
+        confirm_input.value = password;
+
+      }catch(error){
+        console.log(error);
+      }
+
+    }
+
+    async function  SaveChanges(){
+
+      var username_input = document.querySelector(".profile-input[name='username']")
+      var password_input = document.querySelector(".profile-input[name='password']")
+      var name_input = document.querySelector(".profile-input[name='name']")
+      var confirm_input = document.querySelector(".profile-input[name='confirm']")
+
+      var name = name_input.value;
+      var username = username_input.value;
+      var password = password_input.value;
+      var confirm = confirm_input.value;
+
+      if(password != confirm){
+        alert("Your passwords do not match")
+        return;
+      }
+
+      var post_data = {
+        username: username,
+        password: password,
+        name: name
+      };
+
+      if(username.length <= 4){
+        alert("Your username must be at least 4 characters")
+        return;
+      }
+
+      var {data} = await axios.post("/api/user/change",post_data);
+      console.log(data);
+      if(data.error == null){
+        alert("Profile Changed!")
+      }
+      else{
+        console.log(data.error);
+        alert("Something went wrong!");
+      }
+
+    }
 
   </script>
  </body>

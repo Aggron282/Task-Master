@@ -133,15 +133,6 @@ const ReturnProfileModal = (user_id) => {
         </div>
       </div>
 
-      <div class="profile-input-group">
-        <label for="password">New Password</label>
-        <input type="password" id="password" class="profile-input" placeholder="••••••••" name="password" />
-      </div>
-
-      <div class="profile-input-group">
-        <label for="confirm">Confirm Password</label>
-        <input type="password" id="confirm"  class="profile-input" placeholder="••••••••" name="confirm" />
-      </div>
 
       <button class="profile-save-btn">Save Changes</button>
 
@@ -152,7 +143,18 @@ const ReturnProfileModal = (user_id) => {
   )
 
 }
+/*
 
+      <div class="profile-input-group">
+        <label for="password">New Password</label>
+        <input type="password" id="password" class="profile-input" placeholder="••••••••" name="password" />
+      </div>
+
+      <div class="profile-input-group">
+        <label for="confirm">Confirm Password</label>
+        <input type="password" id="confirm"  class="profile-input" placeholder="••••••••" name="confirm" />
+      </div>
+*/
 const ReturnListModal = (list_id) =>{
 
   var html = `

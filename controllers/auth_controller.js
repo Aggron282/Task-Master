@@ -42,7 +42,8 @@ const Login = async (req,res,next)=>{
   var account = req.body;
 
   User.findOne({username:account.username}).then(async (result)=>{
-    const isMatch = await bcrypt.compare(account.password, req.user.password);
+    const isMatch = await bcrypt.compare(account.password, result.password);
+    console.log(account.password,result)
     if(!result){
       res.json({error:"Wrong username/password"});
     }
@@ -50,7 +51,7 @@ const Login = async (req,res,next)=>{
 
       req.session.user = result;
       req.session.isAuthenticated = true;
-
+      
       res.json({error:null});
 
     }
