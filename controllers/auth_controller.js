@@ -20,6 +20,23 @@ const Logout = (req,res,next)=>{
 
 }
 
+const DeleteAccount = async (req,res,next) => {
+
+  var account = req.body;
+
+  try{
+    var response  = await User.deleteOne({_id:account._id})
+    console.log(response);
+    req.user = null;
+    res.redirect("/");
+  }
+  catch(error){
+      console.log(error);
+      res.status(500).json({error:error});
+  }
+
+}
+
 const Login = async (req,res,next)=>{
 
   var account = req.body;
@@ -77,6 +94,7 @@ const CreateAccount = async (req,res,next) => {
 
 }
 
+module.exports.DeleteAccount = DeleteAccount;
 module.exports.Logout = Logout;
 module.exports.GetLoginPage = GetLoginPage;
 module.exports.GetCreateAccountPage = GetCreateAccountPage;

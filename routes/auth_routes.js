@@ -7,6 +7,7 @@ router.post("/auth/create_account",auth_controller.CreateAccount);
 router.post("/auth/login",auth_controller.Login);
 router.get("/auth/login",auth_controller.GetLoginPage);
 router.get("/auth/logout",isAuth,auth_controller.Logout);
+router.post("/auth/delete",isAuth,auth_controller.DeleteAccount);
 
 
 

@@ -10,7 +10,7 @@
   "proxy": "http://localhost:3001",
   "scripts": {
     "sass-watch": "sass --no-source-map --watch sass/main.scss public/css/main.css",
-    "nodemon-watch": "nodemon app.js -e *",
+    "nodemon-watch": "nodemon server.js -e *",
     "start": "node server.js",
     "dev": "npm-run-all --parallel sass-watch nodemon-watch"
   },
