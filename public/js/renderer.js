@@ -93,6 +93,19 @@ const RenderListItem = (task_list,showAll,showArchiveOnly,showWatched) => {
 
 }
 
+const ReturnProfileDefaultImg = (name) => {
+
+  var {background,text } = getRandomColorWithContrast();
+  return (
+    `
+    <div class="profile-avatar" style="background:${background}">
+      <p style="color:${text}">  ${name.substring(0,2)} </p>
+    </div>
+    `
+  );
+
+}
+
 const ReturnProfileModal = (user_id) => {
   return(
     `
@@ -106,10 +119,12 @@ const ReturnProfileModal = (user_id) => {
       </div>
 
       <div class="profile-avatar-section">
-        <div class="profile-avatar">MK</div>
+        <div class="profile-img-wrapper">
+          <div class="profile-avatar">P</div>
+        </div>
         <label class="profile-upload-btn">
           Upload
-          <input type="file"  class="profile-input profile-file-input" name = "profileImg" />
+          <input type="file"  class="profile-input profile-file-input upload" name = "image" />
         </label>
       </div>
 
@@ -302,7 +317,7 @@ const RenderDetailPage = (task,board_id, task_id, list_id) => {
                             <p class="title"> Add Links </p>
                           </div>
 
-                          <div class="feature_box">
+                          <div class="feature_box attachment-box" onclick="toggleModal(true)" >
                             <img class="o-img" src = "/imgs/options/1.png"/>
                             <p class="title"> Add Images </p>
                           </div>
@@ -353,6 +368,8 @@ const RenderDetailPage = (task,board_id, task_id, list_id) => {
           </form>
 
       </div>
+
+      ${RenderFileAdderModal(task.attachments)}
 
     </div>
     `
@@ -522,6 +539,20 @@ function RenderErrorBannerElement(color,message){
 
 }
 
+function retureFilePreviewHTML(imageSrc, fileName, fileURL) {
+    const html = `
+      <div class="file-preview" onclick="window.open('${fileURL}', '_blank')">
+        <img src="${imageSrc}" alt="${fileName}" style="width: 100px;">
+        <p>${fileName}</p>
+      </div>
+    `;
+
+    return html;
+
+
+}
+
+
 function RenderModalElement(colors){
 
   return(`
@@ -561,6 +592,49 @@ function RenderModalElement(colors){
 
 }
 
+
+function ReturnFilePreviewHTML(originalName, fileName, mimeType) {
+
+    var displayImage = ReturnType(mimeType);
+    displayImage = displayImage == null ? "/files/"+fileName : displayImage;
+    const html = `
+      <div class="file-preview" onclick="window.open('/files/${fileName}', '_blank')">
+        <img src="${displayImage}" alt="${displayImage}" style="width: 100px;">
+        <p>${originalName}</p>
+      </div>
+    `;
+
+    return html;
+
+}
+
+ function RenderFileAdderModal(attachments = []){
+
+  var attachment_html = ``;
+  console.log(attachments)
+
+  for(var i =0; i < attachments.length;i++ ){
+    var {originalname, filename, mimetype} = attachments[i];
+
+    attachment_html += ReturnFilePreviewHTML(originalname,filename,mimetype);
+  }
+
+  return (`
+    <div class="attachment-modal hidden" id="attachmentModal">
+    <div class="modal-content">
+      <button class="close-btn" onclick="toggleModal(false)">×</button>
+      <h2 class="modal-title">Attachments</h2>
+      <div class="file-grid" id="fileGrid">
+        <label class="add-file-btn">
+          <input id = "fileInput" name = "attachment" type="file" multiple">
+          +
+        </label>
+        ${attachment_html}
+      </div>
+    </div>
+  </div>`)
+}
+
 function RenderColorElements(){
 
   var html = ``;
@@ -581,4 +655,130 @@ function RenderColorElements(){
 
   return html;
 
+}
+
+function ReturnNavbarDashboard(){
+  return(
+    `
+    <div class="navbar navbar--board">
+
+        <div class="row navbar_board_row">
+
+          <div class="col-2 logo_col">
+            <div class="logo_container--dashboard">
+                <img class="logo" src = "/imgs/logo.png"/>
+                <p class="title title--logo"> Task-Master </p>
+            </div>
+          </div>
+
+          <div class="col-5 choices_col">
+
+            <div class="choice_group_container">
+
+              <div class="choice_container">
+                <div class="dropdown_container">
+                    <p >Preferences</p>
+                    <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg"
+                    fill-rule="evenodd" clip-rule="evenodd"><path d="M11 21.883l-6.235-7.527-.765.644 7.521 9 7.479-9-.764-.645-6.236 7.529v-21.884h-1v21.883z"/></svg>
+                </div>
+              </div>
+
+              <div class="choice_container">
+                <div class="dropdown_container">
+                    <p >Recent</p>
+                    <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg"
+                    fill-rule="evenodd" clip-rule="evenodd"><path d="M11 21.883l-6.235-7.527-.765.644 7.521 9 7.479-9-.764-.645-6.236 7.529v-21.884h-1v21.883z"/></svg>
+                </div>
+              </div>
+
+              <div class="choice_container choice_container--fav">
+
+                <div class="dropdown_container">
+                    <p >Favorites</p>
+                    <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg"
+                    fill-rule="evenodd" clip-rule="evenodd"><path d="M11 21.883l-6.235-7.527-.765.644 7.521 9 7.479-9-.764-.645-6.236 7.529v-21.884h-1v21.883z"/></svg>
+                </div>
+
+              </div>
+
+            </div>
+
+            </div>
+
+          <div class="col-3 board_search_col">
+            <form>
+               <input class="board_search" placeholder = "Search for your boards">
+            </form>
+          </div>
+
+          <div class="col-2 profile_col">
+
+            <div class="choice_container choice_container--profile">
+
+              <div class="profile-dropdown-wrapper" onclick = "toggleProfileDropdown()">
+
+                  <div class="profile-img-wrapper">
+
+                  </div>
+
+                    <div class="profile-dropdown-modal" id="profileDropdown">
+                      <div class="profile-dropdown-close-btn" onclick="toggleProfileDropdown()">×</div>
+                      <ul class="profile-dropdown-menu">
+                        <li id = "openProfile">Edit Profile</li>
+                        <li>Settings</li>
+                        <li>Notifications</li>
+                        <a href = "/auth/logout">
+                          <li >Logout</li>
+                        </a>
+                      </ul>
+                    </div>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+    </div>
+    `
+  )
+}
+function ReturnNavbarBoard(username){
+
+  var profile_avatar = ReturnProfileDefaultImg(username);
+
+  return (`
+    <div class="navbar">
+        <div class="logo">Task-Master</div>
+        <div class="menu">
+            <span>Workspaces</span>
+            <span>Recent</span>
+            <span>Starred</span>
+            <span>Templates</span>
+        </div>
+        <button class="create-btn">Create</button>
+        <div class="search-bar">
+            <input type="text" placeholder="Search">
+        </div>
+    
+        <div class="profile-dropdown-wrapper" onclick = "toggleProfileDropdown()">
+            <div class="profile profile-img-wrapper">
+            ${profile_avatar}
+            </div>
+
+              <div class="profile-dropdown-modal" id="profileDropdown">
+                <div class="profile-dropdown-close-btn" onclick="toggleProfileDropdown()">×</div>
+                <ul class="profile-dropdown-menu">
+                  <li id = "openProfile">Edit Profile</li>
+                  <li>Settings</li>
+                  <li>Notifications</li>
+                  <a href = "/auth/logout">
+                    <li >Logout</li>
+                  </a>
+                </ul>
+              </div>
+        </div>
+    </div>
+    `)
 }

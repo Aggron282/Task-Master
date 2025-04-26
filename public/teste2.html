@@ -1,18 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Profile Dropdown</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Attachment Modal</title>
   <style>
     body {
-      background-color: #1e1e2f;
-      font-family: 'Segoe UI', sans-serif;
+      background: #121212;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       color: #fff;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
       margin: 0;
+      padding: 2rem;
+    }
+
+    button {
+      padding: 0.6rem 1.2rem;
+      background: #2c2c2c;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    button:hover {
+      background: #3a3a3a;
     }
 
 
@@ -20,14 +32,14 @@
 </head>
 <body>
 
-<div class="profile-dropdown-wrapper">
-  <button class="profile-dropdown-button" onclick="toggleProfileDropdown()">Open Profile Menu</button>
+  <!-- Modal Trigger -->
+  <button onclick="toggleModal(true)">Open Attachment Modal</button>
 
-</div>
+  <!-- Modal -->
 
-<script>
 
-</script>
+  <script>
 
+  </script>
 </body>
 </html>

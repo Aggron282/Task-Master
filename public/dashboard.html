@@ -13,7 +13,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
 
-    <link href ='/css/login.css' rel="stylesheet"/>
     <link href ='/css/animations.css' rel="stylesheet"/>
     <link rel = "stylesheet" href = "/css/dashboard.css"/>
     <link rel = "stylesheet" href = "/css/header.css"/>
@@ -30,78 +29,15 @@
 
     <div class="container-fluid">
 
-      <div class="db">
+      <div class="dashboard">
 
         <div class="board_wrapper"></div>
 
         <div class="board_modal_container"></div>
 
-        <div class="navbar navbar--board">
+        <nav class="navbar-wrapper">
 
-            <div class="row navbar_board_row">
-
-              <div class="col-2 logo_col">
-                <div class="logo_container--dashboard">
-                    <img class="logo" src = "/imgs/logo.png"/>
-                    <p class="title title--logo"> Task-Master </p>
-                </div>
-              </div>
-
-              <div class="col-5 choices_col">
-
-                <div class="choice_group_container">
-
-                  <div class="choice_container">
-                    <div class="dropdown_container">
-                        <p >Preferences</p>
-                        <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg"
-                        fill-rule="evenodd" clip-rule="evenodd"><path d="M11 21.883l-6.235-7.527-.765.644 7.521 9 7.479-9-.764-.645-6.236 7.529v-21.884h-1v21.883z"/></svg>
-                    </div>
-                  </div>
-
-                  <div class="choice_container">
-                    <div class="dropdown_container">
-                        <p >Recent</p>
-                        <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg"
-                        fill-rule="evenodd" clip-rule="evenodd"><path d="M11 21.883l-6.235-7.527-.765.644 7.521 9 7.479-9-.764-.645-6.236 7.529v-21.884h-1v21.883z"/></svg>
-                    </div>
-                  </div>
-
-                  <div class="choice_container choice_container--fav">
-
-                    <div class="dropdown_container">
-                        <p >Favorites</p>
-                        <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg"
-                        fill-rule="evenodd" clip-rule="evenodd"><path d="M11 21.883l-6.235-7.527-.765.644 7.521 9 7.479-9-.764-.645-6.236 7.529v-21.884h-1v21.883z"/></svg>
-                    </div>
-
-                  </div>
-
-                </div>
-
-                </div>
-
-              <div class="col-3 board_search_col">
-                <form>
-                   <input class="board_search" placeholder = "Search for your boards">
-                </form>
-              </div>
-
-              <div class="col-2 profile_col">
-
-                <div class="choice_container choice_container--profile">
-
-                  <div class="dropdown_container" id = "openProfile">
-                    <img class="my_profile_img"  src = "/imgs/profile.png"/>
-                  </div>
-
-                </div>
-
-              </div>
-
-            </div>
-
-        </div>
+        </nav>
 
         <div class="row dashboard_row">
 
@@ -190,151 +126,38 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
     <script src = "/js/auth.js"></script>
+    <script src = "/js/upload_img.js"></script>
     <script src = "/js/renderer.js"></script>
     <script src = "/js/create_board.js"></script>
     <script src = "/js/util.js"></script>
+    <script src = "/js/profile.js"></script>
 
-  <script>
-
-    var profileHolder = document.querySelector(".profile-holder");
-
-    profileHolder.innerHTML += ReturnProfileModal(null);
-
-    var dashboard = document.querySelector(".db");
-
-    ToggleProfileModal(false);
-
-    PopulateProfileMenu();
-
-    var exit_profile = document.querySelector(".profile-close-btn");
-    var save_profile = document.querySelector(".profile-save-btn");
-    var open_profile = document.querySelector("#openProfile");
-    var delete_account = document.querySelector(".profile-delete-btn");
-
-    delete_account.addEventListener("click",(e)=>{
-      DeleteAccount();
-    });
-
-    async function DeleteAccount() {
-    try {
-      const deletePrompt = window.prompt(
-        "⚠️ Type DELETE to permanently delete your account. This action cannot be undone."
-      );
-
-      if (deletePrompt === "DELETE") {
-        const { data } = await axios.post("/auth/delete");
-        alert("✅ Your account has been deleted.");
-        // Optionally: redirect the user or log them out
-      } else {
-        alert("❌ Input does not match. Account not deleted.");
-      }
-    } catch (error) {
-      console.error("Error deleting account:", error);
-      alert("An error occurred while trying to delete your account.");
-    }
-  }
-
-    open_profile.addEventListener("click",(e)=>{
-      ToggleProfileModal(true);
-    });
-
-    exit_profile.addEventListener("click",(e)=>{
-      ToggleProfileModal(false);
-    });
-
-    save_profile.addEventListener("click",(e)=>{
-      SaveChanges();
-    })
+    <script>
 
 
-    function ToggleProfileModal(isOn){
+      axios.get("/api/user").then(({data})=>{
+        console.log(data)
+        var {profilePicture} = data.profile;
+        var navbar_wrapper = document.querySelector(".navbar-wrapper");
+        navbar_wrapper.innerHTML = ReturnNavbarDashboard(data.profile.username);
+        var container = document.querySelector(".profile-holder");
+        var wrapper = document.querySelector(".dashboard");
 
-        if(isOn){
-          dashboard.classList.add("hidden");
-          profileHolder.classList.remove("hidden");
-        }
-        else{
-          dashboard.classList.remove("hidden");
-          profileHolder.classList.add("hidden");
+        InitProfile(container,wrapper);
+        var profile_holder = document.querySelectorAll(".profile-img-wrapper");
+
+        console.log(profile_holder.length)
+        for(var i =0; i <profile_holder.length;i++){
+          console.log(PopulateProfileImg)
+
+          PopulateProfileImg(profile_holder[i],profilePicture,data.profile.username);
         }
 
-    }
 
-    async function PopulateProfileMenu(){
-
-      try{
-        var {data} = await axios.get("/api/user");
-        console.log(data);
-        var {username,password,profileImg,name} = data.profile;
-
-        var username_input = document.querySelector(".profile-input[name='username']")
-        var password_input = document.querySelector(".profile-input[name='password']")
-        var name_input = document.querySelector(".profile-input[name='name']")
-        var confirm_input = document.querySelector(".profile-input[name='confirm']")
-
-        password_input.addEventListener("onchange",(e)=>{
-
-          var confirm_input = document.querySelector(".profile-input[name='confirm']");
-
-          confirm_input.value = "";
-
-        })
-
-        console.log(name_input,password_input,username_input);
-
-        name_input.value = name;
-        username_input.value = username;
-        password_input.value = password;
-        confirm_input.value = password;
-
-      }catch(error){
-        console.log(error);
-      }
-
-    }
-
-    async function  SaveChanges(){
-
-      var username_input = document.querySelector(".profile-input[name='username']")
-      var password_input = document.querySelector(".profile-input[name='password']")
-      var name_input = document.querySelector(".profile-input[name='name']")
-      var confirm_input = document.querySelector(".profile-input[name='confirm']")
-
-      var name = name_input.value;
-      var username = username_input.value;
-      var password = password_input.value;
-      var confirm = confirm_input.value;
-
-      if(password != confirm){
-        alert("Your passwords do not match")
-        return;
-      }
-
-      var post_data = {
-        username: username,
-        password: password,
-        name: name
-      };
-
-      if(username.length <= 4){
-        alert("Your username must be at least 4 characters")
-        return;
-      }
-
-      var {data} = await axios.post("/api/user/change",post_data);
-      console.log(data);
-      if(data.error == null){
-        alert("Profile Changed!")
-      }
-      else{
-        console.log(data.error);
-        alert("Something went wrong!");
-      }
-
-    }
-
-  </script>
+      });
+    </script>
 
   </body>
 

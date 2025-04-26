@@ -13,17 +13,6 @@ const User = require("./models/users.js");
 
 const app = express();
 
-const fileStorage = multer.diskStorage({
-
-  destination: (req,file,cb) =>{
-    cb(null,"public/images")
-  },
-  filename: (req,file,cb) =>{
-    cb(null,new Date().toISOString().replace(/:/g, '-') + file.originalname);
-  }
-
-});
-
 const auth_router = require("./routes/auth_routes.js");
 const main_router = require("./routes/main_routes.js");
 const user_router = require("./routes/user_routes.js");
@@ -31,9 +20,10 @@ const board_router = require("./routes/board_routes.js");
 const dashboard_router = require("./routes/dashboard_routes.js");
 
 app.use(body_parser.json());
+
 app.use(express.static(__dirname + '/public'));
 app.use(body_parser.urlencoded({extended:false}));
-app.use(multer({storage:fileStorage}).single("thumbnail"));
+
 
 var StoreSession =  new MongoDBStore({
   uri:mongodb_connection,

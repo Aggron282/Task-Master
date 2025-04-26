@@ -16,6 +16,70 @@ const GetBoards = (req,res,next) => {
 
 }
 
+const AttachFile = async (req,res,next) => {
+  var {list_id, task_id, board_id} = req.body;
+  // var {attachment} = req.body.attachment;
+  var found_board = await board_util.FindBoardById(req.user.boards,board_id);
+  var index = found_board.index;
+
+  if(!found_board){
+    throw new Error("Could not find board");
+  }
+
+  var found_list = await board_util.FindListInBoard(found_board.board,list_id);
+  var found_task = await board_util.FindTaskInList(found_list.list.list, task_id);
+
+  var user = req.user;
+  var new_board = {...found_board.board};
+  console.log(req.file)
+  var file_data = {
+    originalname:req.file.originalname,
+    filename:req.file.filename,
+    mimetype:req.file.mimetype
+  }
+
+  if(!found_task.attachments){
+    found_task.task.attachments = []
+  };
+
+  found_task.task.attachments.push(file_data);
+
+  found_list.list.list.map((task)=>{
+
+    if(task._id == found_task.task._id){
+      return found_task.task;
+    }else{
+      return task;
+    }
+
+  });
+
+
+  new_board.list = new_board.list.map((list)=>{
+
+        if(list._id == found_list.list._id){
+          return found_list.list
+        }
+        else{
+          return list;
+       }
+
+  });
+
+  var set_board = {$set:{boards:req.user.boards}} ;
+
+  SetNewBoard(req,new_board)
+  console.log(found_task)
+  User.updateOne({_id:req.user._id},set_board).then((result)=>{
+      res.json({error:null,attachment:file_data});
+    }).catch((err)=>{
+        console.log(err);
+        next(err);
+    });
+
+
+}
+
 const ExtractColor = (req,res,next) => {
 
   const src = req.body.src;
@@ -107,6 +171,7 @@ const AddTaskToList = async (req,res,next) => {
           name:body.name,
           watched:null,
           deadline:"",
+          attachments:[],
           status:false,
           description:"",
           _id:generateUniqueId()
@@ -462,3 +527,4 @@ module.exports.AddTaskToList = AddTaskToList;
 module.exports.AddListToBoard = AddListToBoard;
 module.exports.GetMyBoardPage = GetMyBoardPage;
 module.exports.GetBoards = GetBoards;
+module.exports.AttachFile = AttachFile;

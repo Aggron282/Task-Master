@@ -192,10 +192,11 @@ const AddClickEventsToTasks = () =>{
         var {data} = await axios.get(`/api/task/${id}/${element.dataset.listId}/${element.dataset.taskId}`);
 
         var html = RenderDetailPage(data.task.task, id, element.dataset.taskId, element.dataset.listId);
+
         var detail_container = document.querySelector(".detail-wrapper");
 
         detail_container.innerHTML = html;
-
+        InitAttacher();
         var exit = document.querySelector("#exit-detail")
         var save_btn = document.querySelector(".save-btn");
         var archive_btn = document.querySelector(".option-card--archive");

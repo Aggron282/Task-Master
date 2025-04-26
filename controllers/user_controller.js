@@ -24,31 +24,40 @@ const GetUser = async (req,res) => {
 }
 
 
-const ChangeUser = async (req,res) => {
-  try{
+const ChangeUser = async (req, res) => {
+  try {
+    var { username, name } = req.body;
 
-      var {username,name,password} = req.body;
+    const updateData = {
+      username: username,
+      name: name
+    };
 
-      const hashedPassword = await bcrypt.hash(password, 10);
+    // if (password) {
+    //   const hashedPassword = await bcrypt.hash(password, 10);
+    //   updateData.password = hashedPassword;
+    // }
 
-      var change_set = {$set: {
-            username: username,
-            password: password,
-            name: name
-          }}
+    if (req.file) {
+      updateData.profilePicture = req.file.filename;
+    }
 
-      var response = await User.updateOne({_id:req.user._id},change_set);
-      console.log(response);
-      res.status(200).json({
-        error:null,
-        response:response
-      });
+    var response = await User.updateOne(
+      { _id: req.user._id },
+      { $set: updateData }
+    );
 
+    res.status(200).json({
+      error: null,
+      response: response,
+      profile:updateData
+    });
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: error, response: 500 });
   }
-  catch(error){
-    res.status(500).json({error:error,response:500})
-  }
-
+  
 }
 
 module.exports.ChangeUser = ChangeUser

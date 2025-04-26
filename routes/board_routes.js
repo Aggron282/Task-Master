@@ -3,6 +3,8 @@ const board_controller = require("./../controllers/my_board_controller.js");
 const main_controller = require("./../controllers/main_controller.js");
 const isAuth = require("./../util/isAuth.js");
 
+const { UploadFile } = require("./../controllers/upload_controller.js");
+
 router.get("/my_board/id=:board/name=:name",isAuth,board_controller.GetMyBoardPage);
 router.post("/my_board/id=:board/name=:name/list/add",isAuth,board_controller.AddListToBoard);
 router.post("/api/color/all",isAuth, board_controller.ExtractColor);
@@ -16,5 +18,8 @@ router.post("/api/task/label/", isAuth, board_controller.LabelTask);
 router.post("/api/task/delete/", isAuth, board_controller.DeleteTask);
 router.post("/api/task/watch/", isAuth, board_controller.WatchTask);
 router.get("/api/task/:board_id/:list_id/:task_id", isAuth, board_controller.GetTaskData);
-router.get("/api/myboards", isAuth, board_controller.GetBoards)
+router.get("/api/myboards", isAuth, board_controller.GetBoards);
+router.post("/api/attachment/add/single",isAuth, UploadFile.single("attachment"), board_controller.AttachFile )
+// router.post("/api/attachment/add/multiple",isAuth, UploadImage.multiple("file"), board_controller.AttachFiles )
+
 module.exports = router;

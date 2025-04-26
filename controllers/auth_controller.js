@@ -22,17 +22,15 @@ const Logout = (req,res,next)=>{
 
 const DeleteAccount = async (req,res,next) => {
 
-  var account = req.body;
-
   try{
-    var response  = await User.deleteOne({_id:account._id})
-    console.log(response);
+
+    var response  = await User.deleteOne({_id:req.user._id})
     req.user = null;
     res.redirect("/");
   }
   catch(error){
-      console.log(error);
-      res.status(500).json({error:error});
+    console.log(error);
+    res.status(500).json({error:error});
   }
 
 }
@@ -42,16 +40,28 @@ const Login = async (req,res,next)=>{
   var account = req.body;
 
   User.findOne({username:account.username}).then(async (result)=>{
-    const isMatch = await bcrypt.compare(account.password, result.password);
-    console.log(account.password,result)
+
     if(!result){
       res.json({error:"Wrong username/password"});
+      return;
+    }
+
+    if(!account){
+      res.json({error:"Wrong username/password"});
+      return;
+    }
+
+    const isMatch = await bcrypt.compare(account.password, result.password);
+
+    if(!result){
+      res.json({error:"Wrong username/password"});
+      return;
     }
     else if(isMatch){
 
       req.session.user = result;
       req.session.isAuthenticated = true;
-      
+
       res.json({error:null});
 
     }
@@ -86,7 +96,7 @@ const CreateAccount = async (req,res,next) => {
       var account_saved = new User(new_account);
 
       account_saved.save();
-
+      req.session.user = account_saved
       res.json({error:null});
 
     }

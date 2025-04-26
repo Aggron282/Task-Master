@@ -38,7 +38,7 @@ function CreateAccount(){
           RenderErrorBanner(data.error,"limegreen");
         }
         else{
-          window.location.assign("/auth/login");
+          window.location.assign("/dashboard");
         }
 
       }
