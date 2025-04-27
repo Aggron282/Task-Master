@@ -116,6 +116,7 @@ const SaveTaskChange = async (e) => {
 function GetTaskData(){
 
   var form = document.querySelector("#detail-form");
+  
   var board_id = form.dataset.boardId;
   var list_id = form.dataset.listId;
   var task_id = form.dataset.taskId;

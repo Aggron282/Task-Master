@@ -30,42 +30,38 @@ const DeleteOneBoard = async (req,res,next) => {
 
 }
 
-const AddBoard = async (req,res,next)=>{
-
-  const color = Object.keys(req.body)[0];
+const AddBoard = async (req, res, next) => {
+  console.log(req.body);
 
   const board_config = req.body;
 
-  board_config.thumbnail = req.file;
-
-  var config = {
-    subtitle:"",
-    name:board_config.name,
-    description:"",
-    status:false,
-    background_img: board_config.thumbnail,
-    background:color,
-    list:[],
+  const config = {
+    subtitle: "",
+    name: board_config.name, // ✅ Correct
+    description: "",
+    status: false,
+    background_img: req.file || null, // ✅ Handle thumbnail safely
+    background: board_config.background, // ✅ Correct background field
+    list: [],
     ownerID: req.user._id,
-  }
+  };
+
+  console.log(config);
 
   var new_board = new Board(config);
 
   await new_board.save();
 
-  User.findOne({username:req.user.username}).then(async (result)=>{
+  const user = await User.findOne({ username: req.user.username });
 
-     result.boards = [...result.boards, new_board];
+  user.boards = [...user.boards, new_board];
 
-     await User.replaceOne({username:result.username},result);
+  await User.replaceOne({ username: user.username }, user);
 
-     req.user = result;
+  req.user = user;
 
-     res.redirect("/dashboard");
-
-  });
-
-}
+  res.redirect("/dashboard");
+};
 
 
 

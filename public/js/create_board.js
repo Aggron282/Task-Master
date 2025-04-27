@@ -65,7 +65,7 @@ function BuildModalHTML(){
     var name = document.querySelector("#board_name").value;
     var form = document.querySelector("#createboard");
 
-    form.preventDefault();
+    // form.preventDefault();
     e.preventDefault();
 
     CreateBoard(name,active_color);
@@ -141,7 +141,7 @@ function ChangeBoardColor(color){
 
     var chosen_color_input = document.querySelector(".chosen_color_input");
 
-    chosen_color_input.setAttribute("name",color)
+    chosen_color_input.setAttribute("value",color)
 
   }
 
@@ -221,7 +221,19 @@ function CreateBoard(name,background){
 
   else if(document.querySelector("#createboard")){
     var form = document.querySelector("#createboard");
-    form.submit();
+    console.log(form)
+
+    const formData = new FormData(form);
+
+    console.log([...formData.entries()]);
+
+    axios.post("/board/create", formData)
+    .then(response => {
+      console.log("Board created!", response.data);
+    })
+    .catch(error => {
+      console.error("Error creating board:", error);
+    });
   }
 
 }

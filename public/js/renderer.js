@@ -66,8 +66,91 @@ const ReturnLabelModal = (task_id) => {
 
 }
 
-const RenderListItem = (task_list,showAll,showArchiveOnly,showWatched) => {
+const ReturnBoardMoveItem  = (board) =>{
+  var isImg = board.background_img != null ? true :false;
+  if(isImg){
+    return (
+      `
+      <div class="board-move-item" board_id = "${board._id}">
+        <img src = "/images/${background}" class="board-preview"/>
+        <p class="title">
+          ${board.name}
+        </p>
+      </div>
+      `
+    )
+  }else{
+    return (
+      `
+      <div class="board-move-item" board_id = "${board._id}">
+        <div style="background:${board.background}" class="board-preview" board_id = "${board._id}"></div>
+        <p class="title" board_id = "${board._id}">
+          ${board.name}
+        </p>
+      </div>
+      `
+    )
+  }
+}
 
+const ReturnListMoveItem  = (list) =>{
+    return (
+      `
+      <div class= "list-move-item board-move-item ">
+        <p class="title">
+          ${list.name}
+        </p>
+      </div>
+      `
+    )
+
+}
+
+const ReturnMoveToBoardModal = (boards) =>{
+
+  var board_html = "";
+
+  for(var i=0; i < boards.length; i++){
+    board_html += ReturnBoardMoveItem(boards[i]);
+  }
+
+  return (`
+    <div class="move-wrapper hidden move-board-wrapper" data-type = "0">
+      <div class="move-modal">
+        <p class="title">Move To Board</p>
+        <p class="exit exit--board--modal">Cancel</p>
+        <div class="board-holders">
+          ${board_html}
+        </div>
+      </div>
+    </div>
+    `);
+
+}
+
+const ReturnMoveToListModal = (board) =>{
+
+  var board_html = "";
+  console.log(board);
+  for(var i=0; i < board.list.length; i++){
+    board_html += ReturnListMoveItem(board.list[i]);
+  }
+
+  return (`
+    <div class="move-wrapper move-list-wrapper hidden" data-type = "0">
+      <div class="move-modal--list move-modal">
+        <p class="title">Move To List</p>
+        <p class="exit exit--list--modal">Go Back</p>
+        <div class="board-holders">
+          ${board_html}
+        </div>
+      </div>
+    </div>
+    `);
+}
+
+const RenderListItem = (task_list,showAll,showArchiveOnly,showWatched) => {
+  console.log(task_list)
   var list_of_tasks = RenderTaskItems(task_list.list,task_list._id, showAll, showArchiveOnly,showWatched);
 
   return(`
@@ -173,17 +256,16 @@ const ReturnProfileModal = (user_id) => {
 const ReturnListModal = (list_id) =>{
 
   var html = `
-  <div class="list-settings-modal" list_id = ${list_id} >
+  <div class="list-settings-modal" list_id = "${list_id}" >
     <div class="lsm-sidebar">
       <div class="lsm-title-container">
         <h2>List actions</h2>
         <span class="lsm-exit exit-list-modal"> X </span>
       </div>
-      <div class="list-modal-grid">
+      <div class="list-modal-grid" list_id = "${list_id}">
         <button>Add card</button>
-        <button>Copy list</button>
-        <button class="move--list">Move list</button>
-        <button>Move all cards in this list</button>
+        <button class="list-action--copy">Copy list</button>
+        <button class="list-action--move">Move list</button>
         <button>Sort by...</button>
         <button>Watch</button>
       </div>
@@ -451,7 +533,8 @@ function RenderTaskItems(tasks,list_id,showAll = false, showArchiveOnly = false,
 
   var html = ``;
 
-  console.log(showAll,showArchiveOnly,showWatched)
+  console.log(tasks)
+  return
   tasks.map((task)=>{
 
     var extra = "";
@@ -572,7 +655,7 @@ function RenderModalElement(colors){
 
       <form method = "POST" action = "/board/create" id="createboard"  enctype = "multipart/form-data">
         <label> Color Picker </label>
-        <input class="chosen_color_input" name='${colors[0]}' type="color"/>
+        <input class="chosen_color_input" value='${colors[0]}' name="background" type="color"/>
         <br>
         <p class="title"> Choose Uploaded Background </p>
 
@@ -761,7 +844,7 @@ function ReturnNavbarBoard(username){
         <div class="search-bar">
             <input type="text" placeholder="Search">
         </div>
-    
+
         <div class="profile-dropdown-wrapper" onclick = "toggleProfileDropdown()">
             <div class="profile profile-img-wrapper">
             ${profile_avatar}

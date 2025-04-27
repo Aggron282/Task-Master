@@ -16,6 +16,94 @@ const GetBoards = (req,res,next) => {
 
 }
 
+const GetCurrentBoard = async (req,res) => {
+
+  var boards = req.user.boards;
+  console.log(req.params)
+  var found_board = await board_util.FindBoardById(boards,req.params.id);
+  console.log(found_board);
+  res.json({board:found_board.board});
+
+}
+
+
+const GetAllBoards =  (req,res) => {
+
+  var boards = req.user.boards;
+  console.log(boards);
+  res.json({boards:boards});
+
+}
+
+const MoveListToAnotherBoard = async (req, res) => {
+
+  const { list_id, current_board_id, board_id } = req.body;
+
+  let found_current_board = await board_util.FindBoardById(req.user.boards, current_board_id);
+  let found_new_board = await board_util.FindBoardById(req.user.boards, board_id);
+
+  var current_board_index = found_current_board.index;
+  var new_board_index = found_new_board.index;
+
+  found_current_board = found_current_board.board;
+  found_new_board = found_new_board.board;
+
+  const found_list = await board_util.FindTaskInList(found_current_board.list, list_id);
+
+  found_current_board.list = found_current_board.list.filter(item => item._id !== list_id);
+
+  found_new_board.list.push(found_list);
+
+  console.log("After Move -> New Board Lists:", found_new_board.list);
+  console.log("After Move -> Current Board Lists:", found_current_board.list);
+
+  req.user.boards[current_board_index] = found_current_board;
+  req.user.boards[new_board_index] = found_new_board;
+
+  var set_board = {$set:{boards:req.user.boards}} ;
+
+  User.updateOne({_id:req.user._id},set_board).then((result)=>{
+      res.json({ error: null, board: found_current_board, new_board: found_new_board });
+    }).catch((err)=>{
+        console.log(err);
+        next(err);
+    });
+
+};
+
+const CopyListToAnotherBoard = async (req,res) => {
+
+  const { list_id, current_board_id, board_id } = req.body;
+
+   let found_current_board = await board_util.FindBoardById(req.user.boards, current_board_id);
+   let found_new_board = await board_util.FindBoardById(req.user.boards, board_id);
+
+   found_current_board = found_current_board.board;
+   found_new_board = found_new_board.board;
+
+   const found_list = await board_util.FindTaskInList(found_current_board.list, list_id);
+
+   const cloned_list = JSON.parse(JSON.stringify(found_list));
+
+   found_new_board.list.push(cloned_list);
+
+   console.log("After Copy -> New Board Lists:", found_new_board.list);
+   console.log("After Copy -> Current Board Lists:", found_current_board.list);
+
+   req.user.boards[new_board_index] = found_new_board;
+
+   var set_board = {$set:{boards:req.user.boards}} ;
+
+   User.updateOne({_id:req.user._id},set_board).then((result)=>{
+     res.json({ error: null, board: found_current_board, new_board: found_new_board });
+     }).catch((err)=>{
+         console.log(err);
+         next(err);
+     });
+
+
+}
+
 const AttachFile = async (req,res,next) => {
   var {list_id, task_id, board_id} = req.body;
   // var {attachment} = req.body.attachment;
@@ -528,3 +616,7 @@ module.exports.AddListToBoard = AddListToBoard;
 module.exports.GetMyBoardPage = GetMyBoardPage;
 module.exports.GetBoards = GetBoards;
 module.exports.AttachFile = AttachFile;
+module.exports.GetAllBoards = GetAllBoards;
+module.exports.MoveListToAnotherBoard = MoveListToAnotherBoard;
+module.exports.CopyListToAnotherBoard = CopyListToAnotherBoard
+module.exports.GetCurrentBoard = GetCurrentBoard;
