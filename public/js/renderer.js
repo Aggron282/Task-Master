@@ -68,11 +68,12 @@ const ReturnLabelModal = (task_id) => {
 
 const ReturnBoardMoveItem  = (board) =>{
   var isImg = board.background_img != null ? true :false;
+
   if(isImg){
     return (
       `
       <div class="board-move-item" board_id = "${board._id}">
-        <img src = "/images/${background}" class="board-preview"/>
+        <img src = "/images/${board.background_img.filename}" class="board-preview"/>
         <p class="title">
           ${board.name}
         </p>

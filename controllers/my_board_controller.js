@@ -38,10 +38,10 @@ const GetAllBoards =  (req,res) => {
 const MoveListToAnotherBoard = async (req, res) => {
 
   const { list_id, current_board_id, board_id } = req.body;
-
+  console.log(board_id)
   let found_current_board = await board_util.FindBoardById(req.user.boards, current_board_id);
   let found_new_board = await board_util.FindBoardById(req.user.boards, board_id);
-
+  console.log(found_new_board)
   var current_board_index = found_current_board.index;
   var new_board_index = found_new_board.index;
 
@@ -77,7 +77,9 @@ const CopyListToAnotherBoard = async (req,res) => {
 
    let found_current_board = await board_util.FindBoardById(req.user.boards, current_board_id);
    let found_new_board = await board_util.FindBoardById(req.user.boards, board_id);
-
+   console.log(found_current_board,found_new_board)
+   var current_board_index = found_current_board.index;
+   var new_board_index = found_new_board.index;
    found_current_board = found_current_board.board;
    found_new_board = found_new_board.board;
 
@@ -89,7 +91,7 @@ const CopyListToAnotherBoard = async (req,res) => {
 
    console.log("After Copy -> New Board Lists:", found_new_board.list);
    console.log("After Copy -> Current Board Lists:", found_current_board.list);
-
+   console.log(found_new_board,new_board_index)
    req.user.boards[new_board_index] = found_new_board;
 
    var set_board = {$set:{boards:req.user.boards}} ;
