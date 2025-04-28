@@ -34,7 +34,7 @@ const AddBoard = async (req, res, next) => {
   console.log(req.body);
 
   const board_config = req.body;
-
+  
   const config = {
     subtitle: "",
     name: board_config.name, // ✅ Correct

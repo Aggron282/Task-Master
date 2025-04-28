@@ -132,7 +132,7 @@ const ReturnMoveToBoardModal = (boards) =>{
 const ReturnMoveToListModal = (board) =>{
 
   var board_html = "";
-  console.log(board);
+
   for(var i=0; i < board.list.length; i++){
     board_html += ReturnListMoveItem(board.list[i]);
   }
@@ -152,6 +152,7 @@ const ReturnMoveToListModal = (board) =>{
 
 const RenderListItem = (task_list,showAll,showArchiveOnly,showWatched) => {
   console.log(task_list)
+
   var list_of_tasks = RenderTaskItems(task_list.list,task_list._id, showAll, showArchiveOnly,showWatched);
 
   return(`
@@ -535,7 +536,7 @@ function RenderTaskItems(tasks,list_id,showAll = false, showArchiveOnly = false,
   var html = ``;
 
   console.log(tasks)
-  return
+
   tasks.map((task)=>{
 
     var extra = "";
@@ -558,6 +559,7 @@ function RenderTaskItems(tasks,list_id,showAll = false, showArchiveOnly = false,
      }else{
        should_show = !isArchived;
      }
+     console.log(task)
 
     if(should_show){
       html += `

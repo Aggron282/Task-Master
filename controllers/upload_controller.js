@@ -12,6 +12,7 @@ const imageFilter = (req, file, cb) => {
   const isValid = allowedTypes.test(file.mimetype);
   cb(null, isValid);
 };
+
 const fileFilter = (req, file, cb) => {
   const allowedTypes = /jpeg|jpg|png|gif|webp|pdf|docx|xlsx|txt|zip|csv/;
   const isValid = allowedTypes.test(file.mimetype);

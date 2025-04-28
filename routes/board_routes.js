@@ -23,6 +23,7 @@ router.post("/api/attachment/add/single",isAuth, UploadFile.single("attachment")
 // router.post("/api/attachment/add/multiple",isAuth, UploadImage.multiple("file"), board_controller.AttachFiles )
 router.get("/api/board/current/:id",isAuth,board_controller.GetCurrentBoard);
 router.get("/api/board/all",isAuth,board_controller.GetAllBoards);
+
 router.post("/api/move/list",isAuth,board_controller.MoveListToAnotherBoard);
 router.post("/api/copy/list",isAuth,board_controller.CopyListToAnotherBoard);
 

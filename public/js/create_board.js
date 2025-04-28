@@ -164,7 +164,7 @@ function AddColorBoxEvents(){
       e.target.classList.add("color_active");
 
       if(chosen_color_input){
-        chosen_color_input.setAttribute("name",chosen_color);
+        chosen_color_input.setAttribute("value",chosen_color);
       }
 
       chosen_color_input.value = chosen_color;
@@ -230,6 +230,8 @@ function CreateBoard(name,background){
     axios.post("/board/create", formData)
     .then(response => {
       console.log("Board created!", response.data);
+      RemoveModal();
+      Init();
     })
     .catch(error => {
       console.error("Error creating board:", error);
