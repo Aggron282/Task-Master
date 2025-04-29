@@ -118,7 +118,10 @@ function BuildBoardHTML(board){
   var board_container = document.querySelector(".board_populate_container");
 
     for(var i = 0 ; i < board.length;i++){
-      html += RenderTaskboard(board[i]);
+      console.log(board)
+      if(!board[i].isArchived){
+        html += RenderTaskboard(board[i]);
+      }
     }
 
     board_container.innerHTML = html;

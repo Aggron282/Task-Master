@@ -621,6 +621,8 @@ function RenderTaskboard(board){
 
   var background = board.background_img ? `url('/images/${board.background_img.filename}')` : board.background;
 
+  var hidden = board.isFavorite === true ? "" : "hidden";
+
   return(
     `
     <div class="taskboard" style = "background:${background}" id = "${board._id} name = "${board.name}">
@@ -630,6 +632,12 @@ function RenderTaskboard(board){
 
       </div>
       </a>
+      <div class="favorite-board ${hidden}">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="yellow" viewBox="0 0 24 24">
+        <path d="M12 2l2.9 6.9L22 10l-5 4.9L18 22l-6-3.5L6 22l1-7.1L2 10l7.1-1.1L12 2z"/>
+      </svg>
+
+      </div>
       <div class="delete_button_" ownerID = "${board.ownerID}" id = "${board._id}">X </div>
     </div>
     `
@@ -853,12 +861,12 @@ function ReturnNavbarBoard(username){
     <div class="navbar">
         <div class="logo">Task-Master</div>
         <div class="menu">
-            <span>Workspaces</span>
-            <span>Recent</span>
-            <span>Starred</span>
+            <a href = "/dashboard"><span>Dashboard</span></a>
+            <span class="board-settings-favorite-board--nav">Set As Favorite</span>
+            <a href = "/"><span>Homepage</span></a>
             <span>Templates</span>
         </div>
-        <button class="create-btn">Create</button>
+
         <div class="search-bar">
             <input type="text" placeholder="Search">
         </div>

@@ -19,6 +19,14 @@ const schema = new Schema(
       type:Object,
       required:false
     },
+    isArchived:{
+      type:Boolean,
+      required:true
+    },
+    isFavorite:{
+      type:Boolean,
+      required:false
+    },
     ownerID:{
       type:Schema.Types.ObjectId,
       required:true

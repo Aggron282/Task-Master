@@ -13,8 +13,6 @@
 }
 
 
-
-
 .inner_board p {
   text-align: left;
   padding:0px;
@@ -98,20 +96,24 @@ body{
 
 .navbar {
     display: flex;
+
     align-items: center;
     justify-content: space-between;
     background-color: #16191d;
-    padding: 10px 20px;
+    padding: 20px 20px;
     color: white;
-}
 
+}
+.inner_container_task-{
+  padding-bottom: 10%;
+}
 .logo {
     font-size: 20px;
     font-weight: bold;
 }
 .menu {
     display: flex;
-    gap: 15px;
+    gap: 40px;
 }
 .menu span {
     cursor: pointer;
@@ -127,8 +129,13 @@ body{
 .create-btn:hover {
     background-color: #026aa7;
 }
+.search-bar{
+  width:40%;
+}
 .search-bar input {
     padding: 6px;
+    width:100%;
+    background:#1e1e1e;
     border: none;
     border-radius: 4px;
 }

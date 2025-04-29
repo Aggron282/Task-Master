@@ -17,7 +17,14 @@ function InitProfileFeature(data){
     PopulateProfileImg(profile_holder[i],profilePicture,data.profile.username);
   }
 
+  var favorite_board = document.querySelector(".board-settings-favorite-board--nav");
+  favorite_board.addEventListener("click",async (e)=>{
+    FavoriteBoard();
+  });
+
 }
+
+
 
 async function MoveListToBoard(e){
 
@@ -133,4 +140,77 @@ function InitMoveFeature(){
 
 }
 
+async function InitBoardSettings(){
+
+  var close_board = document.querySelector(".board-settings-close-board");
+  var archive_board = document.querySelector(".board-settings-archive-board");
+  var copy_board = document.querySelector(".board-settings-copy-board");
+  var favorite_board = document.querySelector(".board-settings-favorite-board");
+
+  close_board.addEventListener("click",async (e)=>{
+
+    let id = url.split("id=:")[1];
+    id = id.split("/")[0];
+    console.log(id)
+    var {data} = await axios.post("/my_board/delete/one",{_id:id});
+
+    if(data){
+      alert("Board Deleted");
+      window.location.assign("/dashboard");
+    }
+
+  });
+
+  archive_board.addEventListener("click",async (e)=>{
+
+    let id = url.split("id=:")[1];
+    id = id.split("/")[0];
+
+    var {data} = await axios.post("/my_board/archive/one",{_id:id});
+
+    if(data){
+      alert("Board Archived");
+      window.location.assign("/dashboard");
+    }
+
+  });
+
+
+  favorite_board.addEventListener("click",async (e)=>{
+    FavoriteBoard();
+  });
+
+  copy_board.addEventListener("click",async (e)=>{
+
+    let id = url.split("id=:")[1];
+    id = id.split("/")[0];
+
+    var {data} = await axios.post("/my_board/copy/one",{board_id:id});
+
+    if(data.error == null){
+      alert("Board Copied");
+      window.location.assign("/dashboard");
+    }else{
+      console.log(data.error);
+    }
+
+  });
+
+}
+
+async function FavoriteBoard(){
+  let id = url.split("id=:")[1];
+  id = id.split("/")[0];
+
+  var {data} = await axios.post("/my_board/favorite",{board_id:id});
+
+  if(data.isFavorite == true){
+    alert("Board Favorited!");
+  }
+  else{
+    alert("Board Unfavorited!");
+  }
+}
+
 InitMoveFeature();
+InitBoardSettings();

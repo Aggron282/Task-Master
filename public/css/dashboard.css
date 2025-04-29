@@ -12,7 +12,19 @@
     /* border-right:1px solid #e6e6e6; */
 }
 
+.favorite-board{
+  position: absolute;
+  bottom:0px;
+  left:0%;
 
+  z-index: 999999;
+}
+.favorite-board svg{
+  width:50px;
+  height:50px;
+  fill:yellow;
+  box-shadow:0px 0px 10px rgba(0,0,0,.5);
+}
 body{
   background: #212121 !important;
 }

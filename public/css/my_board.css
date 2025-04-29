@@ -8,6 +8,18 @@ body{
   overflow:scroll;
 }
 
+.menu a{
+    color:white !important;
+    text-decoration: none !important;
+    border: none !important;
+    transition: all .5s;
+}
+
+.menu a:hover span{
+  color:lightblue !important;
+  transition: all .5s;
+}
+
 .icon_holders{
   display: flex;
   justify-content: space-between; /* puts items at each end */

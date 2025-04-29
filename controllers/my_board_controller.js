@@ -15,6 +15,8 @@ const GetBoards = (req,res,next) => {
 
 }
 
+
+
 const GetCurrentBoard = async (req,res) => {
 
   var boards = req.user.boards;
