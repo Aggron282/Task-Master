@@ -14,8 +14,23 @@ const imageFilter = (req, file, cb) => {
 };
 
 const fileFilter = (req, file, cb) => {
-  const allowedTypes = /jpeg|jpg|png|gif|webp|pdf|docx|xlsx|txt|zip|csv/;
-  const isValid = allowedTypes.test(file.mimetype);
+
+  const allowedMIMEs = [
+  "image/jpeg",
+  "image/jpg",
+  "image/png",
+  "image/gif",
+  "image/webp",
+  "application/pdf",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // docx
+  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // xlsx
+  "text/plain", // txt
+  "application/zip", // zip
+  "text/csv" // csv
+];
+
+  const isValid = allowedMIMEs.includes(file.mimetype);
+  console.log(isValid,file.mimetype)
   cb(null, isValid);
 };
 

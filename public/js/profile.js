@@ -3,13 +3,35 @@ function toggleProfileDropdown() {
   modal.classList.toggle("active");
 }
 
-const InitProfile = (container,wrapper) => {
+const InitProfile = async (container,wrapper) => {
 
-  container.innerHTML += ReturnProfileModal(null);
+  var {data} = await axios.get("/api/user");
+
+  var {username,decryptPassword,profilePicture,name} = data.profile;
+
+  container.innerHTML += ReturnProfileModal(null,name,username,decryptPassword);
+
+  var profile_holders = document.querySelectorAll(".profile-img-wrapper")
+  console.log(profilePicture)
+  for(var i = 0; i < profile_holders.length; i++){
+
+    PopulateProfileImg(profile_holders[i],profilePicture,null);
+  }
+
+  var username_input = document.querySelector(".profile-input[name='username']")
+  var password_input = document.querySelector(".profile-input[name='password']")
+  var name_input = document.querySelector(".profile-input[name='name']")
+  var confirm_input = document.querySelector(".profile-input[name='confirm']")
+
+  password_input.addEventListener("change",(e)=>{
+
+    var confirm_input = document.querySelector(".profile-input[name='confirm']");
+    console.log(confirm_input)
+    confirm_input.value = "";
+
+  });
 
   ToggleProfileModal(false);
-
-  PopulateProfileMenu();
 
   var exit_profile = document.querySelector(".profile-close-btn");
   var save_profile = document.querySelector(".profile-save-btn");
@@ -58,25 +80,24 @@ async function PopulateProfileMenu(){
   try{
     var {data} = await axios.get("/api/user");
 
-    var {username,password,profileImg,name} = data.profile;
+    var {username,decryptPassword,profileImg,name} = data.profile;
 
     var username_input = document.querySelector(".profile-input[name='username']")
-    // var password_input = document.querySelector(".profile-input[name='password']")
+    var password_input = document.querySelector(".profile-input[name='password']")
     var name_input = document.querySelector(".profile-input[name='name']")
-    // var confirm_input = document.querySelector(".profile-input[name='confirm']")
+    var confirm_input = document.querySelector(".profile-input[name='confirm']")
 
-    // // password_input.addEventListener("onchange",(e)=>{
-    //
-    //   var confirm_input = document.querySelector(".profile-input[name='confirm']");
-    //
-    //   confirm_input.value = "";
-    //
-    // })
+    password_input.addEventListener("change",(e)=>{
+
+      var confirm_input = document.querySelector(".profile-input[name='confirm']");
+      confirm_input.value = "";
+
+    });
 
     name_input.value = name;
     username_input.value = username;
-    // password_input.value = password;
-    // confirm_input.value = password;
+    password_input.value = decryptPassword;
+    confirm_input.value = decryptPassword;
 
   }catch(error){
     console.log(error);
@@ -89,30 +110,47 @@ async function SaveChanges() {
   var username_input = document.querySelector(".profile-input[name='username']");
   var name_input = document.querySelector(".profile-input[name='name']");
   var upload_button = document.querySelector(".upload");
+  var confirm_input = document.querySelector(".profile-input[name='confirm']");
+  var password_input = document.querySelector(".profile-input[name='password']");
 
   var name = name_input.value;
+  var password = password_input.value;
+  var confirm = confirm_input.value;
   var username = username_input.value;
 
-  if (username.length <= 4) {
-    alert("Your username must be at least 4 characters");
+  if (username.length < 4){
+    alert("Your username is too short! Must be more than 4 Characters");
+    return;
+  }
+  if (password.length < 4){
+    alert("Your password is too short! Must be more than 4 Characters");
+    return;
+  }
+  if (confirm != password) {
+    alert("Your passwords don't match!");
     return;
   }
 
   var formData = new FormData();
+
   formData.append("username", username);
   formData.append("name", name);
+  formData.append("password", password);
+  // formData.append("name", name);
 
   if (upload_button.files.length > 0) {
     formData.append("image", upload_button.files[0]);
   }
 
   try {
-    var { data } = await axios.post("/api/user/change", formData);
 
+    var { data } = await axios.post("/api/user/change", formData);
+    console.log(data);
     if (data.error == null) {
       alert("Profile Changed!");
       window.location.reload();
-    } else {
+    }
+    else {
       alert("Something went wrong!");
     }
 
@@ -131,38 +169,48 @@ async function SaveChanges() {
 }
 
 function PopulateProfileImg(profileImg, src,name){
-  console.log(profileImg,src,name)
+
     if(src){
       profileImg.innerHTML = `
       <img class="profile_img" src = "/images/${src}"/>
       `
     }else{
+
       var profile_name = name ? name : "P";
       var initials = profile_name.substring(0, 3);
       var {text,background} = getRandomColorWithContrast();
+
       profileImg.innerHTML = `
       <div class="profile-avatar" style="background:${background}">
           <p style = "color:${text}">${initials}</p>
       </div>
       `
     }
+
 }
 
 async function DeleteAccount() {
+
   try {
     const deletePrompt = window.prompt(
       "Type DELETE to permanently delete your account. This action cannot be undone."
     );
 
     if (deletePrompt === "DELETE") {
+
       const { data } = await axios.post("/auth/delete");
+
       alert("Your account has been deleted.");
+
       window.location.assign("/")
-    } else {
+    }
+    else {
       alert("Input does not match. Account not deleted.");
     }
-  } catch (error) {
+  }
+  catch (error) {
     console.error("Error deleting account:", error);
     alert("An error occurred while trying to delete your account.");
   }
+
 }

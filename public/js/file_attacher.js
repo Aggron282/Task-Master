@@ -2,32 +2,43 @@ function toggleModal(show) {
   document.getElementById('attachmentModal').classList.toggle('hidden', !show);
 }
 
-function renderFilePreview(imageSrc, fileName, fileURL) {
-    const container = document.querySelector('.file-grid');
+function renderFilePreview(imageSrc, fileName, fileURL, _id) {
 
-    const wrapper = document.createElement('div');
-    console.log(imageSrc,fileName,fileURL)
-    wrapper.className = 'file-preview';
+  const container = document.querySelector('.file-grid');
 
-    const img = document.createElement('img');
+  const wrapper = document.createElement('div');
 
-    img.src = imageSrc;
-    img.alt = fileName;
-    img.style.width = '100px';
+  wrapper.className = 'file-preview';
+  wrapper.dataset.id = _id;
 
-    const name = document.createElement('p');
+  const deleteBtn = document.createElement('p');
 
-    name.textContent = fileName;
+  deleteBtn.className = 'delete-file';
+  deleteBtn.textContent = 'Delete';
+  deleteBtn.dataset.id = _id;
 
-    wrapper.appendChild(img);
-    wrapper.appendChild(name);
+  // deleteBtn.onclick = (e) => {
+  //   DeleteOneFile(e.target.dataset.id);
+  // };
 
-    wrapper.onclick = () => {
-      window.open(fileURL, '_blank');
-    };
+  const img = document.createElement('img');
 
-    container.appendChild(wrapper);
+  img.src = imageSrc;
+  img.alt = fileName;
+  img.style.width = '100px';
 
+  const name = document.createElement('p');
+  name.textContent = fileName;
+
+  container.appendChild(deleteBtn);
+  wrapper.appendChild(img);
+  wrapper.appendChild(name);
+
+  wrapper.onclick = () => {
+    window.open(fileURL, '_blank');
+  };
+
+  container.appendChild(wrapper);
 }
 
 
@@ -46,43 +57,40 @@ async function PopulateFiles(files){
 
       displayImage = ReturnType(fileType);
       displayImage = displayImage == null ? fileURL : displayImage;
-      var url = displayImage
-      var attach_data = await ServeOneFileToBackend(file);
-      renderFilePreview(url, file.name, fileURL);
+      var url = displayImage;
+      console.log(file)
+      var data = await ServeOneFileToBackend(file);
+
 
   });
 
 }
-
 function ReturnType(fileType){
 
   if (fileType.startsWith('image/')) {
-      return null
+      return null;
   }
-  else if (fileType === 'application/pdf' || fileName.endsWith('.pdf')) {
-      displayImage = '/imgs/files/pdf.png';
+  else if (fileType.includes('application/pdf')) {
+      return '/imgs/files/pdf.png';
   }
-  else if (fileType.includes('word') || fileName.endsWith('.doc') || fileName.endsWith('.docx')) {
-      displayImage = '/imgs/files/word.png';
+  else if (fileType.includes('word')) {
+      return '/imgs/files/word.png';
   }
-  else if (fileType.includes('excel') || fileName.endsWith('.xls') || fileName.endsWith('.xlsx') || fileName.endsWith('.csv')) {
-      displayImage = '/imgs/files/excel.png';
+  else if (fileType.includes('excel')) {
+      return '/imgs/files/excel.png';
   }
-  else if (fileType.includes('powerpoint') || fileName.endsWith('.ppt') || fileName.endsWith('.pptx')) {
-      displayImage = '/imgs/files/powerpoint.png';
+  else if (fileType.includes('powerpoint')) {
+      return '/imgs/files/powerpoint.png';
   }
-  else if (fileType.includes('zip') || fileName.endsWith('.zip') || fileName.endsWith('.rar') || fileName.endsWith('.7z')) {
-      displayImage = '/imgs/files/zip.png';
+  else if (fileType.includes('zip')) {
+      return '/imgs/files/zip.png';
   }
-  else if (fileType.includes('plain') || fileName.endsWith('.txt')) {
-      displayImage = '/imgs/files/text.png';
+  else if (fileType.includes('plain')) {
+      return '/imgs/files/text.png';
   }
   else {
-      displayImage = '/imgs/files/webp.png';
+      return '/imgs/files/text.png';
   }
-
-  return displayImage;
-
 }
 
 
@@ -92,7 +100,34 @@ function InitAttacher(){
         const files = Array.from(event.target.files);
         PopulateFiles(files);
     });
+    var delete_files = document.querySelectorAll(".delete-file");
+    for(var i =0; i < delete_files.length; i++){
+        delete_files.addEventListener("click",(e)=>{
+            var _id = e.target.dataset.id;
+            DeleteOneFile(_id);
+        });
+    }
 
+}
+
+async function DeleteOneFile(e){
+
+  var attachment_id = e.target.dataset.id;
+
+  const formData = new FormData();
+
+  console.log(attachment_id)
+
+  var { board_id, list_id, task_id } = GetTaskData();
+
+  formData.append('board_id', board_id);
+  formData.append('list_id', list_id);
+  formData.append('task_id', task_id);
+  formData.append('attachment_id', attachment_id);
+
+  const { data } = await axios.post("/api/attachment/delete/single", formData);
+
+  console.log(data);
 }
 
 async function ServeOneFileToBackend(file) {
@@ -111,5 +146,10 @@ async function ServeOneFileToBackend(file) {
     }
   });
 
-  console.log(data);
+  console.log(data.attachment)
+  var attachment_holder = document.querySelector(".file-grid");
+  // var attacher_wrapper  = document.querySelector(".attacher-wrapper");
+  var {originalname,filename,mimetype,_id} = data.attachment;
+  attachment_holder.innerHTML += ReturnFilePreviewHTML(originalname, filename, mimetype,_id);
+
 }

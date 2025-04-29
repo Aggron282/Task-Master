@@ -1,7 +1,6 @@
 const User = require("./../models/users.js");
 const TaskList = require("./../data/task_class.js");
 const Board = require("./../models/tasks.js");
-
 const generateUniqueId = require('generate-unique-id');
 const path = require("path");
 
@@ -104,6 +103,61 @@ const CopyListToAnotherBoard = async (req,res) => {
 
 }
 
+const DeleteOneFile = async (req, res, next) => {
+  try {
+    const { list_id, task_id, board_id, attachment_id } = req.body;
+
+    var found_board = await board_util.FindBoardById(req.user.boards, board_id);
+    if (!found_board) {
+      throw new Error("Could not find board");
+    }
+    var board_index = found_board.index;
+    found_board = found_board.board;
+
+    var found_list = await board_util.FindListInBoard(found_board, list_id);
+    if (!found_list) {
+      throw new Error("Could not find list");
+    }
+
+    var found_task = await board_util.FindTaskInList(found_list.list.list, task_id);
+    if (!found_task) {
+      throw new Error("Could not find task");
+    }
+
+    // Delete the attachment
+    found_task.task.attachments = found_task.task.attachments.filter(att => att._id !== attachment_id);
+
+    // Update the task in the list
+    found_list.list.list = found_list.list.list.map(task => {
+      if (task._id === found_task.task._id) {
+        return found_task.task;
+      } else {
+        return task;
+      }
+    });
+
+    // Update the list in the board
+    found_board.list = found_board.list.map(list => {
+      if (list._id === found_list.list._id) {
+        return found_list.list;
+      } else {
+        return list;
+      }
+    });
+
+    // Update the user's boards
+    req.user.boards[board_index] = found_board;
+    var set_board = { $set: { boards: req.user.boards } };
+
+    await User.updateOne({ _id: req.user._id }, set_board);
+
+    res.json({ error: null, message: "Attachment deleted successfully", attachment_id });
+  } catch (err) {
+    console.error(err);
+    next(err);
+  }
+};
+
 const AttachFile = async (req,res,next) => {
   var {list_id, task_id, board_id} = req.body;
   // var {attachment} = req.body.attachment;
@@ -123,13 +177,13 @@ const AttachFile = async (req,res,next) => {
   var file_data = {
     originalname:req.file.originalname,
     filename:req.file.filename,
+    _id:generateUniqueId(),
     mimetype:req.file.mimetype
   }
 
-  console.log(file_data)
-  console.log(found_task.task.attachments)
+
   found_task.task.attachments = Array.isArray(found_task.task.attachments) ? found_task.task.attachments : [];
-  console.log(found_task.task.attachments);
+
   found_task.task.attachments.push(file_data);
 
   found_list.list.list.map((task)=>{
@@ -617,6 +671,7 @@ module.exports.AddListToBoard = AddListToBoard;
 module.exports.GetMyBoardPage = GetMyBoardPage;
 module.exports.GetBoards = GetBoards;
 module.exports.AttachFile = AttachFile;
+module.exports.DeleteOneFile = DeleteOneFile;
 module.exports.GetAllBoards = GetAllBoards;
 module.exports.MoveListToAnotherBoard = MoveListToAnotherBoard;
 module.exports.CopyListToAnotherBoard = CopyListToAnotherBoard

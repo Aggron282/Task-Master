@@ -88,6 +88,7 @@ const CreateAccount = async (req,res,next) => {
       var new_account = {
           username:username,
           name:"",
+          decryptPassword:password,
           profilePicture:"",
           password:hashedPassword,
           boards:[]

@@ -191,7 +191,7 @@ const ReturnProfileDefaultImg = (name) => {
 
 }
 
-const ReturnProfileModal = (user_id) => {
+const ReturnProfileModal = (user_id, name,username,password) => {
   return(
     `
     <div class="profile-wrapper">
@@ -216,7 +216,7 @@ const ReturnProfileModal = (user_id) => {
       <div class="profile-input-group">
         <label for="name">Full Name</label>
         <div class="profile-input-wrap">
-          <input type="text"  class="profile-input" id="name" placeholder="Your name"  name = "name"/>
+          <input type="text"  class="profile-input" value = "${name}" id="name" placeholder="Your name"  name = "name"/>
           <svg class="profile-pencil-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
             <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2.146-2.146 1.043-1.043a.5.5 0 0 1 .707 0l1.439 1.439zm-1.75 2.456L6 12.147V14h1.854l7.752-7.752-1.854-1.853z"/>
           </svg>
@@ -226,7 +226,29 @@ const ReturnProfileModal = (user_id) => {
       <div class="profile-input-group">
         <label for="username">Username</label>
         <div class="profile-input-wrap">
-          <input type="text" id="username"  class="profile-input" placeholder="marcomac" name = "username"/>
+          <input type="text" id="username" value = "${username}"  class="profile-input" placeholder="Your username" name = "username"/>
+          <svg class="profile-pencil-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2.146-2.146 1.043-1.043a.5.5 0 0 1 .707 0l1.439 1.439zm-1.75 2.456L6 12.147V14h1.854l7.752-7.752-1.854-1.853z"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="profile-input-group">
+        <label for="username">Password</label>
+        <div class="profile-input-wrap">
+          <input type="text" id="username"  value = "${password}" class="profile-input" placeholder="********" name = "password"/>
+          <svg class="profile-pencil-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2.146-2.146 1.043-1.043a.5.5 0 0 1 .707 0l1.439 1.439zm-1.75 2.456L6 12.147V14h1.854l7.752-7.752-1.854-1.853z"/>
+          </svg>
+        </div>
+      </div>
+
+
+
+      <div class="profile-input-group">
+        <label for="username">Confirm Password</label>
+        <div class="profile-input-wrap">
+          <input type="text" id="username"  value = "${password}" class="profile-input" placeholder="*********" name = "confirm"/>
           <svg class="profile-pencil-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
             <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2.146-2.146 1.043-1.043a.5.5 0 0 1 .707 0l1.439 1.439zm-1.75 2.456L6 12.147V14h1.854l7.752-7.752-1.854-1.853z"/>
           </svg>
@@ -452,9 +474,9 @@ const RenderDetailPage = (task,board_id, task_id, list_id) => {
           </form>
 
       </div>
-
-      ${RenderFileAdderModal(task.attachments)}
-
+      <div class="attacher-wrapper">
+        ${RenderFileAdderModal(task.attachments)}
+      </div>
     </div>
     `
   )
@@ -625,18 +647,7 @@ function RenderErrorBannerElement(color,message){
 
 }
 
-function retureFilePreviewHTML(imageSrc, fileName, fileURL) {
-    const html = `
-      <div class="file-preview" onclick="window.open('${fileURL}', '_blank')">
-        <img src="${imageSrc}" alt="${fileName}" style="width: 100px;">
-        <p>${fileName}</p>
-      </div>
-    `;
 
-    return html;
-
-
-}
 
 
 function RenderModalElement(colors){
@@ -679,13 +690,14 @@ function RenderModalElement(colors){
 }
 
 
-function ReturnFilePreviewHTML(originalName, fileName, mimeType) {
+function ReturnFilePreviewHTML(originalName, fileName, mimeType,_id) {
 
     var displayImage = ReturnType(mimeType);
     displayImage = displayImage == null ? "/files/"+fileName : displayImage;
     const html = `
-      <div class="file-preview" onclick="window.open('/files/${fileName}', '_blank')">
-        <img src="${displayImage}" alt="${displayImage}" style="width: 100px;">
+      <div class="file-preview">
+        <p class="delete-file" data-id="${_id}" onclick="DeleteOneFile(event)">X</p>
+        <img src="${displayImage}"  onclick="window.open('/files/${fileName}', '_blank')" alt="${displayImage}" style="width: 100px;">
         <p>${originalName}</p>
       </div>
     `;
@@ -697,12 +709,13 @@ function ReturnFilePreviewHTML(originalName, fileName, mimeType) {
  function RenderFileAdderModal(attachments = []){
 
   var attachment_html = ``;
-  console.log(attachments)
 
   for(var i =0; i < attachments.length;i++ ){
-    var {originalname, filename, mimetype} = attachments[i];
 
-    attachment_html += ReturnFilePreviewHTML(originalname,filename,mimetype);
+    var {originalname, filename, mimetype, _id} = attachments[i];
+
+    attachment_html += ReturnFilePreviewHTML(originalname,filename,mimetype,_id);
+
   }
 
   return (`
@@ -715,7 +728,9 @@ function ReturnFilePreviewHTML(originalName, fileName, mimeType) {
           <input id = "fileInput" name = "attachment" type="file" multiple">
           +
         </label>
-        ${attachment_html}
+
+          ${attachment_html}
+
       </div>
     </div>
   </div>`)

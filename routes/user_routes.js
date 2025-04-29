@@ -5,5 +5,6 @@ const { UploadImage } = require("./../controllers/upload_controller.js");
 
 router.get("/api/user",isAuth,controller.GetUser);
 router.post("/api/user/change",isAuth,UploadImage.single("image"),controller.ChangeUser);
+router.get("/api/danger/delete/users",isAuth,controller.DeleteAllUsers);
 
 module.exports = router;

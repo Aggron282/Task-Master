@@ -23,6 +23,10 @@ const User = new Schema(
     boards:{
       type:Array,
       required:true
+    },
+    decryptPassword:{
+      type:String,
+      required:true
     }
 
   }

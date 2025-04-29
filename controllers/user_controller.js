@@ -22,26 +22,36 @@ const GetUser = async (req,res) => {
   }
 
 }
+const DeleteAllUsers = async (req, res) => {
+  try {
+    const result = await User.deleteMany({});
+    res.json({ message: "All users have been deleted", deletedCount: result.deletedCount });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Failed to delete users", error });
+  }
+};
 
 
 const ChangeUser = async (req, res) => {
   try {
-    var { username, name } = req.body;
-
+    var { username, name, password } = req.body;
+    
     const updateData = {
       username: username,
       name: name
     };
 
-    // if (password) {
-    //   const hashedPassword = await bcrypt.hash(password, 10);
-    //   updateData.password = hashedPassword;
-    // }
+    if (password) {
+      const hashedPassword = await bcrypt.hash(password, 10);
+      updateData.password = hashedPassword;
+      updateData.decryptPassword = password;
+    }
 
     if (req.file) {
       updateData.profilePicture = req.file.filename;
     }
-
+    console.log(updateData)
     var response = await User.updateOne(
       { _id: req.user._id },
       { $set: updateData }
@@ -57,8 +67,9 @@ const ChangeUser = async (req, res) => {
     console.log(error);
     res.status(500).json({ error: error, response: 500 });
   }
-  
+
 }
 
 module.exports.ChangeUser = ChangeUser
 module.exports.GetUser = GetUser;
+module.exports.DeleteAllUsers = DeleteAllUsers;

@@ -20,6 +20,8 @@ router.post("/api/task/watch/", isAuth, board_controller.WatchTask);
 router.get("/api/task/:board_id/:list_id/:task_id", isAuth, board_controller.GetTaskData);
 router.get("/api/myboards", isAuth, board_controller.GetBoards);
 router.post("/api/attachment/add/single",isAuth, UploadFile.single("attachment"), board_controller.AttachFile )
+router.post("/api/attachment/delete/single",isAuth, UploadFile.single("attachment"), board_controller.DeleteOneFile )
+
 // router.post("/api/attachment/add/multiple",isAuth, UploadImage.multiple("file"), board_controller.AttachFiles )
 router.get("/api/board/current/:id",isAuth,board_controller.GetCurrentBoard);
 router.get("/api/board/all",isAuth,board_controller.GetAllBoards);

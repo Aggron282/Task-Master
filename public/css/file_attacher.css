@@ -8,8 +8,31 @@
   z-index: 9999;
 }
 
+.file-preview{
+  position: relative;
+}
 .hidden {
   display: none;
+}
+.delete-file{
+  position: absolute;
+  right:0px;
+  top:-10px;
+  color:white;
+  background:black;
+  padding:10px;
+  visibility: hidden;
+  opacity:1;
+  z-index: -9;
+  pointer-events: none;
+}
+
+.file-preview:hover .delete-file {
+  visibility: visible;
+  opacity:1;
+  z-index: 109999 !important;
+
+  pointer-events: all;
 }
 
 .modal-content {
@@ -85,6 +108,7 @@
 }
 .file-preview img,
 .file-preview svg {
+  z-index: 99;
   width: 100% !important;
   height: 100%;
   object-fit: contain;
