@@ -68,6 +68,27 @@ async function ChangeTask(board, list_id, task_id, new_task){
 
 }
 
+
+async function ChangeBoard(boards = [], board = null){
+
+  var new_boards = [];
+
+  for(var i =0; i < boards.length; i ++){
+
+    if(board._id == boards[i]._id){
+      new_boards.push(board);
+    }
+    else{
+      new_boards.push(boards[i]);
+    }
+
+  }
+
+  return boards;
+
+}
+
+module.exports.ChangeBoard = ChangeBoard;
 module.exports.ChangeTask = ChangeTask;
 module.exports.FindBoardById = FindBoardById;
 module.exports.FindListInBoard = FindListInBoard;

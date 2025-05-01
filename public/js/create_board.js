@@ -23,13 +23,13 @@ const colors = [
  "#DA70D6"
 ]
 
-const board_modal_wrapper = document.querySelector(".board_wrapper");
-const board_modal_container = document.querySelector(".board_modal_container");
-const add_board_buttons = document.getElementsByClassName("add_task_button");
-const new_board = document.querySelector("#new_board");
+var board_modal_wrapper = document.querySelector(".board_wrapper");
+var board_modal_container = document.querySelector(".board_modal_container");
+var add_board_buttons = document.getElementsByClassName("add_task_button");
+var new_board = document.querySelector("#new_board");
 
-const delete_boards = document.querySelector(".delete_boards");
-const boards_found = document.getElementsByClassName("taskboard");
+var delete_boards = document.querySelector(".delete_boards");
+var boards_found = document.getElementsByClassName("taskboard");
 
 var canDelete = false;
 var isModalRendered = false;
@@ -47,7 +47,9 @@ function BuildModalHTML(){
 
   board_modal_container.innerHTML = html;
 
-  chosen_color_input = document.querySelector(".chosen_color_input");
+  board_modal_wrapper = document.querySelector(".board_wrapper");
+  board_modal_container = document.querySelector(".board_modal_container");
+
   board_modal_wrapper.classList.add("wrapper_active");
 
   chosen_color_input.addEventListener("change",(e)=>{
@@ -125,6 +127,12 @@ function BuildBoardHTML(board){
     }
 
     board_container.innerHTML = html;
+
+    add_board_buttons = document.getElementsByClassName("add_task_button");
+    new_board = document.querySelector("#new_board");
+    delete_boards = document.querySelector(".delete_boards");
+    boards_found = document.getElementsByClassName("taskboard");
+    chosen_color_input = document.querySelector(".chosen_color_input");
 
     AddDeleteEvents();
 
@@ -223,16 +231,13 @@ function CreateBoard(name,background){
   }
 
   else if(document.querySelector("#createboard")){
+
     var form = document.querySelector("#createboard");
-    console.log(form)
 
     const formData = new FormData(form);
 
-    console.log([...formData.entries()]);
-
     axios.post("/board/create", formData)
     .then(response => {
-      console.log("Board created!", response.data);
       RemoveModal();
       Init();
     })
@@ -243,9 +248,7 @@ function CreateBoard(name,background){
 
 }
 
-if(add_board_buttons.length > 0){
-  AddBoardButtonEvents();
-}
+
 
 function Init(){
 
@@ -254,6 +257,10 @@ function Init(){
     boards = result.data.boards;
 
     BuildBoardHTML(boards);
+
+    if(add_board_buttons.length > 0){
+      AddBoardButtonEvents();
+    }
 
   });
 

@@ -537,7 +537,7 @@ const  RenderList = (board,showAll,showArchiveOnly,showWatched)=>{
 
   const task_heading_container = document.querySelector(".task_heading_container");
 
-  task_heading_container.innerHTML = `<p class="task_title">${board.name}</p>`
+  task_heading_container.innerHTML = `<p class="task_title" id = "boardtitle">${board.name}</p>`
 
   html += RenderAddList(board);
 
@@ -625,10 +625,10 @@ function RenderTaskboard(board){
 
   return(
     `
-    <div class="taskboard" style = "background:${background}" id = "${board._id} name = "${board.name}">
+    <div class="taskboard"  id = "taskboard" style = "background:${background}" id = "${board._id} name = "${board.name}">
       <a href = "/my_board/id=:${board._id}/name=:${no_space_name}">
       <div class = "inner_board">
-        <p class="task_heading">${board.name}</p>
+        <p class="task_heading" id = "taskboardname">${board.name}</p>
 
       </div>
       </a>
@@ -766,93 +766,46 @@ function RenderColorElements(){
 
 }
 
-function ReturnNavbarDashboard(){
-  return(
-    `
-    <div class="navbar navbar--board">
+function ReturnNavbarDashboard(username){
 
-        <div class="row navbar_board_row">
+  var profile_avatar = ReturnProfileDefaultImg(username);
 
-          <div class="col-2 logo_col">
-            <div class="logo_container--dashboard">
-                <img class="logo" src = "/imgs/logo.png"/>
-                <p class="title title--logo"> Task-Master </p>
-            </div>
-          </div>
-
-          <div class="col-5 choices_col">
-
-            <div class="choice_group_container">
-
-              <div class="choice_container">
-                <div class="dropdown_container">
-                    <p >Preferences</p>
-                    <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg"
-                    fill-rule="evenodd" clip-rule="evenodd"><path d="M11 21.883l-6.235-7.527-.765.644 7.521 9 7.479-9-.764-.645-6.236 7.529v-21.884h-1v21.883z"/></svg>
-                </div>
-              </div>
-
-              <div class="choice_container">
-                <div class="dropdown_container">
-                    <p >Recent</p>
-                    <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg"
-                    fill-rule="evenodd" clip-rule="evenodd"><path d="M11 21.883l-6.235-7.527-.765.644 7.521 9 7.479-9-.764-.645-6.236 7.529v-21.884h-1v21.883z"/></svg>
-                </div>
-              </div>
-
-              <div class="choice_container choice_container--fav">
-
-                <div class="dropdown_container">
-                    <p >Favorites</p>
-                    <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg"
-                    fill-rule="evenodd" clip-rule="evenodd"><path d="M11 21.883l-6.235-7.527-.765.644 7.521 9 7.479-9-.764-.645-6.236 7.529v-21.884h-1v21.883z"/></svg>
-                </div>
-
-              </div>
-
-            </div>
-
-            </div>
-
-          <div class="col-3 board_search_col">
-            <form>
-               <input class="board_search" placeholder = "Search for your boards">
-            </form>
-          </div>
-
-          <div class="col-2 profile_col">
-
-            <div class="choice_container choice_container--profile">
-
-              <div class="profile-dropdown-wrapper" onclick = "toggleProfileDropdown()">
-
-                  <div class="profile-img-wrapper">
-
-                  </div>
-
-                    <div class="profile-dropdown-modal" id="profileDropdown">
-                      <div class="profile-dropdown-close-btn" onclick="toggleProfileDropdown()">×</div>
-                      <ul class="profile-dropdown-menu">
-                        <li id = "openProfile">Edit Profile</li>
-                        <li>Settings</li>
-                        <li>Notifications</li>
-                        <a href = "/auth/logout">
-                          <li >Logout</li>
-                        </a>
-                      </ul>
-                    </div>
-              </div>
-
-            </div>
-
-          </div>
-
+  return (`
+    <div class="navbar navbar--dashboard">
+        <div class="logo">Task-Master</div>
+        <div class="menu">
+            <span id = "new_board" class = "add_task_button delete_boards">+ Add Board</span>
+            <span class="delete_boards">Delete Boards</span>
+            <span class="board-settings-favorite-board--nav archive_boards">Archive Boards</span>
+            <a href = "/"><span>Homepage</span></a>
+            <span>Settings</span>
         </div>
 
+        <div class="search-bar">
+            <input type="text" placeholder="Search">
+        </div>
+
+        <div class="profile-dropdown-wrapper" onclick = "toggleProfileDropdown()">
+            <div class="profile profile-img-wrapper">
+            ${profile_avatar}
+            </div>
+
+              <div class="profile-dropdown-modal" id="profileDropdown">
+                <div class="profile-dropdown-close-btn" onclick="toggleProfileDropdown()">×</div>
+                <ul class="profile-dropdown-menu">
+                  <li id = "openProfile">Edit Profile</li>
+                  <li>Settings</li>
+                  <li>Notifications</li>
+                  <a href = "/auth/logout">
+                    <li >Logout</li>
+                  </a>
+                </ul>
+              </div>
+        </div>
     </div>
-    `
-  )
+    `)
 }
+
 function ReturnNavbarBoard(username){
 
   var profile_avatar = ReturnProfileDefaultImg(username);

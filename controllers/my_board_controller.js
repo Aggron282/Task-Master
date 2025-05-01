@@ -646,17 +646,80 @@ const ChangeTask = async (req,res) => {
   found_task.description =  form.description;
   found_task.deadline =form.date;
   found_task.watching = form.watching;
-  // console.log(found_task)
+
   var new_board = await board_util.ChangeTask(found_board.board, list_id, task_id, found_task);
   var set_board = {$set:{boards:new_board}} ;
 
   User.updateOne({_id:req.user._id},set_board).then((result)=>{
-    // console.log(new_board);
       res.json({result:result,board:new_board});
     }).catch((err)=>{
       console.log(err);
       next(err);
   });
+
+
+}
+
+const ChangeBoardName = async (req,res) =>{
+
+  var {board_name,name,board_id} = req.body;
+  console.log(board_id)
+  var {board}= await board_util.FindBoardById(req.user.boards,board_id);
+  board.name = name;
+  var new_boards = await board_util.ChangeBoard(req.user.boards,board);
+  var set_board = { $set:{boards:new_boards} };
+
+  User.updateOne({_id:req.user._id},set_board).then((result)=>{
+      res.json({name:name});
+    }).catch((err)=>{
+      console.log(err);
+      res.json({error:err});
+  });
+
+}
+
+const ChangeBoardBackground = async (req,res) =>{
+
+  var {background, board_id} = req.body;
+  console.log(req.body,req.file)
+  var {board} = await board_util.FindBoardById(req.user.boards,board_id);
+
+  if(req.file){
+    board.background_img = req.file.filename;
+  }
+  else{
+    board.background = background;
+  }
+  console.log(board.background,background  )
+  var new_boards = await board_util.ChangeBoard(req.user.boards,board);
+  var set_board = { $set:{boards:new_boards} };
+
+  User.updateOne({_id:req.user._id},set_board).then((result)=>{
+      res.json({background:background});
+    }).catch((err)=>{
+      console.log(err);
+      res.json({error:err});
+  });
+
+}
+
+
+function CheckIfColorOrImage(background){
+
+  const imageMimeTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml', 'image/bmp', 'image/tiff'];
+  const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg', '.bmp', '.tiff'];
+
+  if (typeof background !== 'string') {
+    return false;
+  }
+
+  const lowerbackground = background.toLowerCase();
+
+  if (lowerbackground.includes('/')) {
+    return imageMimeTypes.includes(lowerbackground);
+  }
+
+  return imageExtensions.some(ext => lowerbackground.endsWith(ext));
 
 }
 
@@ -671,6 +734,8 @@ module.exports.ExtractColor = ExtractColor;
 module.exports.AddTaskToList = AddTaskToList;
 module.exports.AddListToBoard = AddListToBoard;
 module.exports.GetMyBoardPage = GetMyBoardPage;
+module.exports.ChangeBoardName = ChangeBoardName;
+module.exports.ChangeBoardBackground = ChangeBoardBackground;
 module.exports.GetBoards = GetBoards;
 module.exports.AttachFile = AttachFile;
 module.exports.DeleteOneFile = DeleteOneFile;

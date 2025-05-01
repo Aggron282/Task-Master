@@ -19,24 +19,25 @@ function GetAllColorsInImage(image_data) {
 }
 
 function getRandomColorWithContrast() {
-    // Generate random RGB
-    const r = Math.floor(Math.random() * 256);
-    const g = Math.floor(Math.random() * 256);
-    const b = Math.floor(Math.random() * 256);
+  // Generate random RGB
+  const r = Math.floor(Math.random() * 256);
+  const g = Math.floor(Math.random() * 256);
+  const b = Math.floor(Math.random() * 256);
 
-    const backgroundColor = `rgb(${r}, ${g}, ${b})`;
+  const backgroundColor = `rgb(${r}, ${g}, ${b})`;
 
-    // Calculate relative luminance (per WCAG formula)
-    const luminance = (0.299 * r + 0.587 * g + 0.114 * b);
+  // Calculate luminance
+  const luminance = 0.299 * r + 0.587 * g + 0.114 * b;
 
-    // Choose black or white text depending on luminance
-    const textColor = luminance > 186 ? "#000000" : "#FFFFFF";
+  // Avoid white-on-bright colors like yellow (high luminance)
+  const textColor = luminance > 150 ? "#000000" : "#FFFFFF";
 
-    return {
-        background: backgroundColor,
-        text: textColor
-    };
+  return {
+    background: backgroundColor,
+    text: textColor
+  };
 }
+
 
 
 const imageTypesAllowed = ['image/png', 'image/jpeg', 'image/jpg'];

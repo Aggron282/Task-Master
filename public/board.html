@@ -91,12 +91,12 @@
           <span class="board-settings-close">&times;</span>
 
           <div class="board-settings-name">
-            <input type="text" value="Board Name" >
+            <input type="text" placeholder="Board Name" id = "boardnameform" >
             <span class="board-settings-edit-icon">✎</span>
           </div>
 
           <div class="board-settings-grid">
-            <button>Change background</button>
+            <button class="board-settings-background">Change background</button>
             <button class="board-settings-archive-board">Archive board</button>
             <button class="board-settings-copy-board">Copy board</button>
             <button class="board-settings-favorite-board">Favorite board</button>
@@ -114,6 +114,27 @@
     <div class="move-canopy">
 
     </div>
+    <div class="changeBackgroundWrapper hidden">
+    <div class="bgModal-overlay" id="bgModalOverlay">
+      <div class="backgroundModal">
+        <h1 class="title"> Change Background </p>
+        <span class="bgModal-close-btn" onclick="toggleBackgroundModal()">×</span>
+        <form action = "/myboard/change/background" method = "POST"  enctype = "multipart/form-data" id="changeBackgroundBoard">
+          <div class="bgModal-content">
+            <div>
+              <label for="bgColorPicker">Choose a Background Color</label>
+              <input type="color" id="bgColorPicker" name="background" value="#4a90e2">
+            </div>
+            <div>
+              <label for="bgImageUpload">Upload Background Image</label>
+              <input type="file" id="bgImageUpload" name="thumbnail" accept="image/*">
+            </div>
+          </div>
+          <button type="submit" class="bgModal-submit-btn">Submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
 
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script src = "/js/util.js"></script>
