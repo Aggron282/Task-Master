@@ -564,6 +564,11 @@ h6 {
   background-color: #2a2a2a;
 }
 
+.menu-item--active {
+    background-color: #2a2a2a !important;
+    border:1px solid yellow !important;
+}
+
 .board {
     display: flex;
     align-items: center;

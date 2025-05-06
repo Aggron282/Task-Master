@@ -156,7 +156,7 @@ const ChangeTaskState = async (e, url, isRemoving) => {
 
     const showAll = localStorage.getItem('show_all') === 'true';
     const showArchivedOnly = localStorage.getItem('show_archived_only') === 'true';
-
+    const taskElement = document.querySelector(`.task_item_container[_id="${task_id}"]`)
     if (!showAll && !showArchivedOnly && taskElement) {
       taskElement.remove();
     }
@@ -197,15 +197,20 @@ const AddClickEventsToTasks = () =>{
         var html = RenderDetailPage(data.task.task, id, element.dataset.taskId, element.dataset.listId);
 
         detail_container.innerHTML = html;
+        var watch_input = document.querySelector(".watch-input");
+        console.log(data.task.task);
+        watch_input.checked = data.task.task.watching;
 
         var move_task_button = document.querySelector("#move_task_button");
+        var copy_task_button = document.querySelector("#copy_task_button");
 
         move_task_button.addEventListener("click",(e)=>{
-          console.log(e)
           GenerateMoveBoardModal(e,true);
-
         });
 
+        copy_task_button.addEventListener("click",(e)=>{
+          GenerateMoveBoardModal(e,false);
+        });
 
         InitAttacher();
         InitLinkAdder(data.task.task.links);
@@ -433,31 +438,34 @@ function StyleShowBars(showAll = false,showArchiveOnly = false, showWatched = fa
   const show_all_tasks = document.querySelector(".menu-item--all");
   const show_watch_tasks = document.querySelector(".menu-item--watch");
 
-  const active_style = "2px solid white";
-
+  const active = "menu-item--active";
+  const filter_wrapper = document.querySelector(".filter-wrapper");
   const none = "none";
 
   if(showArchiveOnly){
-    show_archive_tasks.style.border = active_style
-    show_all_tasks.style.border = none;
-    show_watch_tasks.style.border = none;
+    show_archive_tasks.classList.add(active);
+    show_all_tasks.classList.remove(active);
+    show_watch_tasks.classList.remove(active);
+    filter_wrapper.innerHTML = "Archived"
   }
   else if(showAll){
-    show_all_tasks.style.border = active_style
-    show_archive_tasks.style.border = none
-    show_watch_tasks.style.border = none;
+    show_all_tasks.classList.add(active);
+    show_archive_tasks.classList.remove(active);
+    show_watch_tasks.classList.remove(active);
+    filter_wrapper.innerHTML = "All"
   }
   else if(showAll == false && showArchiveOnly == false && showWatched == false){
-    show_all_tasks.style.border = none;
-    show_archive_tasks.style.border = none;
-    show_watch_tasks.style.border = none;
+    show_all_tasks.classList.remove(active);
+    show_archive_tasks.classList.remove(active);
+    show_watch_tasks.classList.remove(active);
+    filter_wrapper.innerHTML = "Standard"
   }
   else if(showWatched){
-    show_all_tasks.style.border = none;
-    show_archive_tasks.style.border = none;
-    show_watch_tasks.style.border = active_style;
+    show_all_tasks.classList.remove(active);
+    show_archive_tasks.classList.remove(active);
+    show_watch_tasks.classList.add(active);
+    filter_wrapper.innerHTML = "Watched"
   }
-
 
 }
 
@@ -470,6 +478,7 @@ const AddShowButtonEvents = () => {
   const show_archive_tasks = document.querySelector(".menu-item--archive");
   const show_all_tasks = document.querySelector(".menu-item--all");
   const show_watch_tasks = document.querySelector(".menu-item--watch");
+  const show_standard = document.querySelector(".menu-item--standard");
 
   show_archive_tasks.addEventListener("click", () => {
 
@@ -483,6 +492,23 @@ const AddShowButtonEvents = () => {
     localStorage.setItem("show_watch", false);
 
     StyleShowBars(false,togglingOn,false);
+
+    InitMyBoard();
+
+  });
+
+  show_standard.addEventListener("click", () => {
+
+    const togglingOn = false;
+
+    showArchiveOnly = false;
+    showAll = false;
+
+    localStorage.setItem("show_archived_only", false);
+    localStorage.setItem("show_all", false);
+    localStorage.setItem("show_watch", false);
+
+    StyleShowBars(false,false,false);
 
     InitMyBoard();
 
@@ -546,8 +572,9 @@ function GenerateMoveBoardModal(e, isTaskMoving = false){
 
   var modal = document.querySelector(".lbl-list-settings-modal");
   var type = isTaskMoving  == true ? 1 : 0;
+  var move_canopy = document.querySelector(".move-canopy");
 
-  modal.setAttribute("type",type);
+  move_canopy.setAttribute("type",type);
 
   var exit_modal = modal.querySelector(".lbl-exit");
 
@@ -559,7 +586,9 @@ function GenerateMoveBoardModal(e, isTaskMoving = false){
 
   var holder = modal.querySelector(".list-board-holder");
   var move_board_wrapper = document.querySelector(".move-board-wrapper");
+
   move_board_wrapper.classList.remove("hidden");
+
   GenerateOtherBoards(holder);
 
 }

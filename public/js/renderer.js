@@ -138,7 +138,7 @@ function RenderLinkAdderModal(links = []) {
         <h2 class="modal-title">Links</h2>
         <div class="file-grid" id="linkGrid">
           <label class="add-file-btn">
-            <button id="linkInput" type="text" placeholder="Paste link..." onkeydown="if(event.key === 'Enter') addNewLink(this)">
+            <button id="linkInput" type="text" placeholder="Paste link...">
             +
             </button>
           </label>
@@ -194,7 +194,7 @@ const ReturnMoveToBoardModal = (boards) =>{
 }
 
 const ReturnMoveToListModal = (board) =>{
-
+  console.log(board)
   var board_html = "";
 
   for(var i=0; i < board.list.length; i++){
@@ -518,7 +518,7 @@ const RenderDetailPage = (task,board_id, task_id, list_id) => {
                           <p class="title">Move</p>
                       </div>
 
-                      <div class="option-card">
+                      <div class="option-card" id = "copy_task_button">
                           <img class="o-img" src = "/imgs/options/8.png"/>
                           <p class="title">Copy</p>
                       </div>

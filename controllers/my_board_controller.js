@@ -15,9 +15,9 @@ const GetBoards = (req,res,next) => {
 
 }
 
-const MoveTaskToAnotherListInBoard = async (req, res, next) => {
+async function MoveOrCopyTaskToListInAnotherBoard(req,res,type){
   try {
-    const { board_id, task_id, list_id, new_list_id, new_board_id, type } = req.body;
+    const { board_id, task_id, list_id, new_list_id, new_board_id } = req.body;
 
     const found_old_board = await board_util.FindBoardById(req.user.boards, board_id);
     const found_new_board = await board_util.FindBoardById(req.user.boards, new_board_id);
@@ -64,8 +64,17 @@ const MoveTaskToAnotherListInBoard = async (req, res, next) => {
     res.json({
       error: error
     });
-};
+  }
+}
 
+const MoveTaskToAnotherListInBoard = async (req, res, next) => {
+  MoveOrCopyTaskToListInAnotherBoard(req,res, 1);
+}
+
+
+const CopyTaskToAnotherListInBoard = async (req, res, next) => {
+  MoveOrCopyTaskToListInAnotherBoard(req,res, 0);
+}
 
 const AddLink = async (req,res,next) => {
   var {list_id, task_id, board_id} = req.body;
@@ -150,38 +159,6 @@ const GetAllBoards =  (req,res) => {
 
 }
 
-const MoveListToAnotherBoard = async (req, res) => {
-
-  const { list_id, current_board_id, board_id } = req.body;
-  // console.log("S")
-  let found_current_board = await board_util.FindBoardById(req.user.boards, current_board_id);
-  let found_new_board = await board_util.FindBoardById(req.user.boards, board_id);
-  // console.log(found_new_board,board_id)
-  var current_board_index = found_current_board.index;
-  var new_board_index = found_new_board.index;
-
-  found_current_board = found_current_board.board;
-  found_new_board = found_new_board.board;
-
-  var found_list = await board_util.FindTaskInList(found_current_board.list, list_id);
-  found_list = found_list.task;
-  found_current_board.list = found_current_board.list.filter(item => item._id !== list_id);
-
-  found_new_board.list.push(found_list);
-
-  req.user.boards[current_board_index] = found_current_board;
-  req.user.boards[new_board_index] = found_new_board;
-
-  var set_board = {$set:{boards:req.user.boards}} ;
-
-  User.updateOne({_id:req.user._id},set_board).then((result)=>{
-      res.json({ error: null, board: found_current_board, new_board: found_new_board });
-    }).catch((err)=>{
-        console.log(err);
-        next(err);
-    });
-
-};
 
 const CopyListToAnotherBoard = async (req,res) => {
 
@@ -817,6 +794,39 @@ const ChangeBoardBackground = async (req,res) =>{
 
 }
 
+const MoveListToAnotherBoard = async (req, res) => {
+
+  const { list_id, current_board_id, board_id } = req.body;
+  // console.log("S")
+  let found_current_board = await board_util.FindBoardById(req.user.boards, current_board_id);
+  let found_new_board = await board_util.FindBoardById(req.user.boards, board_id);
+  // console.log(found_new_board,board_id)
+  var current_board_index = found_current_board.index;
+  var new_board_index = found_new_board.index;
+
+  found_current_board = found_current_board.board;
+  found_new_board = found_new_board.board;
+
+  var found_list = await board_util.FindTaskInList(found_current_board.list, list_id);
+  found_list = found_list.task;
+  found_current_board.list = found_current_board.list.filter(item => item._id !== list_id);
+
+  found_new_board.list.push(found_list);
+
+  req.user.boards[current_board_index] = found_current_board;
+  req.user.boards[new_board_index] = found_new_board;
+
+  var set_board = {$set:{boards:req.user.boards}} ;
+
+  User.updateOne({_id:req.user._id},set_board).then((result)=>{
+      res.json({ error: null, board: found_current_board, new_board: found_new_board });
+    }).catch((err)=>{
+        console.log(err);
+        next(err);
+    });
+
+};
+
 
 function CheckIfColorOrImage(background){
 
@@ -843,7 +853,7 @@ module.exports.ChangeTask = ChangeTask;
 module.exports.ArchiveTask = ArchiveTask;
 module.exports.GetTaskData = GetTaskData;
 module.exports.DeleteTask = DeleteTask;
-module.exports.ChangeTasks   = ChangeTasks;
+module.exports.ChangeTasks = ChangeTasks;
 module.exports.ExtractColor = ExtractColor;
 module.exports.AddTaskToList = AddTaskToList;
 module.exports.AddListToBoard = AddListToBoard;
@@ -853,9 +863,11 @@ module.exports.ChangeBoardBackground = ChangeBoardBackground;
 module.exports.GetBoards = GetBoards;
 module.exports.AddLink = AddLink;
 module.exports.AttachFile = AttachFile;
-module.exports.MoveTaskToAnotherListInBoard = MoveTaskToAnotherListInBoard
+module.exports.CopyTaskToAnotherListInBoard = CopyTaskToAnotherListInBoard;
+module.exports.MoveTaskToAnotherListInBoard = MoveTaskToAnotherListInBoard;
 module.exports.DeleteOneFile = DeleteOneFile;
 module.exports.GetAllBoards = GetAllBoards;
-module.exports.MoveListToAnotherBoard = MoveListToAnotherBoard;
-module.exports.CopyListToAnotherBoard = CopyListToAnotherBoard
+module.exports.MoveTaskToAnotherListInBoard = MoveTaskToAnotherListInBoard;
+module.exports.CopyListToAnotherBoard = CopyListToAnotherBoard;
 module.exports.GetCurrentBoard = GetCurrentBoard;
+module.exports.MoveListToAnotherBoard = MoveListToAnotherBoard;

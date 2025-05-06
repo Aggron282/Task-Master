@@ -5,30 +5,34 @@ function toggleLinkModal(show) {
 
 function toggleInnerLinkModal(show) {
   const modal = document.getElementById("innerLinkModal");
+  console.log(modal,show)
   modal.classList.toggle("hidden", !show);
 }
+function InitLinkAdder(links = []) {
+  var link_wrapper = document.querySelector(".link-adder-wrapper");
 
-function InitLinkAdder(links = []){
+  // Render HTML first
+  link_wrapper.innerHTML = RenderLinkAdderModal(links);
 
-    var link_wrapper = document.querySelector(".link-adder-wrapper");
+  // THEN attach event listeners
+  var add_link_button = document.querySelector("#linkInput");
+  var submit_link_button = document.querySelector("#innerSubmitLink");
 
-    var add_link_button = document.querySelector("#linkInput");
-    var submit_link_button = document.querySelector("#innerSubmitLink")
+  console.log("Add Link Button:", add_link_button);
 
-    add_link_button.addEventListener("click",(e)=>{
-      
+  if (add_link_button) {
+    add_link_button.addEventListener("click", (e) => {
+      console.log("Clicked linkInput", e);
       toggleInnerLinkModal(true);
     });
+  }
 
-    submit_link_button.addEventListener("click",(e)=>{
-      console.log(e);
+  if (submit_link_button) {
+    submit_link_button.addEventListener("click", (e) => {
+      console.log("Clicked innerSubmitLink", e);
       SubmitLink();
-    })
-
-
-
-    link_wrapper.innerHTML = RenderLinkAdderModal(links);
-
+    });
+  }
 }
 
 async function SubmitLink(){

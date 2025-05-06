@@ -35,4 +35,6 @@ router.get("/api/board/all",isAuth,board_controller.GetAllBoards);
 router.post("/api/move/list",isAuth,board_controller.MoveListToAnotherBoard);
 router.post("/api/copy/list",isAuth,board_controller.CopyListToAnotherBoard);
 router.post("/api/move/task/",isAuth,board_controller.MoveTaskToAnotherListInBoard)
+router.post("/api/copy/task/",isAuth,board_controller.CopyTaskToAnotherListInBoard)
+
 module.exports = router;
