@@ -1,0 +1,162 @@
+.link-preview {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #2c2c2c;
+  border-radius: 8px;
+  padding: 0.8rem 1rem;
+  color: #fff;
+  position: relative;
+  transition: 0.3s ease;
+  font-size: 0.95rem;
+}
+
+.link-info {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  overflow: hidden;
+}
+#linkInput{
+  color:grey;
+  width:100%;
+  height:100%;
+    background:none;
+    border:none;
+    outline:none;
+}
+.link-icon {
+  color: #6da4ff;
+  min-width: 20px;
+}
+
+.link-name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+}
+
+.more-btn {
+  background: none;
+  border: none;
+  color: #aaa;
+  font-size: 1.3rem;
+  cursor: pointer;
+  padding: 0 5px;
+}
+
+.more-btn:hover {
+  color: #fff;
+}
+
+.link-options {
+  position: absolute;
+  top: 100%;
+  right: 10px;
+  background: #1e1e1e;
+  border-radius: 6px;
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  box-shadow: 0 0 10px rgba(0,0,0,0.4);
+  z-index: 1000;
+  min-width: 120px;
+  animation: fadeIn 0.2s ease-in;
+}
+
+.link-options a,
+.link-options button {
+  color: #ccc;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  padding: 0;
+  font-size: 0.9rem;
+  transition: 0.2s;
+}
+
+.link-options a:hover,
+.link-options button:hover {
+  color: #fff;
+}
+
+.link-options.hidden {
+  display: none;
+}
+
+.add-file-btn input[type="text"] {
+  background: transparent;
+  border: none;
+  color: white;
+  width: 100%;
+  padding: 0.5rem;
+  font-size: 1rem;
+}
+
+.inner-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(10, 10, 10, 0.85);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.inner-modal-content {
+  background: #1e1e1e;
+  color: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 400px;
+  position: relative;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.6);
+  z-index: 10000;
+}
+
+.inner-close-btn {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: #aaa;
+  cursor: pointer;
+}
+
+.inner-modal-title {
+  margin-bottom: 20px;
+  font-size: 1.5em;
+}
+
+.inner-modal-form input {
+  width: 100%;
+  margin-bottom: 15px;
+  padding: 10px;
+  background: #333;
+  border: 1px solid #555;
+  border-radius: 5px;
+  color: #fff;
+}
+
+.inner-modal-form button {
+  width: 100%;
+  padding: 10px;
+  background-color: #4caf50;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.hidden {
+  display: none;
+}

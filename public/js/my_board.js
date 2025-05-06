@@ -116,7 +116,7 @@ const SaveTaskChange = async (e) => {
 function GetTaskData(){
 
   var form = document.querySelector("#detail-form");
-  
+
   var board_id = form.dataset.boardId;
   var list_id = form.dataset.listId;
   var task_id = form.dataset.taskId;
@@ -192,12 +192,24 @@ const AddClickEventsToTasks = () =>{
 
         var {data} = await axios.get(`/api/task/${id}/${element.dataset.listId}/${element.dataset.taskId}`);
 
-        var html = RenderDetailPage(data.task.task, id, element.dataset.taskId, element.dataset.listId);
-
         var detail_container = document.querySelector(".detail-wrapper");
 
+        var html = RenderDetailPage(data.task.task, id, element.dataset.taskId, element.dataset.listId);
+
         detail_container.innerHTML = html;
+
+        var move_task_button = document.querySelector("#move_task_button");
+
+        move_task_button.addEventListener("click",(e)=>{
+          console.log(e)
+          GenerateMoveBoardModal(e,true);
+
+        });
+
+
         InitAttacher();
+        InitLinkAdder(data.task.task.links);
+
         var exit = document.querySelector("#exit-detail")
         var save_btn = document.querySelector(".save-btn");
         var archive_btn = document.querySelector(".option-card--archive");
@@ -207,6 +219,7 @@ const AddClickEventsToTasks = () =>{
         var label_modal = document.querySelector("#label-modal");
         var exit_label_maker = document.querySelector(".exit-label-modal");
         var detail_page = document.querySelector(".detail_page");
+
         save_btn.addEventListener("click", async (e) => {
           SaveTaskChange(e);
         });
@@ -515,29 +528,39 @@ const AddEventsToMove = () => {
 
     move_buttons[i].addEventListener("click",(e)=>{
 
-      e.stopPropagation();
-      e.preventDefault();
-
-      var parentElement =  e.target.parentElement.parentElement;
-      var _id = parentElement.getAttribute("_id");
-
-      var modal = document.querySelector(".lbl-list-settings-modal");
-
-      var exit_modal = modal.querySelector(".lbl-exit");
-
-      exit_modal.addEventListener("click",(e)=>{
-        modal.classList.remove("list-settings-modal--active");
-      });
-
-      modal.classList.add("list-settings-modal--active");
-
-      var holder = modal.querySelector(".list-board-holder");
-
-      GenerateOtherBoards(holder);
+      GenerateMoveBoardModal(e,false);
 
     });
 
   }
+
+}
+
+function GenerateMoveBoardModal(e, isTaskMoving = false){
+
+  e.stopPropagation();
+  e.preventDefault();
+
+  var parentElement =  e.target.parentElement.parentElement;
+  var _id = parentElement.getAttribute("_id");
+
+  var modal = document.querySelector(".lbl-list-settings-modal");
+  var type = isTaskMoving  == true ? 1 : 0;
+
+  modal.setAttribute("type",type);
+
+  var exit_modal = modal.querySelector(".lbl-exit");
+
+  exit_modal.addEventListener("click",(e)=>{
+    modal.classList.remove("list-settings-modal--active");
+  });
+
+  modal.classList.add("list-settings-modal--active");
+
+  var holder = modal.querySelector(".list-board-holder");
+  var move_board_wrapper = document.querySelector(".move-board-wrapper");
+  move_board_wrapper.classList.remove("hidden");
+  GenerateOtherBoards(holder);
 
 }
 

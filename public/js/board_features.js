@@ -53,6 +53,43 @@ async function MoveListToBoard(e){
 
 }
 
+async function MoveTaskToListInBoard(e){
+
+  var new_board_id = e.target.getAttribute("new_board_id");
+
+  var new_list_id = e.target.getAttribute("new_list_id");
+
+  var current_task_id = e.target.getAttribute("current_task_id");
+  var current_list_id = e.target.getAttribute("current_list_id");
+  var current_board_id = id;
+
+  const moveWrapper = document.querySelector(".move-board-wrapper");
+
+  var data;
+
+  var post_data = {
+    current_task_id: current_task_id,
+    current_list_id: current_list_id,
+    current_board_id: current_board_id,
+    new_list_id: new_list_id,
+    new_board_id: new_board_id,
+  }
+
+  var isMove = moveWrapper.getAttribute("data-type") == 0 ? true : false;
+
+  if(isMove){
+    data = await  axios.post("/api/move/task",post_data);
+    var task_item = document.querySelector(`.task_list[_id="${current_task_id}"]`);
+    task_list.remove();
+  }
+  else{
+    data = await  axios.post("/api/copy/task", post_data);
+  }
+
+  moveWrapper.classList.toggle("hidden");
+
+}
+
 function InitMoveFeature(){
 
   axios.get("/api/user").then(async ({data})=>{
@@ -72,7 +109,6 @@ function InitMoveFeature(){
     var all_boards = response.data.boards;
 
     move_holder.innerHTML += ReturnMoveToBoardModal(all_boards);
-    // move_holder.innerHTML += ReturnMoveToListModal(board);
 
     var exit_move_modal = document.querySelector(".exit--board--modal");
 
@@ -119,7 +155,42 @@ function InitMoveFeature(){
       var board_item = board_items_in_move_modal[i];
 
       board_item.addEventListener("click",async (e)=>{
-        MoveListToBoard(e);
+        if(e.target.getAttribute("type") == 0){
+          MoveListToBoard(e);
+        }else{
+          var move_holder = document.querySelector(".move-canopy--list");
+          var {board_id} = GetTaskData();
+          var {data} = await axios.get(`/api/board/current/${board_id}`);
+          console.log(data)
+
+          move_holder.innerHTML += ReturnMoveToListModal(data.board);
+          var move_list_modal = document.querySelector(".move-list-wrapper");
+          move_list_modal.setAttribute("board_id",e.target.getAttribute("board_id"))
+          var move_board_modal = document.querySelector(".move-board-wrapper");
+          move_list_modal.classList.remove("hidden");
+          move_board_modal.classList.add("hidden");
+          var list_move_items = document.querySelectorAll(".list-move-item");
+          for(var i =0; i < list_move_items.length;i++){
+            list_move_items[i].addEventListener("click",async(e)=>{
+
+              var new_list_id = e.target.getAttribute("list_id");
+              var list_wrapper = document.querySelector(".move-list-wrapper");
+              var new_board_id = list_wrapper.getAttribute("board_id");
+              var {board_id,task_id,list_id} = GetTaskData();
+              var post_data = {
+                new_list_id:new_list_id,
+                new_board_id:new_board_id,
+                board_id:board_id,
+                task_id:task_id,
+                list_id:list_id
+              }
+              var {data} = await axios.post("/api/move/task/",post_data);
+              console.log(data);
+            });
+          }
+
+        }
+
       });
 
     }

@@ -73,8 +73,8 @@ const ReturnBoardMoveItem  = (board) =>{
     return (
       `
       <div class="board-move-item" board_id = "${board._id}">
-        <img src = "/images/${board.background_img.filename}" class="board-preview"/>
-        <p class="title">
+        <img src = "/images/${board.background_img.filename}" class="board-preview" board_id = "${board._id}"/>
+        <p class="title" board_id = "${board._id}">
           ${board.name}
         </p>
       </div>
@@ -97,8 +97,8 @@ const ReturnBoardMoveItem  = (board) =>{
 const ReturnListMoveItem  = (list) =>{
     return (
       `
-      <div class= "list-move-item board-move-item ">
-        <p class="title">
+      <div class= "list-move-item board-move-item" list_id = "${list._id}">
+        <p class="title" list_id = "${list._id}">
           ${list.name}
         </p>
       </div>
@@ -106,6 +106,70 @@ const ReturnListMoveItem  = (list) =>{
     )
 
 }
+
+function RenderLinkAdderModal(links = []) {
+  let link_html = ``;
+  console.log(links)
+  for (let i = 0; i < links.length; i++) {
+    const { name, url, _id } = links[i];
+    link_html += `
+      <div class="link-preview" data-id="${_id}">
+        <div class="link-info">
+          <svg class="link-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M6.354 5.5H4a2 2 0 0 0 0 4h2.354a.5.5 0 1 1 0 1H4a3 3 0 0 1 0-6h2.354a.5.5 0 1 1 0 1z"/>
+            <path d="M11.646 10.5H14a2 2 0 0 0 0-4h-2.354a.5.5 0 1 1 0-1H14a3 3 0 0 1 0 6h-2.354a.5.5 0 1 1 0-1z"/>
+            <path d="M5.5 8a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4A.5.5 0 0 1 5.5 8z"/>
+          </svg>
+          <span class="link-name">${name}</span>
+        </div>
+        <button class="more-btn" onclick="toggleLinkOptions(this)">...</button>
+        <div class="link-options hidden">
+          <a href="${url}" target="_blank">Go to Link</a>
+          <button onclick="deleteLink('${_id}')">Delete</button>
+        </div>
+      </div>
+    `;
+  }
+
+  return `
+    <div class="attachment-modal hidden" id="linkModal">
+      <div class="modal-content">
+        <button class="close-btn" onclick="toggleLinkModal(false)">×</button>
+        <h2 class="modal-title">Links</h2>
+        <div class="file-grid" id="linkGrid">
+          <label class="add-file-btn">
+            <button id="linkInput" type="text" placeholder="Paste link..." onkeydown="if(event.key === 'Enter') addNewLink(this)">
+            +
+            </button>
+          </label>
+          ${link_html}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function RenderInnerLinkModal(){
+  return (
+    `
+    <div class="inner-overlay hidden" id="innerLinkModal">
+    <div class="inner-modal-content">
+      <button class="inner-close-btn" onclick="toggleInnerLinkModal(false)">×</button>
+      <h2 class="inner-modal-title">Add New Link</h2>
+
+      <div class="inner-modal-form">
+        <input id="innerLinkName" type="text" placeholder="Link Name" />
+        <input id="innerLinkURL" type="text" placeholder="https://example.com" />
+        <button id = "innerSubmitLink">Submit</button>
+      </div>
+    </div>
+  </div>
+
+
+    `
+  )
+}
+
 
 const ReturnMoveToBoardModal = (boards) =>{
 
@@ -138,7 +202,7 @@ const ReturnMoveToListModal = (board) =>{
   }
 
   return (`
-    <div class="move-wrapper move-list-wrapper hidden" data-type = "0">
+    <div class="move-wrapper move-list-wrapper hidden" data-type = "0" board_id = "${board._id}">
       <div class="move-modal--list move-modal">
         <p class="title">Move To List</p>
         <p class="exit exit--list--modal">Go Back</p>
@@ -162,8 +226,10 @@ const RenderListItem = (task_list,showAll,showArchiveOnly,showWatched) => {
       <div class="list_heading inactive_list"  _id = "${task_list._id}" data-list-id = "${task_list._id}" >
         <p>${task_list.name}</p>
         <p class="more" data-toggle = "0" > ... </p>
+
         ${ReturnListModal(task_list._id)}
         ${ReturnBoardListModal(task_list._id)}
+
       </div>
 
       <div class="all_tasks_in_list">
@@ -408,7 +474,7 @@ const RenderDetailPage = (task,board_id, task_id, list_id) => {
                       </div>
 
                       <div class="text-area-container">
-                        <textarea class="description_box" id="task-description" name="description" rows="3" cols="3">${task.description}</textarea>
+                        <textarea class="description_box" id="task-description" name="description" rows="1" cols="3">${task.description}</textarea>
                       </div>
 
                       <div class="feature_container">
@@ -418,7 +484,7 @@ const RenderDetailPage = (task,board_id, task_id, list_id) => {
                             <p class="title"> Add Cover </p>
                           </div>
 
-                          <div class="feature_box">
+                          <div class="feature_box link-adder-box" onclick="toggleLinkModal(true)">
                             <img class="o-img" src = "/imgs/options/1.png"/>
                             <p class="title"> Add Links </p>
                           </div>
@@ -447,7 +513,7 @@ const RenderDetailPage = (task,board_id, task_id, list_id) => {
                           <p class="title">Current Members</p>
                       </div>
 
-                      <div class="option-card">
+                      <div class="option-card" id = "move_task_button" >
                           <img class="o-img"  src = "/imgs/options/9.png"/>
                           <p class="title">Move</p>
                       </div>
@@ -476,6 +542,12 @@ const RenderDetailPage = (task,board_id, task_id, list_id) => {
       </div>
       <div class="attacher-wrapper">
         ${RenderFileAdderModal(task.attachments)}
+      </div>
+      <div class="link-adder-wrapper">
+        ${RenderLinkAdderModal([])}
+      </div>
+      <div class="inner-link-adder-wrapper">
+        ${RenderInnerLinkModal()}
       </div>
     </div>
     `
@@ -557,8 +629,6 @@ function RenderTaskItems(tasks,list_id,showAll = false, showArchiveOnly = false,
 
   var html = ``;
 
-  console.log(tasks)
-
   tasks.map((task)=>{
 
     var extra = "";
@@ -571,7 +641,7 @@ function RenderTaskItems(tasks,list_id,showAll = false, showArchiveOnly = false,
     let should_show = false;
     const isArchived = task.isArchived === true;
     const isWatched = task.watching === true;
-    console.log(task.watching)
+
      if (showAll) {
        should_show = true;
      } else if (showArchiveOnly) {
@@ -581,7 +651,6 @@ function RenderTaskItems(tasks,list_id,showAll = false, showArchiveOnly = false,
      }else{
        should_show = !isArchived;
      }
-     console.log(task)
 
     if(should_show){
       html += `
@@ -655,9 +724,6 @@ function RenderErrorBannerElement(color,message){
 
 }
 
-
-
-
 function RenderModalElement(colors){
 
   return(`
@@ -701,7 +767,9 @@ function RenderModalElement(colors){
 function ReturnFilePreviewHTML(originalName, fileName, mimeType,_id) {
 
     var displayImage = ReturnType(mimeType);
+
     displayImage = displayImage == null ? "/files/"+fileName : displayImage;
+
     const html = `
       <div class="file-preview">
         <p class="delete-file" data-id="${_id}" onclick="DeleteOneFile(event)">X</p>
@@ -774,7 +842,7 @@ function ReturnNavbarDashboard(username){
     <div class="navbar navbar--dashboard">
         <div class="logo">Task-Master</div>
         <div class="menu">
-            <span id = "new_board" class = "add_task_button delete_boards">+ Add Board</span>
+            <span id = "new_board" class = "add_task_button">+ Add Board</span>
             <span class="delete_boards">Delete Boards</span>
             <span class="board-settings-favorite-board--nav archive_boards">Archive Boards</span>
             <a href = "/"><span>Homepage</span></a>

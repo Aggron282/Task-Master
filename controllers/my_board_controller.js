@@ -15,6 +15,120 @@ const GetBoards = (req,res,next) => {
 
 }
 
+const MoveTaskToAnotherListInBoard = async (req, res, next) => {
+  try {
+    const { board_id, task_id, list_id, new_list_id, new_board_id, type } = req.body;
+
+    const found_old_board = await board_util.FindBoardById(req.user.boards, board_id);
+    const found_new_board = await board_util.FindBoardById(req.user.boards, new_board_id);
+    const old_board_index = found_old_board.index;
+    const new_board_index = found_new_board.index;
+
+    const old_board = found_old_board.board;
+    const new_board = found_new_board.board;
+
+    const found_old_list = await board_util.FindListInBoard(old_board, list_id);
+    const found_new_list = await board_util.FindListInBoard(new_board, new_list_id);
+
+    const found_task = await board_util.FindTaskInList(found_old_list.list.list, task_id);
+
+    if (!found_task || !found_new_list) {
+      throw new Error("Could not find task or target list");
+    }
+
+    if (type == 1) {
+      found_old_list.list.list = found_old_list.list.list.filter(
+        task => task._id !== task_id
+      );
+    }
+    found_new_list.list.list.push(found_task.task);
+
+    req.user.boards[old_board_index].list = old_board.list.map(list =>
+      list._id === found_old_list.list._id ? found_old_list.list : list
+    );
+
+    req.user.boards[new_board_index].list = new_board.list.map(list =>
+      list._id === found_new_list.list._id ? found_new_list.list : list
+    );
+
+    const set_board = { $set: { boards: req.user.boards } };
+    await User.updateOne({ _id: req.user._id }, set_board);
+
+    res.json({
+      error: null,
+      moved_task: found_task.task,
+      new_board: req.user.boards[new_board_index],
+    });
+  } catch (error) {
+    console.error(error);
+    res.json({
+      error: error
+    });
+};
+
+
+const AddLink = async (req,res,next) => {
+  var {list_id, task_id, board_id} = req.body;
+  var {name,url} = req.body;
+
+  var found_board = await board_util.FindBoardById(req.user.boards,board_id);
+
+  var index = found_board.index;
+
+  if(!found_board){
+    throw new Error("Could not find board");
+  }
+
+  var found_list = await board_util.FindListInBoard(found_board.board,list_id);
+  var found_task = await board_util.FindTaskInList(found_list.list.list, task_id);
+
+  var user = req.user;
+  var new_board = {...found_board.board};
+
+  var link_data = {
+    name:name,
+    url:url
+  }
+
+  found_task.task.links = Array.isArray(found_task.task.links) ? found_task.task.links : [];
+
+  found_task.task.links.push(link_data);
+
+  found_list.list.list.map((task)=>{
+
+    if(task._id == found_task.task._id){
+      return found_task.task;
+    }
+    else{
+      return task;
+    }
+
+  });
+
+
+  new_board.list = new_board.list.map((list)=>{
+
+      if(list._id == found_list.list._id){
+        return found_list.list
+      }
+      else{
+        return list;
+      }
+
+  });
+
+  var set_board = {$set:{boards:req.user.boards}} ;
+
+  SetNewBoard(req,new_board)
+
+  User.updateOne({_id:req.user._id},set_board).then((result)=>{
+      res.json({error:null,links:found_task.task.links});
+    }).catch((err)=>{
+        res.json({error:err,links:[]});
+    });
+
+
+}
 
 
 const GetCurrentBoard = async (req,res) => {
@@ -737,7 +851,9 @@ module.exports.GetMyBoardPage = GetMyBoardPage;
 module.exports.ChangeBoardName = ChangeBoardName;
 module.exports.ChangeBoardBackground = ChangeBoardBackground;
 module.exports.GetBoards = GetBoards;
+module.exports.AddLink = AddLink;
 module.exports.AttachFile = AttachFile;
+module.exports.MoveTaskToAnotherListInBoard = MoveTaskToAnotherListInBoard
 module.exports.DeleteOneFile = DeleteOneFile;
 module.exports.GetAllBoards = GetAllBoards;
 module.exports.MoveListToAnotherBoard = MoveListToAnotherBoard;

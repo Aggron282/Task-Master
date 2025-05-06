@@ -25,7 +25,7 @@ const colors = [
 
 var board_modal_wrapper = document.querySelector(".board_wrapper");
 var board_modal_container = document.querySelector(".board_modal_container");
-var add_board_buttons = document.getElementsByClassName("add_task_button");
+var add_board_button = document.getElementsByClassName("add_task_button");
 var new_board = document.querySelector("#new_board");
 
 var delete_boards = document.querySelector(".delete_boards");
@@ -51,7 +51,7 @@ function BuildModalHTML(){
   board_modal_container = document.querySelector(".board_modal_container");
 
   board_modal_wrapper.classList.add("wrapper_active");
-
+  chosen_color_input = document.querySelector(".chosen_color_input");
   chosen_color_input.addEventListener("change",(e)=>{
     ChangeBoardColor(chosen_color_input.value);
   })
@@ -104,7 +104,7 @@ function AddDeleteEvents(){
         }
 
         axios.post("/my_board/delete/one",config).then((response)=>{
-          Init();
+          InitDashboard();
         });
 
       })
@@ -189,19 +189,21 @@ function AddColorBoxEvents(){
 
 function AddBoardButtonEvents(){
 
-  for(var i =0; add_board_buttons.length; i++){
 
-    if(!add_board_buttons[i]){
-      break;
-    }
+    var new_board = document.querySelector("#new_board");
+    var delete_boards = document.querySelector(".delete_boards");
 
-    add_board_buttons[i].addEventListener("click",(e)=>{
+    console.log(new_board)
 
+    var delete_boards = document.querySelector(".delete_boards");
+
+    new_board.addEventListener("click",(e)=>{
+      console.log("s")
       if(!isModalRendered){
         BuildModalHTML();
       }
 
-    })
+    });
 
     delete_boards.addEventListener("click",(e)=>{
 
@@ -222,7 +224,7 @@ function AddBoardButtonEvents(){
 
   }
 
-}
+
 
 function CreateBoard(name,background){
 
@@ -239,7 +241,7 @@ function CreateBoard(name,background){
     axios.post("/board/create", formData)
     .then(response => {
       RemoveModal();
-      Init();
+      InitDashboard();
     })
     .catch(error => {
       console.error("Error creating board:", error);
@@ -250,7 +252,7 @@ function CreateBoard(name,background){
 
 
 
-function Init(){
+function InitDashboard(){
 
   axios.get("/user/data").then((result)=>{
 
@@ -258,12 +260,9 @@ function Init(){
 
     BuildBoardHTML(boards);
 
-    if(add_board_buttons.length > 0){
-      AddBoardButtonEvents();
-    }
+    AddBoardButtonEvents();
+
 
   });
 
 }
-
-Init();

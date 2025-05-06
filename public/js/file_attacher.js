@@ -102,7 +102,7 @@ function InitAttacher(){
     });
     var delete_files = document.querySelectorAll(".delete-file");
     for(var i =0; i < delete_files.length; i++){
-        delete_files.addEventListener("click",(e)=>{
+        delete_files[i].addEventListener("click",(e)=>{
             var _id = e.target.dataset.id;
             DeleteOneFile(_id);
         });
