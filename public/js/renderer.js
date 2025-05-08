@@ -115,15 +115,16 @@ function RenderLinkAdderModal(links = []) {
     link_html += `
       <div class="link-preview" data-id="${_id}">
         <div class="link-info">
-          <svg class="link-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+        <a href="${url}" target="_blank">  <svg class="link-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
             <path d="M6.354 5.5H4a2 2 0 0 0 0 4h2.354a.5.5 0 1 1 0 1H4a3 3 0 0 1 0-6h2.354a.5.5 0 1 1 0 1z"/>
             <path d="M11.646 10.5H14a2 2 0 0 0 0-4h-2.354a.5.5 0 1 1 0-1H14a3 3 0 0 1 0 6h-2.354a.5.5 0 1 1 0-1z"/>
             <path d="M5.5 8a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4A.5.5 0 0 1 5.5 8z"/>
-          </svg>
+          </svg></a>
           <span class="link-name">${name}</span>
         </div>
         <button class="more-btn" onclick="toggleLinkOptions(this)">...</button>
         <div class="link-options hidden">
+          <button onclick="toggleLinkPOptions(this)">Go Back</button>
           <a href="${url}" target="_blank">Go to Link</a>
           <button onclick="deleteLink('${_id}')">Delete</button>
         </div>

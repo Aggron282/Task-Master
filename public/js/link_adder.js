@@ -8,6 +8,19 @@ function toggleInnerLinkModal(show) {
   console.log(modal,show)
   modal.classList.toggle("hidden", !show);
 }
+
+function toggleLinkOptions(button) {
+
+  const linkOptions = button.nextElementSibling;
+  linkOptions.classList.toggle('hidden');
+}
+
+function toggleLinkPOptions(button) {
+
+  const linkOptions = button.parentElement;
+  linkOptions.classList.toggle('hidden');
+}
+
 function InitLinkAdder(links = []) {
   var link_wrapper = document.querySelector(".link-adder-wrapper");
 
