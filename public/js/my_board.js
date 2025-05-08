@@ -739,10 +739,10 @@ const SetDynamicColors = async (chosen_board) => {
     diff_color_style = `rgb(${current_background[0]},${current_background[1]},${current_background[2]})`;
 
     if(parseInt(sub_color.color) > 30){
-      side_color[sub_color.index] =sub_color.color - 5;
+      side_color[sub_color.index] = sub_color.color - 5;
     }
     else{
-      side_color[dom_color.index] =dom_color.color - 15;
+      side_color[dom_color.index] = dom_color.color - 15;
     }
 
     side_color_style = `rgb(${side_color[0]},${side_color[1]},${side_color[2]})`;

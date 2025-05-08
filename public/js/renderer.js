@@ -66,6 +66,26 @@ const ReturnLabelModal = (task_id) => {
 
 }
 
+function ReturnLoaderTaskItem(){
+  return(
+    `
+    <div class="dark-loader-container">
+      <div class="dark-loader"></div>
+    </div>
+    `
+  )
+}
+
+function ReturnBackgroundLoader(){
+  return(
+    `
+    <div class="shimmer-loader">
+      <div class="shimmer-overlay"></div>
+    </div>
+    `
+  )
+}
+
 const ReturnBoardMoveItem  = (board) =>{
   var isImg = board.background_img != null ? true :false;
 
