@@ -479,10 +479,6 @@ const RenderDetailPage = (task,board_id, task_id, list_id) => {
 
                       <div class="feature_container">
 
-                          <div class="feature_box">
-                            <img class="o-img" src = "/imgs/options/1.png"/>
-                            <p class="title"> Add Cover </p>
-                          </div>
 
                           <div class="feature_box link-adder-box" onclick="toggleLinkModal(true)">
                             <img class="o-img" src = "/imgs/options/1.png"/>
@@ -507,12 +503,6 @@ const RenderDetailPage = (task,board_id, task_id, list_id) => {
                             ${ReturnLabelModal(task_id)}
                           </div>
                       </div>
-
-                      <div class="option-card">
-                          <img class="o-img"  src = "/imgs/options/3.png"/>
-                          <p class="title">Current Members</p>
-                      </div>
-
                       <div class="option-card" id = "move_task_button" >
                           <img class="o-img"  src = "/imgs/options/9.png"/>
                           <p class="title">Move</p>
@@ -849,7 +839,7 @@ function ReturnNavbarDashboard(username){
             <span>Settings</span>
         </div>
 
-        <div class="search-bar">
+        <div class="search-bar" id="searchboard">
             <input type="text" placeholder="Search">
         </div>
 

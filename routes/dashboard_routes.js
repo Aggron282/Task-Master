@@ -8,5 +8,6 @@ router.post("/board/create",isAuth,UploadImage.single("thumbnail"),dashboard_con
 router.post("/my_board/delete/one", isAuth, dashboard_controller.DeleteOneBoard)
 router.post("/my_board/archive/one", isAuth, dashboard_controller.ArchiveOneBoard)
 router.post("/my_board/copy/one", isAuth, dashboard_controller.CopyOneBoard)
+router.post("/api/search/board", isAuth, dashboard_controller.SearchBoardsByName);
 router.post("/my_board/favorite",isAuth,dashboard_controller.FavoriteOneBoard);
 module.exports  = router;

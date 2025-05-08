@@ -6,6 +6,22 @@ const generateUniqueId = require('generate-unique-id');
 const path = require("path");
 const board_util = require("./../util/board.js");
 
+const SearchBoardsByName = async (req,res,next) => {
+
+  var data = req.body;
+
+  var search_name = data.search;
+
+  const found_boards = await board_util.SearchBoardsByName(req.user.boards, search_name);
+
+  if(found_boards.length > 0){
+    res.json({error:null, boards:found_boards});
+  }else{
+    res.json({error:"No boards found", boards:req.user.boards });
+  }
+
+}
+
 const DeleteOneBoard = async (req,res,next) => {
 
   var data = req.body;
@@ -73,7 +89,7 @@ const FavoriteOneBoard = async (req,res,next) => {
       current_boards[i].isFavorite = !current_boards[i].isFavorite;
 
       isFavoriting = current_boards[i].isFavorite;
-    
+
     }
 
     new_boards.push(current_boards[i]);
@@ -141,6 +157,7 @@ const CopyOneBoard = async (req, res, next) => {
 };
 
 module.exports.AddBoard = AddBoard;
+module.exports.SearchBoardsByName =SearchBoardsByName;
 module.exports.DeleteOneBoard = DeleteOneBoard;
 module.exports.ArchiveOneBoard = ArchiveOneBoard;
 module.exports.CopyOneBoard = CopyOneBoard;

@@ -118,7 +118,7 @@ function BuildBoardHTML(board){
   var html = ``;
 
   var board_container = document.querySelector(".board_populate_container");
-
+  board_container.innerHTML = "";
     for(var i = 0 ; i < board.length;i++){
       console.log(board)
       if(!board[i].isArchived){

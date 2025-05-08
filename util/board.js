@@ -13,6 +13,26 @@ async function FindBoardById(boards,id){
 }
 
 
+async function SearchBoardsByName(boards, search_name) {
+  if (!boards || boards.length === 0) {
+    return [];
+  }
+
+  const searchLower = search_name.trim().toLowerCase();
+
+  const found_boards = boards.filter((board) => {
+    return board.name.toLowerCase().includes(searchLower);
+  });
+
+  console.log(found_boards);
+
+  return found_boards;
+}
+
+
+
+
+
 async function FindTaskInList(list,id){
   for(var i =0; i < list.length; i ++){
 
@@ -93,3 +113,4 @@ module.exports.ChangeTask = ChangeTask;
 module.exports.FindBoardById = FindBoardById;
 module.exports.FindListInBoard = FindListInBoard;
 module.exports.FindTaskInList = FindTaskInList;
+module.exports.SearchBoardsByName = SearchBoardsByName;
