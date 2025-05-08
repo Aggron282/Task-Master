@@ -49,12 +49,14 @@ async function FindTaskInList(list,id){
 
 }
 
-async function FindListInBoard(board,id){
+ function FindListInBoard(board,id){
+   console.log(board.list.length)
   for(var i =0; i < board.list.length; i ++){
 
     var list = board.list[i];
-
+    console.log(id == list._id)
     if(id == list._id){
+      console.log({list:list,index:i})
       return {list:list,index:i};
     }
 

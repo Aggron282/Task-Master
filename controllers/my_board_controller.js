@@ -441,19 +441,20 @@ const GetMyBoardPage = (req,res,next) => {
 const ChangeTasks = async (req,res) => {
 
 
-  var {list_id, newListId, task_id, board_id} = req.body;
+  var {original_list_id, new_list_id, task_id, board_id} = req.body;
   var found_board = await board_util.FindBoardById(req.user.boards,board_id);
-
+  console.log(req.body);
   var index = found_board.index;
-
+  console.log(found_board);
   if(!found_board){
     throw new Error("Could not find board");
   }
-
-  var originalList = await board_util.FindListInBoard(found_board.board,list_id);
-  var newList = await board_util.FindListInBoard(found_board.list,newListId);
-  var task_to_replace = await board_util.FindTaskInList(originalList.list, task_id);
-
+  console.log(original_list_id)
+  var originalList = board_util.FindListInBoard(found_board.board,original_list_id);
+  var newList = await board_util.FindListInBoard(found_board.board,new_list_id);
+  console.log(originalList)
+  var task_to_replace = await board_util.FindTaskInList(originalList.list.list, task_id);
+  console.log(originalList.list, task_id)
   const listWithRemovedTask = originalList.list.list.filter(task => {
     return task._id != task_to_replace.task._id;
   });

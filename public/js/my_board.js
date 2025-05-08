@@ -701,7 +701,7 @@ const SetDynamicColors = async (chosen_board) => {
 
     current_background = background.split(",");
     current_background[0] = current_background[0].substr(4);
-    current_background[2] = current_background[2].replace(")","")
+    // current_background[2] = current_background[2].replace(")","")
 
     var dom_color = {
       color:parseInt(current_background[0]),

@@ -1,208 +1,162 @@
 let originalListId = null;
-var archive_delete_container = document.querySelector(".archive_board")
+let draggedTask = null;
+let originalList = null;
 
-var archive_container = document.querySelector(".archive--container--archive");
-var delete_container = document.querySelector(".archive--container--delete");
+const archive_delete_container = document.querySelector(".archive_board");
+const archive_container = document.querySelector(".archive--container--archive");
+const delete_container = document.querySelector(".archive--container--delete");
 
-function ToggleArchive(isOn){
-
-  if(isOn){
-    archive_delete_container.classList.add("archive_board--active");
-  }
-  else{
-    archive_delete_container.classList.remove("archive_board--active");
-  }
-
+function ToggleArchive(isOn) {
+  archive_delete_container.classList.toggle("archive_board--active", isOn);
 }
 
 function EnableDragDrop() {
+  const taskLists = document.querySelectorAll('.task_list');
+  const taskItems = document.querySelectorAll('.task_item_container');
 
-    const taskLists = document.querySelectorAll('.task_list');
-    const taskItems = document.querySelectorAll('.task_item_container');
+  taskItems.forEach(addDragListeners);
 
-    let draggedTask = null;
-    let originalList = null;
+  taskLists.forEach((list) => {
+    list.addEventListener('dragover', (e) => e.preventDefault());
 
-    taskItems.forEach(addDragListeners);
+    list.addEventListener('drop', async (e) => {
+    e.preventDefault();
+    if (!draggedTask) return;
 
-    taskLists.forEach((list) => {
+    const newListId = list.dataset.listId;
+    const listContainer = list.querySelector(".all_tasks_in_list") || list;
+    const boardId = window.location.href.split("id=:")[1]?.split("/")[0];
 
-        list.addEventListener('dragover', (e) => {
-            e.preventDefault();
-        });
+    // 🔐 Store data BEFORE removing the DOM element
+    const taskId = draggedTask.dataset.taskId;
+    draggedTask.style.display = "block";
 
+    // 🧠 Clone task AND ensure it has unique identity + listeners
+    const newTask = draggedTask.cloneNode(true);
+    newTask.dataset.dragInit = "false";  // Allow reinit
+    newTask.setAttribute("draggable", "true"); // In case it's lost
+    addDragListeners(newTask);
 
-        list.addEventListener('drop', async (e) => {
+    // 🗑 Remove the original dragged DOM element
+    draggedTask.remove();
 
-            e.preventDefault();
+    try {
+      await axios.post('/api/update-task', {
+        task_id: taskId,
+        new_list_id: newListId,
+        board_id: boardId,
+        original_list_id: originalListId,
+      });
 
-            if (draggedTask) {
-
-                const newListId = list.dataset.listId;
-                const listContainer = list.querySelector(".all_tasks_in_list");
-
-                const url = window.location.href;
-                const boardId = url.split("id=:")[1]?.split("/")[0];
-
-                try {
-                    await axios.post('/api/update-task', {
-                        taskId: draggedTask.dataset.taskId,
-                        newListId: newListId,
-                        boardId: boardId,
-                        originalListId: originalListId,
-                    });
-
-                    listContainer.appendChild(draggedTask);
-                    draggedTask.style.display = "block";
-                    draggedTask.dataset.listId = newListId;
-
-                    originalListId = null;
-                    draggedTask = null;
-
-                }
-                catch (error) {
-                    ToggleArchive(false)
-                    console.error('Error updating task:', error);
-                }
-
-            }
-
-        });
-
-    });
-
-    archive_container.addEventListener('dragover', (e) => {
-      e.preventDefault();
-    });
-
-    delete_container.addEventListener('dragover', (e) => {
-      e.preventDefault();
-    });
-
-    archive_container.addEventListener("dragleave", (e) => {
-      e.preventDefault();  // This is important to allow dropping
-      archive_container.classList.remove('archive-container-hover');  // Optional: style indication
-    });
-
-    archive_container.addEventListener("drop",async (e)=>{
-      Archive(e);
+      newTask.dataset.listId = newListId;
+      addDragListeners(newTask);
+      listContainer.appendChild(newTask);
+    } catch (error) {
+      console.error('Error updating task:', error);
+      // 🛑 Re-append original task on error
+      originalList.appendChild(draggedTask);
+    } finally {
+      draggedTask = null;
+      originalListId = null;
+    }
   });
 
-  delete_container.addEventListener("drop",async (e)=>{
-    Delete(e);
   });
 
+  // Archive + Delete containers
+  [archive_container, delete_container].forEach(container => {
+    container.addEventListener('dragover', e => e.preventDefault());
+  });
 
+  archive_container.addEventListener('dragleave', (e) => {
+    e.preventDefault();
+    archive_container.classList.remove('archive-container-hover');
+  });
+
+  archive_container.addEventListener("drop", Archive);
+  delete_container.addEventListener("drop", Delete);
 }
 
-
-async function Archive(e){
-
+async function Archive(e) {
   e.preventDefault();
+  if (!draggedTask) return;
 
-  if(draggedTask){
+  const boardId = window.location.href.split("id=:")[1]?.split("/")[0];
 
-      // const newListId = list.dataset.listId;
-      // const listContainer = list.querySelector(".all_tasks_in_list");
-      const taskId = draggedTask.dataset.taskId;
-      const url = window.location.href;
-      const boardId = url.split("id=:")[1]?.split("/")[0];
+  try {
+    await axios.post('/api/task/archive/', {
+      task_id: draggedTask.dataset.taskId,
+      board_id: boardId,
+      list_id: originalListId,
+    });
 
-      draggedTask.style.display = "block";
-      // draggedTask.dataset.listId = newListId;
-
-      try {
-          var r = await axios.post('/api/task/archive/', {
-              task_id: draggedTask.dataset.taskId,
-              board_id: boardId,
-              list_id: originalListId,
-          });
-
-          draggedTask.style.display = "block";
-
-          originalListId = null;
-
-          draggedTask.remove();
-          draggedTask = null;
-
-
-      }
-      catch (error) {
-          // ToggleArchive(false)
-          console.error('Error updating task:', error);
-      }
-
+    draggedTask.remove();
+  } catch (error) {
+    console.error('Error archiving task:', error);
+  } finally {
+    draggedTask = null;
+    originalListId = null;
   }
-
 }
 
-async function Delete(e){
-
+async function Delete(e) {
   e.preventDefault();
+  if (!draggedTask) return;
 
-  if(draggedTask){
+  const boardId = window.location.href.split("id=:")[1]?.split("/")[0];
 
-      const taskId = draggedTask.dataset.taskId;
-      const url = window.location.href;
-      const boardId = url.split("id=:")[1]?.split("/")[0];
+  try {
+    await axios.post("/api/task/delete/", {
+      task_id: draggedTask.dataset.taskId,
+      board_id: boardId,
+      list_id: originalListId,
+    });
 
-      draggedTask.style.display = "block";
-
-      try {
-
-          var r = await axios.post("/api/task/delete/", {
-              task_id: draggedTask.dataset.taskId,
-              board_id: boardId,
-              list_id: originalListId,
-          });
-
-          draggedTask.style.display = "block";
-
-          originalListId = null;
-
-          draggedTask.remove();
-          draggedTask = null;
-
-
-      }
-      catch (error) {
-          ToggleArchive(false)
-          console.error('Error updating task:', error);
-      }
-
+    draggedTask.remove();
+  } catch (error) {
+    console.error('Error deleting task:', error);
+  } finally {
+    draggedTask = null;
+    originalListId = null;
   }
-
 }
 
 function addDragListeners(task) {
-    task.setAttribute('draggable', 'true');
+  if (task.dataset.dragInit === "true") return;
 
-    task.addEventListener('dragstart', (e) => {
+  task.dataset.dragInit = "true";
+  task.setAttribute('draggable', 'true');
 
-        draggedTask = task;
+  task.addEventListener('dragstart', (e) => {
+    draggedTask = task;
+    originalList = task.parentElement;
+    originalListId = task.dataset.listId;
 
-        originalList = task.parentElement;
-        originalListId = task.dataset.listId;
+    ToggleArchive(true);
+    e.dataTransfer.setData('text/plain', task.dataset.taskId);
+    setTimeout(() => task.style.display = "none", 0);
+  });
 
-        ToggleArchive(true)
+  task.addEventListener('dragend', () => {
+    if (draggedTask) {
+      draggedTask.style.display = "block";
+    }
 
-        e.dataTransfer.setData('text/plain', task.dataset.id);
+    setTimeout(() => {
+      if (!draggedTask) return;
 
-        setTimeout(() => task.style.display = "none", 0);
+      // ✅ Only attempt to re-append if parentElement still exists
+      if (draggedTask.parentElement && !draggedTask.parentElement.contains(draggedTask)) {
+        originalList.appendChild(draggedTask);
+      }
 
-    });
-
-    task.addEventListener('dragend', () => {
-
-        if (draggedTask) {
-            draggedTask.style.display = "block";
-        }
-
-        if (!draggedTask.parentElement || !draggedTask.parentElement.classList.contains('task_list')) {
-            originalList.appendChild(draggedTask);
-        }
-
-    });
-
-
+      ToggleArchive(false);
+      draggedTask = null;
+      originalList = null;
+      originalListId = null;
+    }, 10);
+  });
 }
+
+// ✅ Call drag/drop initializer when DOM is ready
+document.addEventListener("DOMContentLoaded", EnableDragDrop);
