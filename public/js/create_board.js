@@ -95,9 +95,11 @@ function AddDeleteEvents(){
 
       delete_button_[i].addEventListener("click",(e)=>{
 
-        var _id = e.target.getAttribute("id");
+        var _id = e.target.getAttribute("board_id");
         var ownerID = e.target.getAttribute("ownerID");
-
+        var board = document.querySelector(`.taskboard[board_id="${_id}"]`);
+        console.log(board)
+        board.classList.add("out");
         var config = {
           _id:_id,
           ownerID:ownerID
@@ -113,7 +115,27 @@ function AddDeleteEvents(){
 
 }
 
+function RenderDashboardLoader(){
+  var html = ``;
+
+  var board_container = document.querySelector(".board_populate_container");
+  board_container.innerHTML = "";
+    for(var i = 0 ; i < 40;i++){
+
+
+      html += ReturnBoardLoader();
+
+    }
+
+    board_container.innerHTML = html;
+}
+
 function BuildBoardHTML(board){
+
+  if(!board){
+    RenderDashboardLoader();
+    return;
+  }
 
   var html = ``;
 
@@ -187,14 +209,21 @@ function AddColorBoxEvents(){
 
 }
 
+function RenderNoBoardsFound() {
+  const holder = document.querySelector(".board_populate_container");
+  holder.innerHTML = `
+    <div class="no-boards-container">
+      <div class="no-boards-icon">😞</div>
+      <h1 class="no-boards-heading">No Boards Found</h1>
+      <p class="no-boards-subtext">Try searching with a different name or create a new board.</p>
+    </div>
+  `;
+}
+
 function AddBoardButtonEvents(){
 
 
     var new_board = document.querySelector("#new_board");
-    var delete_boards = document.querySelector(".delete_boards");
-
-    console.log(new_board)
-
     var delete_boards = document.querySelector(".delete_boards");
 
     new_board.addEventListener("click",(e)=>{
@@ -254,8 +283,11 @@ function CreateBoard(name,background){
 
 function InitDashboard(){
 
-  axios.get("/user/data").then((result)=>{
+  var time = setTimeout(()=>{BuildBoardHTML(null)},2000);
 
+  axios.get("/user/data").then((result)=>{
+    clearTimeout(time);
+    time = null;
     boards = result.data.boards;
 
     BuildBoardHTML(boards);

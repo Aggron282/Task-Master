@@ -25,8 +25,24 @@
   border-radius:10px;
   box-shadow:0px 0px 10px rgba(0,0,0,.5);
 }
-.create_list{
-  height:50px !important;
+ .task_list--add{
+  height:50px  !important;
+}
+.label-marker{
+  width:50%;
+  height:30px;
+  font-size: 18px;
+  text-align: center;
+  border-radius:30px;
+  transform: translateY(-20px);
+}
+.label-marker--preview{
+  width:50%;
+  height:5px;
+  margin-left: 25%;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  border-radius:30px;
 }
 .inner_board p {
   text-align: left;

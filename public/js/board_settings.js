@@ -70,6 +70,9 @@ async function ChangeBoardName(){
 
     if(data.error == null){
       alert("Successfully Changed Board!");
+      const newUrl = url.replace(/name=:[^\/]*/, `name=:${name}`);
+      window.history.replaceState({}, "", newUrl);
+      GenerateOtherBoards()
     }
     else{
       alert("Error in Changing Board!");
@@ -104,7 +107,9 @@ function ChangeBoardColor(){
     }
 
     var background = data.background;
-    var isImage = CheckIfColorOrImage(background);
+    var isImage = data.isImage || CheckIfColorOrImage(background);
+    document.body.style.background = "";
+    document.body.style.backgroundColor = "";
     console.log(background)
     if(isImage){
       document.body.style.background = `url("/images/${background}")`;
@@ -112,6 +117,7 @@ function ChangeBoardColor(){
     else{
       document.body.style.background = data.background;
     }
+    GenerateOtherBoards()
     alert("Board Background Changed!")
   }).catch(error => {
     console.error("Error creating board:", error);

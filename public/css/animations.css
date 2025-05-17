@@ -14,12 +14,40 @@
   }
 }
 
+@keyframes element_in{
+  0%{
+    opacity: 0;
+    transform: scale(0);
+  }
+  100%{
+    opacity: 1;
+      transform: scale(1);
+  }
+}
+@keyframes element_out{
+  0%{
+      opacity: 0;
+    transform: scale(1);
+  }
+  100%{
+      opacity: 1;
+      transform: scale(0);
+  }
+}
+
+.in {
+  animation: element_in .2s 1 ease-in;
+}
+
+.out {
+  animation: element_out .2s 1 ease-in;
+}
 
 .hidden{
   visibility: hidden !important;
   position:fixed !important;
   z-index:-99 !important;
-  opacity:0 !important; 
+  opacity:0 !important;
 }
 
 

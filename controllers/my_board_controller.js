@@ -616,14 +616,14 @@ const LabelTask = async (req,res) => {
   }
 
   var originalList = await board_util.FindListInBoard(found_board.board,list_id);
-  var task_to_archive = await board_util.FindTaskInList(originalList.list.list, task_id);
+  var found_task = await board_util.FindTaskInList(originalList.list.list, task_id);
 
-  task_to_archive.task.label = label;
+  found_task.task.label = label;
 
   originalList.list.list.map((list)=>{
 
-    if(list._id == task_to_archive.task._id){
-      return task_to_archive.task;
+    if(list._id == found_task.task._id){
+      return found_task.task;
     }
     else{
       return list;
@@ -647,13 +647,13 @@ const LabelTask = async (req,res) => {
   var set_board = {$set:{boards:req.user.boards}} ;
 
   SetNewBoard(req,new_board)
-
+  console.log(label,"Label")
   User.updateOne({_id:req.user._id},set_board).then((result)=>{
-        res.json(result);
-      }).catch((err)=>{
-        console.log(err);
-        next(err);
-    });
+    res.json({label:label});
+  }).catch((err)=>{
+    console.log(err);
+    next(err);
+  });
 
 }
 
@@ -781,14 +781,17 @@ const ChangeBoardBackground = async (req,res) =>{
   }
   else{
     board.background = background;
+    board.background_img = null;
   }
   console.log(board.background,background  )
   var new_boards = await board_util.ChangeBoard(req.user.boards,board);
   var set_board = { $set:{boards:new_boards} };
-
-  User.updateOne({_id:req.user._id},set_board).then((result)=>{
-      res.json({background:background});
-    }).catch((err)=>{
+  User.updateOne({_id:req.user._id}, set_board).then((result) => {
+    res.json({
+      background: req.file ? req.file.filename : background,
+      isImage: !!req.file
+    });
+  }).catch((err)=>{
       console.log(err);
       res.json({error:err});
   });

@@ -41,10 +41,19 @@ const ExitOutOfTaskModals = () => {
 const AddEventToAddList = () => {
 
   var create_list = document.querySelector(".create_list");
+  var add_list = document.querySelector(".menu-item--add");
+
   var add_list_modal = document.querySelector(".add_list_modal");
 
-  create_list.addEventListener("click",(e)=>{
+  add_list.addEventListener("click",(e)=>{
+    AddListButton();
+  })
 
+  create_list.addEventListener("click",(e)=>{
+    AddListButton();
+  });
+
+  function AddListButton(){
     ExitOutOfListModals();
     ExitOutOfTaskModals();
 
@@ -58,7 +67,7 @@ const AddEventToAddList = () => {
       AddListToBoard(e,(result)=>{console.log(result)});
     });
 
-  });
+  }
 
 }
 
@@ -158,7 +167,8 @@ const ChangeTaskState = async (e, url, isRemoving) => {
     const showArchivedOnly = localStorage.getItem('show_archived_only') === 'true';
     const taskElement = document.querySelector(`.task_item_container[_id="${task_id}"]`)
     if (!showAll && !showArchivedOnly && taskElement) {
-      taskElement.remove();
+      taskElement.classList.add("out");
+      setTimeout(()=>{taskElement.remove()},3000);
     }
 
   }
@@ -245,13 +255,15 @@ const AddClickEventsToTasks = () =>{
               if(label_items[i].dataset.labelType == type){
 
                 label_items[i].classList.add("label-modal-item--active");
-                detail_page.style.borderColor = label_items[i].dataset.color;
 
                 var _id = label_modal.dataset.taskId;
                 var task_item =  document.querySelector(`.task_item_container[data-task-id="${_id}"]`);
                 var {data} = await axios.post("/api/task/label",{task_id:task_id, list_id:list_id, board_id:board_id,label:type});
-
-                task_item.style.border = `${label_items[i].dataset.color} 3px solid`;
+                var task_label_container = document.querySelector(`.task_label_container`);
+                var label_preview_container = task_item.querySelector(".label_preview_container");
+                console.log(ReturnLabel(type),type)
+                task_label_container.innerHTML=  ReturnLabel(type);
+                label_preview_container.innerHTML=  ReturnLabelPreview(type);
               }
               else{
                 label_items[i].classList.remove("label-modal-item--active");
@@ -633,12 +645,22 @@ const InitMyBoard = async () => {
   showArchiveOnly = localStorage.getItem('show_archived_only') === 'true';
   showWatched = localStorage.getItem('show_watch') === 'true';
 
+  var time = setTimeout(()=>{
+    BuildListHTML();
+  },1000)
+
+  SetDynamicColors(null);
+
   await SetCurrentBoard();
 
    if(!didSetColors){
      SetDynamicColors(chosen_board);
      didSetColors = true;
    }
+
+   clearTimeout(time);
+
+   time = null;
 
    ExitOutOfListModals();
    ExitOutOfTaskModals();
@@ -674,12 +696,18 @@ const BuildListHTML = async (board,showAll,showArchiveOnly,showWatched) =>{
 }
 
 const SetDynamicColors = async (chosen_board) => {
-
+  if(!chosen_board){
+    document.body.classList.add("shimmer-loader");
+    return;
+  }
+  document.body.classList.remove("shimmer-loader");
   var task_heading = document.querySelector(".task_heading");
   var side_nav = document.querySelector(".task_sidenav");
 
-  var background = chosen_board.background;
-  var rgb = chosen_board.background;
+  let isImage = chosen_board.background_img && typeof chosen_board.background_img === "string";
+  let background = isImage ? `url("/images/${chosen_board.background_img}")` : chosen_board.background;
+  let rgb = isImage ? chosen_board.background_img : chosen_board.background;
+
   var color_data = chosen_board.background;
   var linear_grad = `linear-gradient(to bottom`;
 

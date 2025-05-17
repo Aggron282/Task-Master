@@ -36,24 +36,53 @@ const deadline_icon =
   </svg>
 
 `
+const labels = [
+  { name: "Warning", color: "#2e7d32", type: 0 },
+  { name: "Urgent", color: "#f9a825", type: 1 },
+  { name: "High Priority", color: "#d32f2f", type: 2 },
+  { name: "Low Priority", color: "#ef6c00", type: 3 },
+  { name: "Habit", color: "#7e57c2", type: 10 },
+  { name: "Incomplete", color: "#1976d2", type: -1 },
+  { name: "None", color: "grey", type: -100 }
+];
 
+function getLabelByType(labelType) {
+  console.log(labelType)
+  for (let i = 0; i < labels.length; i++) {
+    console.log(labels[i].type  == labelType)
+      if (labels[i].type == labelType) {
+        return labels[i];
+        break;
+      }
+  }
+}
+
+const ReturnLabelItem = (label)=>{
+  if(label != null){
+    var {color,type,name} = getLabelByType(label);
+    return(`
+      <div class="label-modal-item" data-color ="${color}" data-is-active = "0" data-label-type="${type}" style="--label-color: ${color};">${name}</div>
+
+      `)
+  }else{
+    return "";
+  }
+}
 const ReturnLabelModal = (task_id) => {
-
+  var html = ``;
+  for(var i =0; i < labels.length; i++){
+    html += ReturnLabelItem(labels[i].type);
+  }
   return (
     `
     <div id="label-modal" class="label-modal" data-task-id="${task_id}">
-      <p class="exit-label-modal exit">X</p> <!-- FIXED: closed <p> tag properly -->
+      <p class="exit-label-modal exit">X</p>
 
       <div class="label-modal-content">
         <h2 class="label-modal-title">Labels</h2>
 
         <div class="label-modal-list">
-          <div class="label-modal-item" data-color ="#2e7d32" data-is-active = "0" data-label-type="0" style="--label-color: #2e7d32;">Warning</div>
-          <div class="label-modal-item" data-color ="#f9a825" data-is-active = "0" data-label-type="1" style="--label-color: #f9a825;">Urgent</div>
-          <div class="label-modal-item" data-color ="#ef6c00" data-is-active = "0" data-label-type="3" style="--label-color: #ef6c00;">Low Priority</div>
-          <div class="label-modal-item" data-color ="#d32f2f" data-is-active = "0" data-label-type="2" style="--label-color: #d32f2f;">High Priority</div>
-          <div class="label-modal-item" data-color ="#7e57c2" data-is-active = "0" data-label-type="10" style="--label-color: #7e57c2;">Habit</div>
-          <div class="label-modal-item" data-color ="#1976d2" data-is-active = "0" data-label-type="-1" style="--label-color: #1976d2;">Incomplete</div>
+          ${html}
         </div>
 
         <button class="label-modal-btn">New Feature Coming Soon</button>
@@ -63,6 +92,43 @@ const ReturnLabelModal = (task_id) => {
 
     `
   );
+
+}
+
+function ReturnLabel(label){
+  var html = ``;
+  if(!label || label == -100){
+    return html;
+  }
+  var {color,type,name} = getLabelByType(label);
+
+        html = (
+          `
+          <div class="label-marker"style="background:${color}" data-type = "${type}" data-color="${color}">
+            <p class='title'>${name} </p>
+          </div>
+          `
+        )
+
+    return html;
+
+}
+
+function ReturnLabelPreview(label){
+  var html = ``;
+  if(!label || label == -100){
+    return html;
+  }
+  var {color,type,name} = getLabelByType(label);
+
+        html = (
+          `
+          <div class="label-marker--preview"style="background:${color}" data-type = "${type}" data-color="${color}">
+          </div>
+          `
+        )
+
+    return html;
 
 }
 
@@ -84,6 +150,15 @@ function ReturnBackgroundLoader(){
     </div>
     `
   )
+}
+function ReturnBoardLoader(){
+    return(
+        `
+        <div class="card shimmer-bg-loader">
+        </div>
+
+        `
+    )
 }
 
 const ReturnBoardMoveItem  = (board) =>{
@@ -236,12 +311,17 @@ const ReturnMoveToListModal = (board) =>{
 }
 
 const RenderListItem = (task_list,showAll,showArchiveOnly,showWatched) => {
+
   console.log(task_list)
+
+  if(!task_list){
+    return ReturnLoaderTaskItem();
+  }
 
   var list_of_tasks = RenderTaskItems(task_list.list,task_list._id, showAll, showArchiveOnly,showWatched);
 
   return(`
-    <div class=" task_list relative" _id = "${task_list._id}" data-list-id = "${task_list._id}" isClicked = "0">
+    <div class=" task_list relative in" _id = "${task_list._id}" data-list-id = "${task_list._id}" isClicked = "0">
 
 
       <div class="list_heading inactive_list"  _id = "${task_list._id}" data-list-id = "${task_list._id}" >
@@ -430,7 +510,8 @@ const ExitDetailPage = () => {
 const RenderDetailPage = (task,board_id, task_id, list_id) => {
 
   var watching_class = task.watching ? "watching--active" : "";
-
+  var label = task.label;
+  var label_html = ReturnLabel(label);
   return(
     `
     <div class="wrapper">
@@ -440,7 +521,7 @@ const RenderDetailPage = (task,board_id, task_id, list_id) => {
       <div class="detail_page">
 
         <p class="exit" id = "exit-detail"">X</p>
-
+        <div class="task_label_container">${label_html}</div>
           <form id = "detail-form"  data-task-id = "${task_id}" data-list-id = "${list_id}"  data-board-id = "${board_id}" >
 
               <div class="detail_grid">
@@ -612,6 +693,15 @@ const RenderAddListModal = () => {
 
 const  RenderList = (board,showAll,showArchiveOnly,showWatched)=>{
 
+  if(!board){
+    for(var k = 0; k < 6; k++){
+      html += RenderListItem(null);
+    }
+
+    return html;
+
+  }
+
   var html = ``;
 
   if(!board){
@@ -662,12 +752,14 @@ function RenderTaskItems(tasks,list_id,showAll = false, showArchiveOnly = false,
      }else{
        should_show = !isArchived;
      }
-
+     console.log( ReturnLabelPreview(task.type),task.label);
     if(should_show){
       html += `
 
-      <div class="task_item_container" _id = ${task._id} data-task-id = ${task._id}  data-list-id = "${list_id}" status = ${task.status}>
-
+      <div class="task_item_container in" _id = ${task._id} data-task-id = ${task._id}  data-list-id = "${list_id}" status = ${task.status}>
+        <div class="label_preview_container">
+          ${ReturnLabelPreview(task.label)}
+        </div>
         <p class="task_item_name">
           ${task.name}
         </p>
@@ -705,7 +797,7 @@ function RenderTaskboard(board){
 
   return(
     `
-    <div class="taskboard"  id = "taskboard" style = "background:${background}" id = "${board._id} name = "${board.name}">
+    <div class="taskboard in"  id = "taskboard" style = "background:${background}" board_id = "${board._id}" name = "${board.name}">
       <a href = "/my_board/id=:${board._id}/name=:${no_space_name}">
       <div class = "inner_board">
         <p class="task_heading" id = "taskboardname">${board.name}</p>
@@ -718,7 +810,7 @@ function RenderTaskboard(board){
       </svg>
 
       </div>
-      <div class="delete_button_" ownerID = "${board.ownerID}" id = "${board._id}">X </div>
+      <div class="delete_button_" ownerID = "${board.ownerID}" board_id = "${board._id}">X </div>
     </div>
     `
   );

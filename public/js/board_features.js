@@ -248,6 +248,8 @@ function InitMoveFeature(){
 
 }
 
+
+
 async function InitBoardSettings(){
 
   var close_board = document.querySelector(".board-settings-close-board");

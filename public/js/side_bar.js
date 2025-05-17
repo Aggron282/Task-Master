@@ -1,6 +1,6 @@
-var board_holder = document.querySelector(".board-holder");
 
-const GenerateOtherBoards = async (holder) =>{
+const GenerateOtherBoards = async () =>{
+  var holder = document.querySelector(".board-holder");
 
   const url = window.location.href;
   const name = url.split("name=:")[1];
@@ -13,10 +13,11 @@ const GenerateOtherBoards = async (holder) =>{
   var html = ``;
 
   for(var i =0; i < boards.length; i ++ ){
-
+    
     var board = boards[i];
-    var background = board.background_img ? `url("/images/${board.background_img.filename}")` : board.background;
-    var rgb = board.background_img ?  board.background_img.filename : board.background;
+    var isImage = board.background_img && typeof board.background_img === "string";
+    var background = isImage ? `url("/images/${board.background_img}")` : board.background;
+    var rgb = isImage ? board.background_img : board.background;
     var no_space_name = board.name.replace(/\s/g, '');
     var anchor = document.createElement("a");
     anchor.setAttribute("href",`http://localhost:3001/my_board/id=:${board._id}/name=:${no_space_name}`)
@@ -40,4 +41,4 @@ const GenerateOtherBoards = async (holder) =>{
 
 }
 
- GenerateOtherBoards(board_holder);
+ GenerateOtherBoards();

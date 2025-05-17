@@ -1,28 +1,33 @@
- function InitSearchBoardFeature(){
+function InitSearchBoardFeature() {
+  const searchbar = document.querySelector("#searchboard");
 
-  var searchbar = document.querySelector("#searchboard");
-
-  searchbar.addEventListener("change", (e)=>{
+  searchbar.addEventListener("input", (e) => {
     SearchBoard(e.target);
   });
-
 }
 
 
-async function SearchBoard(element){
-    var input = element.value.length > 0 ? element.value : null;
-    console.log(input)
-    var {data} = await axios.post("/api/search/board", {search: input});
-      var boards = data.boards;
-    if(!data.error){
+async function SearchBoard(element) {
+  let input = element.value.trim();
+  if (input.length === 0) input = null;
 
-      console.log(boards);
-      BuildBoardHTML(boards);
-      AddBoardButtonEvents();
-    }else{
-      alert("No Boards Found!");
+  try {
+    const { data } = await axios.post("/api/search/board", { search: input });
+    const boards = data.boards;
 
-      BuildBoardHTML(boards);
-      AddBoardButtonEvents();
+    BuildBoardHTML(boards);
+    AddBoardButtonEvents();
+    if(boards.length <= 0 ){
+      RenderNoBoardsFound();
     }
+    if(!boards){
+      alert("Error occurred");
+    }
+    if (data.error) {
+      alert(data.error);
+    }
+  } catch (err) {
+    console.error("Search failed:", err);
+    alert("Error searching for boards.");
+  }
 }

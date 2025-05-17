@@ -12,13 +12,17 @@ const SearchBoardsByName = async (req,res,next) => {
 
   var search_name = data.search;
 
+  if (!search_name || search_name.trim().length === 0) {
+  // Load all boards
+    return res.json({ error: null, boards: req.user.boards });
+  }
+
   const found_boards = await board_util.SearchBoardsByName(req.user.boards, search_name);
 
-  if(found_boards.length > 0){
-    res.json({error:null, boards:found_boards});
-  }else{
-    res.json({error:"No boards found", boards:req.user.boards });
-  }
+  res.json({
+    error: null,
+    boards: found_boards
+  });
 
 }
 
